@@ -40,27 +40,29 @@ const Login = ({ setIsLoggedIn }) => {
 
   return (
     <div className="App">
-      <div className="login">
-        <h1>Login</h1>
-        <label>Email</label>
-        <input
-          type="text"
-          placeholder="Email..."
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        />
-        <label>Password</label>
-        <input
-          type="password"
-          placeholder="Password..."
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <button onClick={login}> Login </button>
+      <div className="login container">
+        <div className="form">
+          <h1>Login</h1>
+          <label>Email: </label>
+          <input
+            type="text"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          />
+          <label>Password: </label>
+          <input
+            type="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <div className="button-container">
+            <button onClick={login}> Login </button>
+          </div>
+          <h1>{loginStatus}</h1>
+        </div>
       </div>
-      <h1>{loginStatus}</h1>
     </div>
   );
 };
