@@ -20,7 +20,11 @@ import "./App.css";
 import Axios from "axios";
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginStatus, setLoginStatus] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -35,12 +39,29 @@ function App() {
         <Route path="profile" element={<Profile />} />
         <Route
           path="logout"
-          element={<Logout setIsLoggedIn={setIsLoggedIn} />}
+          element={
+            <Logout
+              setIsLoggedIn={setIsLoggedIn}
+              setEmail={setEmail}
+              setPassword={setPassword}
+              setUser={setUser}
+            />
+          }
         />
         <Route path="data" element={<Data />} />
       </Route>
     )
   );
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    console.log(loggedInUser);
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+      setIsLoggedIn(true);
+    }
+  });
 
   const [movieName, setMovieName] = useState("");
   const [review, setReview] = useState("");
@@ -149,6 +170,7 @@ const Root = ({ isLoggedIn, setIsLoggedIn }) => {
       }
     });
   };
+
   return (
     <>
       <div className="nav">

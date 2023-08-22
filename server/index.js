@@ -63,7 +63,7 @@ app.post("/api/register", (req, res) => {
 
 app.get("/api/login", (req, res) => {
   if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
+    res.send({ loggedIn: true, user: req.session.user[0] });
   } else {
     res.send({ loggedIn: false });
   }
@@ -106,6 +106,44 @@ app.delete("/api/logout", (req, res) => {
 
     res.status(200).json({ message: "Logout successful" });
   });
+});
+
+app.get("/api/get/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const sqlSelect = "SELECT * FROM users WHERE id = ?";
+
+  db.query(sqlSelect, userId, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(err);
+    } else {
+      res.status(200).json(result[0]);
+    }
+  });
+});
+
+app.post("/api/insert/profile", (req, res) => {
+  const userId = req.body.userId;
+  const weight = req.body.weight;
+  const height = req.body.height;
+  const age = req.body.age;
+  const activityLevel = req.body.activityLevel;
+  const gender = req.body.gender;
+
+  const sqlInsert =
+    "INSERT INTO user_profiles (user_id, weight, height, age, activity_level, gender) VALUES (?, ?, ?, ?, ?, ?)";
+  db.query(
+    sqlInsert,
+    [userId, weight, height, age, activityLevel, gender],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.log(err);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
 });
 
 app.get("/api/get", (req, res) => {

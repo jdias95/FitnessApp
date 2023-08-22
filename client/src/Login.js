@@ -21,6 +21,7 @@ const Login = ({ setIsLoggedIn }) => {
       } else {
         setLoginStatus(response.data[0].email);
         setIsLoggedIn(true);
+        localStorage.setItem("user", JSON.stringify(response.data));
         navigate("/dashboard");
       }
     });
