@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [firstNameReg, setFirstNameReg] = useState("");
+  const navigate = useNavigate();
 
   Axios.defaults.withCredentials = true;
 
@@ -14,7 +16,8 @@ const Register = () => {
       password: passwordReg,
       firstName: firstNameReg,
     }).then((response) => {
-      console.log(response.data);
+      console.log("Server respons:", response.data);
+      navigate("/login");
     });
   };
   return (
