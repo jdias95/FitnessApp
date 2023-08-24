@@ -21,8 +21,6 @@ import "./App.css";
 import Axios from "axios";
 
 function App() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
@@ -35,19 +33,20 @@ function App() {
       >
         <Route index element={<Home />} />
         <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+        <Route
+          path="login"
+          element={
+            <Login
+              setIsLoggedIn={setIsLoggedIn}
+              setLoginStatus={setLoginStatus}
+            />
+          }
+        />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route
           path="logout"
-          element={
-            <Logout
-              setIsLoggedIn={setIsLoggedIn}
-              setEmail={setEmail}
-              setPassword={setPassword}
-              setUser={setUser}
-            />
-          }
+          element={<Logout setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
         />
         <Route path="data" element={<Data />} />
       </Route>

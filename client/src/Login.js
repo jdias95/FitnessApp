@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ setIsLoggedIn }) => {
-  const navigate = useNavigate();
-
+const Login = ({ setIsLoggedIn, setLoginStatus, loginStatus }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState("");
+  const navigate = useNavigate();
 
   Axios.defaults.withCredentials = true;
 
@@ -16,9 +14,11 @@ const Login = ({ setIsLoggedIn }) => {
       email: email,
       password: password,
     }).then((response) => {
+      console.log(response.data, email, password);
       if (response.data.message) {
         setLoginStatus(response.data.message);
       } else {
+        console.log(response.data);
         setLoginStatus(response.data[0].email);
         setIsLoggedIn(true);
         localStorage.setItem("user", JSON.stringify(response.data));
@@ -37,7 +37,7 @@ const Login = ({ setIsLoggedIn }) => {
         setLoginStatus("");
       }
     });
-  }, [setIsLoggedIn]);
+  }, [setIsLoggedIn, setLoginStatus]);
 
   return (
     <div className="App">

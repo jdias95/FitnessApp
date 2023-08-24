@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: ["http://localhost:3000"],
-    methods: ["GET", "POST", "DELETE"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
 );
@@ -52,11 +52,17 @@ app.post("/api/register", (req, res) => {
 
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
-      console.log(err);
+      console.log("Error hashing password:", err);
+      return res.status(500).json({ message: "Error during registration" });
     }
 
     db.query(sqlPost, [email, hash, firstName], (err, result) => {
-      console.log(err);
+      if (err) {
+        console.log("Error executing SQL query:", err);
+        return res.status(500).json({ message: "Error during registration" });
+      }
+      console.log("Registration successful:", result);
+      res.status(200).json({ messagea: "Registration successful" });
     });
   });
 });
@@ -74,7 +80,7 @@ app.post("/api/login", (req, res) => {
   const password = req.body.password;
 
   const sqlPost = "SELECT * FROM users WHERE email = ?";
-  db.query(sqlPost, email, (err, result) => {
+  db.query(sqlPost, [email], (err, result) => {
     if (err) {
       res.send({ err: err });
     }
