@@ -102,7 +102,14 @@ app.delete("/api/logout", (req, res) => {
       return res.status(500).json({ message: "Internal Server Error" });
     }
 
-    res.clearCookie("userId");
+    res.clearCookie("userId", {
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        expires: 60 * 60 * 24 * 1000,
+      },
+    });
 
     res.status(200).json({ message: "Logout successful" });
   });
