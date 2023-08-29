@@ -3,10 +3,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Link,
-  Outlet,
   RouterProvider,
-  useNavigate,
 } from "react-router-dom";
 import NavbarLoggedIn from "./NavbarLoggedIn";
 import NavbarLoggedOut from "./NavbarLoggedOut";
@@ -16,7 +13,6 @@ import Login from "./Login";
 import Root from "./Root";
 import Profile from "./Profile";
 import Home from "./Home";
-import Data from "./Data";
 import "./App.css";
 import Axios from "axios";
 
@@ -42,7 +38,6 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route path="logout" />
-        <Route path="data" element={<Data />} />
       </Route>
     )
   );
