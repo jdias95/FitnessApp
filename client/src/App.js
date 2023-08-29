@@ -13,7 +13,7 @@ import NavbarLoggedOut from "./NavbarLoggedOut";
 import Dashboard from "./Dashboard";
 import Register from "./Register";
 import Login from "./Login";
-import Logout from "./Logout";
+import Root from "./Root";
 import Profile from "./Profile";
 import Home from "./Home";
 import Data from "./Data";
@@ -22,92 +22,56 @@ import Axios from "axios";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState({});
+
+  Axios.defaults.withCredentials = true;
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
         path="/"
-        element={<Root isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
+        element={
+          <Root setLoginStatus={setLoginStatus} loginStatus={loginStatus} />
+        }
       >
         <Route index element={<Home />} />
         <Route path="register" element={<Register />} />
         <Route
           path="login"
-          element={
-            <Login
-              setIsLoggedIn={setIsLoggedIn}
-              setLoginStatus={setLoginStatus}
-            />
-          }
+          element={<Login setLoginStatus={setLoginStatus} />}
         />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
-        <Route
-          path="logout"
-          element={<Logout setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
-        />
+        <Route path="logout" />
         <Route path="data" element={<Data />} />
       </Route>
     )
   );
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    console.log(loggedInUser);
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
-      setIsLoggedIn(true);
-    }
-  }, [setUser, setIsLoggedIn]);
+    const fetchData = async () => {
+      try {
+        const response = await Axios.get("http://localhost:3001/api/login");
+
+        if (response.data.loggedIn === true) {
+          setLoginStatus(response.data.user.email);
+        } else {
+          setLoginStatus("");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [setLoginStatus]);
 
   return (
     <div className="App">
       <RouterProvider router={router}>
-        {isLoggedIn ? <NavbarLoggedIn /> : <NavbarLoggedOut />}
+        {loginStatus ? <NavbarLoggedIn /> : <NavbarLoggedOut />}
       </RouterProvider>
     </div>
   );
 }
-
-const Root = ({ isLoggedIn, setIsLoggedIn }) => {
-  const navigate = useNavigate();
-  const logout = () => {
-    Axios.delete("http://localhost:3001/api/logout").then((response) => {
-      if (response.status === 200) {
-        setIsLoggedIn(false);
-        localStorage.clear();
-        navigate("/");
-      }
-    });
-  };
-
-  return (
-    <>
-      <div className="nav">
-        {isLoggedIn ? (
-          <>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/profile">Profile</Link>
-            <Link to="/logout" onClick={logout}>
-              Logout
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </>
-        )}
-      </div>
-
-      <div>
-        <Outlet />
-      </div>
-    </>
-  );
-};
 
 export default App;

@@ -8,8 +8,6 @@ const Register = () => {
   const [firstNameReg, setFirstNameReg] = useState("");
   const navigate = useNavigate();
 
-  Axios.defaults.withCredentials = true;
-
   const register = () => {
     Axios.post("http://localhost:3001/api/register", {
       email: emailReg,

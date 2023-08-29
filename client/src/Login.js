@@ -1,43 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ setIsLoggedIn, setLoginStatus, loginStatus }) => {
+const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
-  Axios.defaults.withCredentials = true;
 
   const login = () => {
     Axios.post("http://localhost:3001/api/login", {
       email: email,
       password: password,
     }).then((response) => {
-      console.log(response.data, email, password);
       if (response.data.message) {
-        setLoginStatus(response.data.message);
+        props.setLoginStatus(response.data.message);
       } else {
-        console.log(response.data);
-        setLoginStatus(response.data[0].email);
-        setIsLoggedIn(true);
-        localStorage.setItem("user", JSON.stringify(response.data));
+        props.setLoginStatus(response.data[0].email);
         navigate("/dashboard");
       }
     });
   };
-
-  useEffect(() => {
-    Axios.get("http://localhost:3001/api/login").then((response) => {
-      if (response.data.loggedIn === true) {
-        setIsLoggedIn(true);
-        setLoginStatus(response.data.user[0].email);
-      } else {
-        setIsLoggedIn(false);
-        setLoginStatus("");
-      }
-    });
-  }, [setIsLoggedIn, setLoginStatus]);
 
   return (
     <div className="App">
@@ -61,7 +43,6 @@ const Login = ({ setIsLoggedIn, setLoginStatus, loginStatus }) => {
           <div className="button-container">
             <button onClick={login}> Login </button>
           </div>
-          <h1>{loginStatus}</h1>
         </div>
       </div>
     </div>
