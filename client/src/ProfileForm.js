@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Profile = () => {
-  const [userIdReg, setUserIdReg] = useState(0);
+const ProfileForm = (props) => {
   const [weightReg, setWeightReg] = useState(0);
   const [heightReg, setHeightReg] = useState(0);
   const [feet, setFeet] = useState(0);
@@ -11,20 +11,11 @@ const Profile = () => {
   const [activityLevelReg, setActivityLevelReg] = useState("");
   const [genderReg, setGenderReg] = useState("");
   const [measuremantType, setMeasuremantType] = useState("Imperial");
-
-  useEffect(() => {
-    Axios.get("http://localhost:3001/api/login").then((response) => {
-      if (response.data.loggedIn) {
-        setUserIdReg(response.data.user.id);
-      } else {
-        setUserIdReg(0);
-      }
-    });
-  }, []);
+  const navigate = useNavigate();
 
   const profile = () => {
     console.log(
-      userIdReg,
+      props.loginStatus.id,
       weightReg,
       heightReg,
       ageReg,
@@ -32,7 +23,7 @@ const Profile = () => {
       genderReg
     );
     Axios.post("http://localhost:3001/api/insert/profile", {
-      userId: userIdReg,
+      userId: props.loginStatus.id,
       weight: weightReg,
       height: heightReg,
       age: ageReg,
@@ -41,6 +32,7 @@ const Profile = () => {
     }).then((response) => {
       console.log(response.data);
     });
+    navigate("/profile");
   };
 
   const convertWeight = (kgs) => {
@@ -58,24 +50,22 @@ const Profile = () => {
     return newInches;
   };
 
-  const caloriesBurnedMen = (weight, height, age, activityLevel) => {
-    const bmr = 66 + 6.2 * weight + 12.7 * height - 6.76 * age;
-    const total = bmr * activityLevel;
-    return total;
-  };
-
-  const caloriesBurnedWomen = (weight, height, age, activityLevel) => {
-    const bmr = 655.1 + 4.35 * weight + 4.7 * height - 4.7 * age;
-    const total = bmr * activityLevel;
-    return total;
-  };
-
   return (
     <div className="App">
       <div className="profile container">
         <div className="form">
           <h1>Profile</h1>
-          {measuremantType == "Imperial" ? (
+          <select
+            name="measuremantType"
+            id="measuremant-type"
+            onChange={(e) => {
+              setMeasuremantType(e.target.value);
+            }}
+          >
+            <option value="Imperial">Imperial</option>
+            <option value="Metric">Metric</option>
+          </select>
+          {measuremantType === "Imperial" ? (
             <div className="height-imperial-container">
               <label>Weight:</label>
               <input
@@ -117,7 +107,7 @@ const Profile = () => {
                   setWeightReg(convertWeight(parseInt(e.target.value)));
                 }}
               />
-              <label>kgs</label>
+              <label>kg</label>
               <br></br>
               <label>Height:</label>
               <input
@@ -127,20 +117,8 @@ const Profile = () => {
                 }}
               />
               <label>cm</label>
-              {console.log(weightReg, heightReg)}
             </div>
           )}
-
-          <select
-            name="measuremantType"
-            id="measuremant-type"
-            onChange={(e) => {
-              setMeasuremantType(e.target.value);
-            }}
-          >
-            <option value="Imperial">Imperial</option>
-            <option value="Metric">Metric</option>
-          </select>
           <label>Age:</label>
           <input
             type="number"
@@ -183,4 +161,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileForm;

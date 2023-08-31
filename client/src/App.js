@@ -11,7 +11,8 @@ import Dashboard from "./Dashboard";
 import Register from "./Register";
 import Login from "./Login";
 import Root from "./Root";
-import Profile from "./Profile";
+import ProfilePage from "./ProfilePage";
+import ProfileForm from "./ProfileForm";
 import Home from "./Home";
 import "./App.css";
 import Axios from "axios";
@@ -36,7 +37,14 @@ function App() {
           element={<Login setLoginStatus={setLoginStatus} />}
         />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="profile" element={<Profile />} />
+        <Route
+          path="profile"
+          element={<ProfilePage loginStatus={loginStatus} />}
+        />
+        <Route
+          path="profile-form"
+          element={<ProfileForm loginStatus={loginStatus} />}
+        />
         <Route path="logout" />
       </Route>
     )
@@ -48,7 +56,8 @@ function App() {
         const response = await Axios.get("http://localhost:3001/api/login");
 
         if (response.data.loggedIn === true) {
-          setLoginStatus(response.data.user.email);
+          setLoginStatus(response.data.user);
+          console.log(loginStatus);
         } else {
           setLoginStatus("");
         }

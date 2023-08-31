@@ -159,6 +159,22 @@ app.post("/api/insert/profile", (req, res) => {
   );
 });
 
+app.get("/api/get/profile/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const sqlSelect = "SELECT * FROM user_profiles WHERE user_id = ?";
+
+  db.query(sqlSelect, userId, (err, result) => {
+    if (err) {
+      console.error("Error retrieving profile:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (result.length === 0) {
+      res.status(404).json({ error: "Profile not found" });
+    } else {
+      res.status(200).json(result[0]);
+    }
+  });
+});
+
 app.get("/api/get", (req, res) => {
   const sqlSelect = "SELECT * FROM movie_reviews";
   db.query(sqlSelect, (err, result) => {
