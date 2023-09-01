@@ -142,12 +142,42 @@ app.post("/api/insert/profile", (req, res) => {
   const age = req.body.age;
   const activityLevel = req.body.activityLevel;
   const gender = req.body.gender;
+  const measurementType = req.body.measurementType;
 
   const sqlInsert =
-    "INSERT INTO user_profiles (user_id, weight, height, age, activity_level, gender) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO user_profiles (user_id, weight, height, age, activity_level, gender, measurement_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlInsert,
-    [userId, weight, height, age, activityLevel, gender],
+    [userId, weight, height, age, activityLevel, gender, measurementType],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.log(err);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
+});
+
+app.put("/api/update/profile/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const weight = req.body.weight;
+  const height = req.body.height;
+  const age = req.body.age;
+  const activityLevel = req.body.activityLevel;
+  const gender = req.body.gender;
+  const measurementType = req.body.measurementType;
+
+  const sqlUpdate = `
+    UPDATE user_profiles 
+    SET weight = ?, height = ?, age = ?, activity_level = ?, gender = ?, measurement_type = ?
+    WHERE user_id = ?
+  `;
+
+  db.query(
+    sqlUpdate,
+    [weight, height, age, activityLevel, gender, measurementType, userId],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });

@@ -15,7 +15,7 @@ const Login = (props) => {
       if (response.data.message) {
         props.setLoginStatus(response.data.message);
       } else {
-        props.setLoginStatus(response.data[0].email);
+        props.setLoginStatus(response.data[0]);
         navigate("/dashboard");
       }
     });
