@@ -3,24 +3,52 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 
 const ProfilePage = (props) => {
+  const [infoBool, setInfoBool] = useState(false);
   const activityLevelPoints = {
-    sedentary: 1.2,
-    "lightly active": 1.37,
-    active: 1.55,
-    "very active": 1.725,
+    Sedentary: 1.2,
+    "Lightly Active": 1.37,
+    Active: 1.55,
+    "Very Active": 1.725,
   };
 
   useEffect(() => {
-    if (props.loginStatus) {
-      Axios.get(`http://localhost:3001/api/get/profile/${props.loginStatus.id}`)
+    const { loginStatus, setUserProfile, setUserProfileDisplay } = props;
+
+    if (loginStatus) {
+      Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
         .then((response) => {
-          props.setUserProfileDisplay(response.data);
+          const userProfileWithNA = Object.keys(response.data).reduce(
+            (acc, key) => {
+              acc[key] =
+                response.data[key] === 0 || response.data[key] === ""
+                  ? "N/A"
+                  : response.data[key];
+              return acc;
+            },
+            {}
+          );
+          setUserProfile(response.data);
+          setUserProfileDisplay(userProfileWithNA);
         })
         .catch((error) => {
           console.error("Error fetching profile data:", error);
         });
     }
-  }, [props.loginStatus]);
+  }, [props]);
+
+  useEffect(() => {
+    if (props.userProfileDisplay) {
+      const allValuesAreProper = Object.values(props.userProfileDisplay).every(
+        (value) => value !== "N/A"
+      );
+
+      if (allValuesAreProper) {
+        setInfoBool(true);
+      } else {
+        setInfoBool(false);
+      }
+    }
+  }, [props.userProfileDisplay]);
 
   const defaultConvertWeight = (lbs) => {
     const kgs = lbs / 2.20462262185;
@@ -50,71 +78,112 @@ const ProfilePage = (props) => {
     return total;
   };
 
-  useEffect(() => {
-    console.log(props.userProfileDisplay);
-  });
-
   return (
     <div className="App">
       <div className="profile container">
         <div>
           {props.userProfileDisplay && (
             <div>
-              {console.log(props.userProfileDisplay)}
               <h1>Profile</h1>
               {props.userProfileDisplay.measurement_type === "imperial" ? (
                 <div>
-                  <h2>Weight:</h2>
-                  <p>{props.userProfileDisplay.weight} lbs</p>
-                  <h2>Height:</h2>
-                  <p>
-                    {
-                      defaultConvertHeightImperial(
-                        props.userProfileDisplay.height
-                      )[0]
-                    }{" "}
-                    ft
-                  </p>
-                  <p>
-                    {
-                      defaultConvertHeightImperial(
-                        props.userProfileDisplay.height
-                      )[1]
-                    }{" "}
-                    in
-                  </p>
+                  <div className="flex">
+                    <label>Weight: </label>
+                    <p className="item">
+                      {props.userProfileDisplay.weight} lbs
+                    </p>
+                  </div>
+                  <div className="flex">
+                    <label>Height: </label>
+                    <p className="item">
+                      {
+                        defaultConvertHeightImperial(
+                          props.userProfileDisplay.height
+                        )[0]
+                      }{" "}
+                      ft
+                    </p>
+                    <p className="item">
+                      {
+                        defaultConvertHeightImperial(
+                          props.userProfileDisplay.height
+                        )[1]
+                      }{" "}
+                      in
+                    </p>
+                  </div>
                 </div>
               ) : (
                 <div>
-                  <h2>Weight:</h2>
-                  <p>
-                    {defaultConvertWeight(props.userProfileDisplay.weight)} kg
-                  </p>
-                  <h2>Height:</h2>
-                  <p>
-                    {defaultConvertHeightMetric(
-                      props.userProfileDisplay.height
-                    )}{" "}
-                    cm
-                  </p>
+                  <div className="flex">
+                    <label>Weight: </label>
+                    <p className="item">
+                      {defaultConvertWeight(props.userProfileDisplay.weight)} kg
+                    </p>
+                  </div>
+                  <div className="flex">
+                    <label>Height: </label>
+                    <p className="item">
+                      {defaultConvertHeightMetric(
+                        props.userProfileDisplay.height
+                      )}{" "}
+                      cm
+                    </p>
+                  </div>
                 </div>
               )}
-              <h2>Age:</h2>
-              <p>{props.userProfileDisplay.age}</p>
-              <h2>Activity Level:</h2>
-              <p>
-                {props.userProfileDisplay.activity_level
-                  .charAt(0)
-                  .toUpperCase() +
-                  props.userProfileDisplay.activity_level.slice(1)}
-              </p>
-              <h2>Gender:</h2>
-              <p>
-                {props.userProfileDisplay.gender.charAt(0).toUpperCase() +
-                  props.userProfileDisplay.gender.slice(1)}
-              </p>
+              <div className="flex">
+                <label>Age: </label>
+                <p className="item">{props.userProfileDisplay.age}</p>
+              </div>
+              <div className="flex">
+                <label>Activity Level: </label>
+                <p className="item">
+                  {props.userProfileDisplay.activity_level}
+                </p>
+              </div>
+              <div className="flex">
+                <label>Gender: </label>
+                <p className="item">{props.userProfileDisplay.gender}</p>
+              </div>
+              {infoBool && props.userProfileDisplay.gender === "Male" ? (
+                <div className="flex">
+                  <label>Estimated Calories Burned:</label>
+                  <p className="item">
+                    {Math.floor(
+                      caloriesBurnedMen(
+                        props.userProfileDisplay.weight,
+                        props.userProfileDisplay.height,
+                        props.userProfileDisplay.age,
+                        activityLevelPoints[
+                          props.userProfileDisplay.activity_level
+                        ]
+                      )
+                    )}
+                  </p>
+                </div>
+              ) : infoBool && props.userProfileDisplay.gender === "Female" ? (
+                <div className="flex">
+                  <label>Estimated Calories Burned: </label>
+                  <p className="item">
+                    {Math.floor(
+                      caloriesBurnedWomen(
+                        props.userProfileDisplay.weight,
+                        props.userProfileDisplay.height,
+                        props.userProfileDisplay.age,
+                        activityLevelPoints[
+                          props.userProfileDisplay.activity_level
+                        ]
+                      )
+                    )}
+                  </p>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           )}
+
           <Link to="/profile-form">
             <div className="button-container">
               <button>Edit Profile</button>

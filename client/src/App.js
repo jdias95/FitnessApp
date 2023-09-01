@@ -46,6 +46,7 @@ function App(props) {
               loginStatus={loginStatus}
               userProfile={userProfile}
               userProfileDisplay={userProfileDisplay}
+              setUserProfile={setUserProfile}
               setUserProfileDisplay={setUserProfileDisplay}
             />
           }
@@ -78,18 +79,6 @@ function App(props) {
         console.error("Error fetching data:", error);
       });
   }, [setLoginStatus]);
-
-  // useEffect(() => {
-  //   if (loginStatus) {
-  //     Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
-  //       .then((response) => {
-  //         setUserProfile(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching profile data:", error);
-  //       });
-  //   }
-  // }, [loginStatus]);
 
   useEffect(() => {
     if (loginStatus) {
@@ -153,11 +142,6 @@ function App(props) {
         });
     }
   }, [loginStatus]);
-
-  useEffect(() => {
-    console.log(userProfile);
-    console.log(userProfileDisplay);
-  });
 
   return (
     <div className="App">

@@ -135,7 +135,7 @@ const ProfileForm = (props) => {
             <h1>Profile</h1>
             <select
               name="measurementType"
-              id="measurement-type"
+              id="input"
               value={measurementType}
               onChange={(e) => {
                 setMeasurementType(e.target.value);
@@ -146,19 +146,22 @@ const ProfileForm = (props) => {
             </select>
             {measurementType === "imperial" ? (
               <div>
-                <label>Weight:</label>
+                <label>Weight: </label>
                 <input
                   type="number"
+                  step="0.01"
+                  id="input"
                   value={weightReg}
                   onChange={(e) => {
-                    setWeightReg(parseInt(e.target.value));
+                    setWeightReg(parseFloat(e.target.value));
                   }}
                 />
                 <label>lbs</label>
                 <br></br>
-                <label>Height:</label>
+                <label>Height: </label>
                 <input
                   type="number"
+                  id="input"
                   value={defaultConvertHeightImperial(heightReg)[0]}
                   onChange={(e) => {
                     const newFeet = parseInt(e.target.value);
@@ -167,9 +170,10 @@ const ProfileForm = (props) => {
                     setHeightReg(newHeight);
                   }}
                 />
-                <label>ft</label>
+                <label> ft </label>
                 <input
                   type="number"
+                  id="input"
                   value={defaultConvertHeightImperial(heightReg)[1]}
                   onChange={(e) => {
                     const newInches = parseInt(e.target.value);
@@ -178,67 +182,77 @@ const ProfileForm = (props) => {
                     setHeightReg(newHeight);
                   }}
                 />
-                <label>in</label>
+                <label> in</label>
               </div>
             ) : (
               <div>
-                <label>Weight:</label>
+                <label>Weight: </label>
                 <input
                   type="number"
+                  step="0.01"
+                  id="input"
                   value={defaultConvertWeight(weightReg)}
                   onChange={(e) => {
-                    setWeightReg(convertWeight(parseInt(e.target.value)));
+                    setWeightReg(convertWeight(parseFloat(e.target.value)));
                   }}
                 />
-                <label>kg</label>
+                <label> kg</label>
                 <br></br>
-                <label>Height:</label>
+                <label>Height: </label>
                 <input
                   type="number"
+                  id="input"
                   value={defaultConvertHeightMetric(heightReg)}
                   onChange={(e) => {
                     setHeightReg(convertHeightMetric(parseInt(e.target.value)));
                   }}
                 />
-                <label>cm</label>
+                <label> cm</label>
               </div>
             )}
-            <label>Age:</label>
-            <input
-              type="number"
-              value={ageReg}
-              onChange={(e) => {
-                setAgeReg(parseInt(e.target.value));
-              }}
-            />
-            <label>Activity Level:</label>
-            <select
-              name="activityLevel"
-              id="activity-level"
-              value={activityLevelReg}
-              onChange={(e) => {
-                setActivityLevelReg(e.target.value);
-              }}
-            >
-              <option value="">Please Select</option>
-              <option value="sedentary">Sedentary</option>
-              <option value="lightly active">Lightly Active</option>
-              <option value="active">Active</option>
-              <option value="very active">Very Active</option>
-            </select>
-            <label>Gender:</label>
-            <select
-              name="gender"
-              id="gender"
-              value={genderReg}
-              onChange={(e) => {
-                setGenderReg(e.target.value);
-              }}
-            >
-              <option value="">Please Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
+            <div>
+              <label>Age: </label>
+              <input
+                type="number"
+                id="input"
+                value={ageReg}
+                onChange={(e) => {
+                  setAgeReg(parseInt(e.target.value));
+                }}
+              />
+            </div>
+            <div>
+              <label>Activity Level: </label>
+              <select
+                name="activityLevel"
+                id="input"
+                value={activityLevelReg}
+                onChange={(e) => {
+                  setActivityLevelReg(e.target.value);
+                }}
+              >
+                <option value="">Please Select</option>
+                <option value="Sedentary">Sedentary</option>
+                <option value="Lightly Active">Lightly Active</option>
+                <option value="Active">Active</option>
+                <option value="Very Active">Very Active</option>
+              </select>
+            </div>
+            <div>
+              <label>Gender: </label>
+              <select
+                name="gender"
+                id="input"
+                value={genderReg}
+                onChange={(e) => {
+                  setGenderReg(e.target.value);
+                }}
+              >
+                <option value="">Please Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
             <div className="button-container">
               <button onClick={profileUpdate}>Confirm</button>
             </div>
