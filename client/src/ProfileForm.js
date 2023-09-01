@@ -9,8 +9,16 @@ const ProfileForm = (props) => {
   const [heightReg, setHeightReg] = useState(
     props.userProfile && props.userProfile.height ? props.userProfile.height : 0
   );
-  const [feet, setFeet] = useState(0);
-  const [inches, setInches] = useState(0);
+  const [feet, setFeet] = useState(
+    props.userProfile && props.userProfile.height
+      ? Math.floor(props.userProfile.height / 12)
+      : 0
+  );
+  const [inches, setInches] = useState(
+    props.userProfile && props.userProfile.height
+      ? props.userProfile.height % 12
+      : 0
+  );
   const [ageReg, setAgeReg] = useState(
     props.userProfile && props.userProfile.age ? props.userProfile.age : 0
   );
@@ -80,6 +88,7 @@ const ProfileForm = (props) => {
     )
       .then((response) => {
         console.log(response.data);
+        props.setUserProfileDisplay(response.data);
         navigate("/profile");
       })
       .catch((error) => {
@@ -152,10 +161,10 @@ const ProfileForm = (props) => {
                   type="number"
                   value={defaultConvertHeightImperial(heightReg)[0]}
                   onChange={(e) => {
-                    setFeet(parseInt(e.target.value));
-                    setHeightReg((prevHeight) =>
-                      convertHeightImperial(parseInt(e.target.value), inches)
-                    );
+                    const newFeet = parseInt(e.target.value);
+                    const newHeight = convertHeightImperial(newFeet, inches);
+                    setFeet(newFeet);
+                    setHeightReg(newHeight);
                   }}
                 />
                 <label>ft</label>
@@ -163,20 +172,16 @@ const ProfileForm = (props) => {
                   type="number"
                   value={defaultConvertHeightImperial(heightReg)[1]}
                   onChange={(e) => {
-                    setInches(parseInt(e.target.value));
-                    setHeightReg((prevHeight) =>
-                      convertHeightImperial(feet, parseInt(e.target.value))
-                    );
+                    const newInches = parseInt(e.target.value);
+                    const newHeight = convertHeightImperial(feet, newInches);
+                    setInches(newInches);
+                    setHeightReg(newHeight);
                   }}
                 />
                 <label>in</label>
               </div>
             ) : (
               <div>
-                {console.log(
-                  defaultConvertWeight(180),
-                  defaultConvertHeightMetric(68)
-                )}
                 <label>Weight:</label>
                 <input
                   type="number"

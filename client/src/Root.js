@@ -9,6 +9,7 @@ const Root = (props) => {
     Axios.delete("http://localhost:3001/api/logout").then((response) => {
       if (response.status === 200) {
         props.setLoginStatus("");
+        localStorage.clear();
         navigate("/");
       }
     });

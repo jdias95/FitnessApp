@@ -46,13 +46,18 @@ function App(props) {
               loginStatus={loginStatus}
               userProfile={userProfile}
               userProfileDisplay={userProfileDisplay}
+              setUserProfileDisplay={setUserProfileDisplay}
             />
           }
         />
         <Route
           path="profile-form"
           element={
-            <ProfileForm loginStatus={loginStatus} userProfile={userProfile} />
+            <ProfileForm
+              loginStatus={loginStatus}
+              userProfile={userProfile}
+              setUserProfileDisplay={setUserProfileDisplay}
+            />
           }
         />
         <Route path="logout" />
