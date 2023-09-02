@@ -60,12 +60,6 @@ const ProfilePage = (props) => {
     return Number(cm.toFixed(0));
   };
 
-  const defaultConvertHeightImperial = (inches) => {
-    const ft = Math.floor(inches / 12);
-    const newInches = inches % 12;
-    return [ft, newInches];
-  };
-
   const caloriesBurnedMen = (weight, height, age, activityLevel) => {
     const bmr = 66 + 6.2 * weight + 12.7 * height - 6.76 * age;
     const total = bmr * activityLevel;
@@ -96,20 +90,10 @@ const ProfilePage = (props) => {
                   <div className="flex">
                     <label>Height: </label>
                     <p className="item">
-                      {
-                        defaultConvertHeightImperial(
-                          props.userProfileDisplay.height
-                        )[0]
-                      }{" "}
-                      ft
+                      {Math.floor(props.userProfileDisplay.height / 12)} ft
                     </p>
                     <p className="item">
-                      {
-                        defaultConvertHeightImperial(
-                          props.userProfileDisplay.height
-                        )[1]
-                      }{" "}
-                      in
+                      {props.userProfileDisplay.height % 12} in
                     </p>
                   </div>
                 </div>
@@ -148,7 +132,7 @@ const ProfilePage = (props) => {
               </div>
               {infoBool && props.userProfileDisplay.gender === "Male" ? (
                 <div className="flex">
-                  <label>Estimated Calories Burned:</label>
+                  <label>Estimated Daily Calories Burned:</label>
                   <p className="item">
                     {Math.floor(
                       caloriesBurnedMen(
@@ -164,7 +148,7 @@ const ProfilePage = (props) => {
                 </div>
               ) : infoBool && props.userProfileDisplay.gender === "Female" ? (
                 <div className="flex">
-                  <label>Estimated Calories Burned: </label>
+                  <label>Estimated Daily Calories Burned: </label>
                   <p className="item">
                     {Math.floor(
                       caloriesBurnedWomen(

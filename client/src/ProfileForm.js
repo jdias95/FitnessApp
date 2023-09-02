@@ -19,6 +19,11 @@ const ProfileForm = (props) => {
       ? props.userProfile.height % 12
       : 0
   );
+  const [cm, setCm] = useState(
+    props.userProfile && props.userProfile.height
+      ? Math.floor(props.userProfile.height / 0.3937008)
+      : 0
+  );
   const [ageReg, setAgeReg] = useState(
     props.userProfile && props.userProfile.age ? props.userProfile.age : 0
   );
@@ -49,6 +54,9 @@ const ProfileForm = (props) => {
       setActivityLevelReg(savedFormData.activity_level);
       setGenderReg(savedFormData.gender);
       setMeasurementType(savedFormData.measurement_type);
+      setFeet(savedFormData.feet);
+      setInches(savedFormData.inches);
+      setCm(savedFormData.cm);
     }
   }, []);
 
@@ -63,6 +71,9 @@ const ProfileForm = (props) => {
         activity_level: activityLevelReg,
         gender: genderReg,
         measurement_type: measurementType,
+        feet: feet,
+        inches: inches,
+        cm: cm,
       })
     );
   }, [
@@ -72,6 +83,9 @@ const ProfileForm = (props) => {
     activityLevelReg,
     genderReg,
     measurementType,
+    feet,
+    inches,
+    cm,
   ]);
 
   const profileUpdate = () => {
@@ -121,12 +135,6 @@ const ProfileForm = (props) => {
     return Number(cm.toFixed(0));
   };
 
-  const defaultConvertHeightImperial = (inches) => {
-    const ft = Math.floor(inches / 12);
-    const newInches = inches % 12;
-    return [ft, newInches];
-  };
-
   return (
     <div className="App">
       <div className="profile container">
@@ -162,11 +170,12 @@ const ProfileForm = (props) => {
                 <input
                   type="number"
                   id="input"
-                  value={defaultConvertHeightImperial(heightReg)[0]}
+                  value={feet}
                   onChange={(e) => {
                     const newFeet = parseInt(e.target.value);
                     const newHeight = convertHeightImperial(newFeet, inches);
                     setFeet(newFeet);
+                    setCm(defaultConvertHeightMetric(newFeet * 12 + inches));
                     setHeightReg(newHeight);
                   }}
                 />
@@ -174,11 +183,12 @@ const ProfileForm = (props) => {
                 <input
                   type="number"
                   id="input"
-                  value={defaultConvertHeightImperial(heightReg)[1]}
+                  value={inches}
                   onChange={(e) => {
                     const newInches = parseInt(e.target.value);
                     const newHeight = convertHeightImperial(feet, newInches);
                     setInches(newInches);
+                    setCm(defaultConvertHeightMetric(feet * 12 + newInches));
                     setHeightReg(newHeight);
                   }}
                 />
@@ -202,9 +212,15 @@ const ProfileForm = (props) => {
                 <input
                   type="number"
                   id="input"
-                  value={defaultConvertHeightMetric(heightReg)}
+                  value={cm}
                   onChange={(e) => {
-                    setHeightReg(convertHeightMetric(parseInt(e.target.value)));
+                    const newCm = parseInt(e.target.value);
+                    const newHeight = convertHeightMetric(newCm);
+                    setCm(newCm);
+                    setFeet(Math.floor(convertHeightMetric(newCm) / 12));
+                    setInches(convertHeightMetric(newCm) % 12);
+                    setHeightReg(newHeight);
+                    console.log(newCm, newHeight, cm, heightReg);
                   }}
                 />
                 <label> cm</label>
