@@ -84,18 +84,7 @@ function App(props) {
     if (loginStatus) {
       Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
         .then((response) => {
-          const userProfileWithNA = Object.keys(response.data).reduce(
-            (acc, key) => {
-              acc[key] =
-                response.data[key] === 0 || response.data[key] === ""
-                  ? "N/A"
-                  : response.data[key];
-              return acc;
-            },
-            {}
-          );
           setUserProfile(response.data);
-          setUserProfileDisplay(userProfileWithNA);
         })
         .catch((error) => {
           if (error.response && error.response.status === 404) {
@@ -116,18 +105,7 @@ function App(props) {
                 `http://localhost:3001/api/get/profile/${loginStatus.id}`
               )
                 .then((response) => {
-                  const userProfileWithNA = Object.keys(response.data).reduce(
-                    (acc, key) => {
-                      acc[key] =
-                        response.data[key] === 0 || response.data[key] === ""
-                          ? "N/A"
-                          : response.data[key];
-                      return acc;
-                    },
-                    {}
-                  );
                   setUserProfile(response.data);
-                  setUserProfileDisplay(userProfileWithNA);
                 })
                 .catch((error) => {
                   console.error(
@@ -139,6 +117,7 @@ function App(props) {
           } else {
             console.error("Error fetching profile data:", error);
           }
+          console.log(error);
         });
     }
   }, [loginStatus]);

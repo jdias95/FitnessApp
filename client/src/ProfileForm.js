@@ -220,7 +220,6 @@ const ProfileForm = (props) => {
                     setFeet(Math.floor(convertHeightMetric(newCm) / 12));
                     setInches(convertHeightMetric(newCm) % 12);
                     setHeightReg(newHeight);
-                    console.log(newCm, newHeight, cm, heightReg);
                   }}
                 />
                 <label> cm</label>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -81,39 +82,68 @@ const ProfilePage = (props) => {
               <h1>Profile</h1>
               {props.userProfileDisplay.measurement_type === "imperial" ? (
                 <div>
-                  <div className="flex">
-                    <label>Weight: </label>
-                    <p className="item">
-                      {props.userProfileDisplay.weight} lbs
-                    </p>
-                  </div>
-                  <div className="flex">
-                    <label>Height: </label>
-                    <p className="item">
-                      {Math.floor(props.userProfileDisplay.height / 12)} ft
-                    </p>
-                    <p className="item">
-                      {props.userProfileDisplay.height % 12} in
-                    </p>
-                  </div>
+                  {props.userProfileDisplay.weight === "N/A" ? (
+                    <div className="flex">
+                      <label>Weight: </label>
+                      <p className="item">N/A</p>
+                    </div>
+                  ) : (
+                    <div className="flex">
+                      <label>Weight: </label>
+                      <p className="item">
+                        {props.userProfileDisplay.weight} lbs
+                      </p>
+                    </div>
+                  )}
+                  {props.userProfileDisplay.height === "N/A" ? (
+                    <div className="flex">
+                      <label>Height: </label>
+                      <p className="item">N/A</p>
+                    </div>
+                  ) : (
+                    <div className="flex">
+                      <label>Height: </label>
+                      <p className="item">
+                        {Math.floor(props.userProfileDisplay.height / 12)} ft
+                      </p>
+                      <p className="item">
+                        {props.userProfileDisplay.height % 12} in
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div>
-                  <div className="flex">
-                    <label>Weight: </label>
-                    <p className="item">
-                      {defaultConvertWeight(props.userProfileDisplay.weight)} kg
-                    </p>
-                  </div>
-                  <div className="flex">
-                    <label>Height: </label>
-                    <p className="item">
-                      {defaultConvertHeightMetric(
-                        props.userProfileDisplay.height
-                      )}{" "}
-                      cm
-                    </p>
-                  </div>
+                  {props.userProfileDisplay.weight === "N/A" ? (
+                    <div className="flex">
+                      <label>Weight: </label>
+                      <p className="item">N/A</p>
+                    </div>
+                  ) : (
+                    <div className="flex">
+                      <label>Weight: </label>
+                      <p className="item">
+                        {defaultConvertWeight(props.userProfileDisplay.weight)}{" "}
+                        kg
+                      </p>
+                    </div>
+                  )}
+                  {props.userProfileDisplay.height === "N/A" ? (
+                    <div className="flex">
+                      <label>Height: </label>
+                      <p className="item">N/A</p>
+                    </div>
+                  ) : (
+                    <div className="flex">
+                      <label>Height: </label>
+                      <p className="item">
+                        {defaultConvertHeightMetric(
+                          props.userProfileDisplay.height
+                        )}{" "}
+                        cm
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
               <div className="flex">
