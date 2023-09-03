@@ -45,6 +45,12 @@ const ProfileForm = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!props.loginStatus) {
+      navigate("/login");
+    }
+  });
+
+  useEffect(() => {
     // Load data from local storage if available
     const savedFormData = JSON.parse(localStorage.getItem("profileFormData"));
     if (savedFormData) {

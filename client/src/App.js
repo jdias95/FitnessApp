@@ -4,6 +4,7 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
+  useNavigate,
 } from "react-router-dom";
 import NavbarLoggedIn from "./NavbarLoggedIn";
 import NavbarLoggedOut from "./NavbarLoggedOut";
@@ -33,8 +34,11 @@ function App(props) {
           <Root setLoginStatus={setLoginStatus} loginStatus={loginStatus} />
         }
       >
-        <Route index element={<Home />} />
-        <Route path="register" element={<Register />} />
+        <Route index element={<Home setLoginStatus={setLoginStatus} />} />
+        <Route
+          path="register"
+          element={<Register setLoginStatus={setLoginStatus} />}
+        />
         <Route
           path="login"
           element={<Login setLoginStatus={setLoginStatus} />}
@@ -75,7 +79,6 @@ function App(props) {
   );
 
   useEffect(() => {
-    console.log(loginStatus);
     Axios.get("http://localhost:3001/api/login")
       .then((response) => {
         if (response.data.loggedIn === true) {

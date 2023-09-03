@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Register = (props) => {
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [firstNameReg, setFirstNameReg] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    Axios.delete("http://localhost:3001/api/logout").then((response) => {
+      if (response.status === 200) {
+        props.setLoginStatus("");
+        localStorage.clear();
+      }
+    });
+  }, [props]);
 
   const register = () => {
     Axios.post("http://localhost:3001/api/register", {

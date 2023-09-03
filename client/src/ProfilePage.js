@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProfilePage = (props) => {
   const [infoBool, setInfoBool] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!props.loginStatus) {
+      navigate("/login");
+    }
+  });
+
   const activityLevelPoints = {
     Sedentary: 1.2,
     "Lightly Active": 1.37,

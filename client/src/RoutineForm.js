@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const RoutineForm = ({ loginStatus, onClose }) => {
   const [nameReg, setNameReg] = useState("");
-  const navigate = useNavigate();
 
   const createRoutine = () => {
     console.log(loginStatus);

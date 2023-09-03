@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import RoutineForm from "./RoutineForm";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = (props) => {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!props.loginStatus) {
+      navigate("/login");
+    }
+  });
 
   const openModal = () => {
     setShowModal(true);
