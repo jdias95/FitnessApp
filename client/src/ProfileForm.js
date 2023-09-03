@@ -143,7 +143,6 @@ const ProfileForm = (props) => {
         throw new Error("Value is not a valid number.");
       }
     } catch (error) {
-      console.error("Error parsing value:", error);
       return 0;
     }
   };
@@ -157,7 +156,6 @@ const ProfileForm = (props) => {
         throw new Error("Value is not a valid number.");
       }
     } catch (error) {
-      console.error("Error parsing value:", error);
       return 0;
     }
   };

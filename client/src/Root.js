@@ -20,6 +20,7 @@ const Root = (props) => {
       <div className="nav">
         {props.loginStatus ? (
           <>
+            <h1 className="name">Hello {props.loginStatus.first_name}</h1>
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/profile">Profile</Link>
             <Link to="/logout" onClick={logout}>

@@ -205,41 +205,18 @@ app.get("/api/get/profile/:userId", (req, res) => {
   });
 });
 
-app.get("/api/get", (req, res) => {
-  const sqlSelect = "SELECT * FROM movie_reviews";
-  db.query(sqlSelect, (err, result) => {
-    res.send(result);
-  });
-});
+app.post("/api/insert/routine", (req, res) => {
+  const userId = req.body.userId;
+  const name = req.body.name;
 
-app.post("/api/insert", (req, res) => {
-  const movieName = req.body.movieName;
-  const movieReview = req.body.movieReview;
-
-  const sqlInsert =
-    "INSERT INTO movie_reviews (movieName, movieReview) VALUES (?, ?)";
-  db.query(sqlInsert, [movieName, movieReview], (err, result) => {
-    console.log(result);
-  });
-});
-
-app.delete("/api/delete/:movieName", (req, res) => {
-  const name = req.params.movieName;
-  const sqlDelete = "DELETE FROM movie_reviews WHERE movieName = ?";
-
-  db.query(sqlDelete, name, (err, result) => {
-    if (err) console.log(err);
-  });
-});
-
-app.put("/api/update", (req, res) => {
-  const name = req.body.movieName;
-  const review = req.body.movieReview;
-  const sqlUpdate =
-    "UPDATE movie_reviews SET movieReview = ? WHERE movieName = ?";
-
-  db.query(sqlUpdate, [review, name], (err, result) => {
-    if (err) console.log(err);
+  const sqlInsert = "INSERT INTO user_profiles (user_id, namee) VALUES (?, ?)";
+  db.query(sqlInsert, [userId, name], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(err);
+    } else {
+      res.status(200).json(result);
+    }
   });
 });
 

@@ -41,6 +41,12 @@
   right: 0rem;
 }
 
+.nav .name {
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+}
+
 .nav a {
   margin: 0.5rem;
   text-decoration: none;
@@ -106,19 +112,20 @@ a {
   align-items: center;
 }
 
+.dashboard {
+  justify-content: space-between;
+}
+
 .item {
   padding: 3px 4px;
 }
 
-.card {
-  width: 500px;
-  height: 170px;
-  border: 2px solid black;
-  border-radius: 15px;
-  margin: 10px;
+.flex #plus {
+  font-size: 2.5em;
+  margin: 0.4em 0;
+  color: rgba(255, 255, 255, 0.87);
 }
 
-#updateInput {
-  width: 100px;
-  height: 20px;
+.flex #plus:hover {
+  color: rgba(159, 225, 255, 0.87);
 }

@@ -77,134 +77,129 @@ const ProfilePage = (props) => {
   return (
     <div className="App">
       <div className="profile container">
-        <div>
-          {props.userProfileDisplay && (
-            <div>
-              <h1>Profile</h1>
-              {props.userProfileDisplay.measurement_type === "imperial" ? (
-                <div>
-                  {props.userProfileDisplay.weight === "N/A" ? (
-                    <div className="flex">
-                      <label>Weight: </label>
-                      <p className="item">N/A</p>
-                    </div>
-                  ) : (
-                    <div className="flex">
-                      <label>Weight: </label>
-                      <p className="item">
-                        {props.userProfileDisplay.weight} lbs
-                      </p>
-                    </div>
-                  )}
-                  {props.userProfileDisplay.height === "N/A" ? (
-                    <div className="flex">
-                      <label>Height: </label>
-                      <p className="item">N/A</p>
-                    </div>
-                  ) : (
-                    <div className="flex">
-                      <label>Height: </label>
-                      <p className="item">
-                        {Math.floor(props.userProfileDisplay.height / 12)} ft
-                      </p>
-                      <p className="item">
-                        {props.userProfileDisplay.height % 12} in
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div>
-                  {props.userProfileDisplay.weight === "N/A" ? (
-                    <div className="flex">
-                      <label>Weight: </label>
-                      <p className="item">N/A</p>
-                    </div>
-                  ) : (
-                    <div className="flex">
-                      <label>Weight: </label>
-                      <p className="item">
-                        {defaultConvertWeight(props.userProfileDisplay.weight)}{" "}
-                        kg
-                      </p>
-                    </div>
-                  )}
-                  {props.userProfileDisplay.height === "N/A" ? (
-                    <div className="flex">
-                      <label>Height: </label>
-                      <p className="item">N/A</p>
-                    </div>
-                  ) : (
-                    <div className="flex">
-                      <label>Height: </label>
-                      <p className="item">
-                        {defaultConvertHeightMetric(
-                          props.userProfileDisplay.height
-                        )}{" "}
-                        cm
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-              <div className="flex">
-                <label>Age: </label>
-                <p className="item">{props.userProfileDisplay.age}</p>
+        {props.userProfileDisplay && (
+          <div>
+            <h2>Profile</h2>
+            {props.userProfileDisplay.measurement_type === "imperial" ? (
+              <div>
+                {props.userProfileDisplay.weight === "N/A" ? (
+                  <div className="flex">
+                    <label>Weight: </label>
+                    <p className="item">N/A</p>
+                  </div>
+                ) : (
+                  <div className="flex">
+                    <label>Weight: </label>
+                    <p className="item">
+                      {props.userProfileDisplay.weight} lbs
+                    </p>
+                  </div>
+                )}
+                {props.userProfileDisplay.height === "N/A" ? (
+                  <div className="flex">
+                    <label>Height: </label>
+                    <p className="item">N/A</p>
+                  </div>
+                ) : (
+                  <div className="flex">
+                    <label>Height: </label>
+                    <p className="item">
+                      {Math.floor(props.userProfileDisplay.height / 12)} ft
+                    </p>
+                    <p className="item">
+                      {props.userProfileDisplay.height % 12} in
+                    </p>
+                  </div>
+                )}
               </div>
+            ) : (
+              <div>
+                {props.userProfileDisplay.weight === "N/A" ? (
+                  <div className="flex">
+                    <label>Weight: </label>
+                    <p className="item">N/A</p>
+                  </div>
+                ) : (
+                  <div className="flex">
+                    <label>Weight: </label>
+                    <p className="item">
+                      {defaultConvertWeight(props.userProfileDisplay.weight)} kg
+                    </p>
+                  </div>
+                )}
+                {props.userProfileDisplay.height === "N/A" ? (
+                  <div className="flex">
+                    <label>Height: </label>
+                    <p className="item">N/A</p>
+                  </div>
+                ) : (
+                  <div className="flex">
+                    <label>Height: </label>
+                    <p className="item">
+                      {defaultConvertHeightMetric(
+                        props.userProfileDisplay.height
+                      )}{" "}
+                      cm
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="flex">
+              <label>Age: </label>
+              <p className="item">{props.userProfileDisplay.age}</p>
+            </div>
+            <div className="flex">
+              <label>Activity Level: </label>
+              <p className="item">{props.userProfileDisplay.activity_level}</p>
+            </div>
+            <div className="flex">
+              <label>Gender: </label>
+              <p className="item">{props.userProfileDisplay.gender}</p>
+            </div>
+            {infoBool && props.userProfileDisplay.gender === "Male" ? (
               <div className="flex">
-                <label>Activity Level: </label>
+                <label>Estimated Daily Calories Burned:</label>
                 <p className="item">
-                  {props.userProfileDisplay.activity_level}
+                  {Math.floor(
+                    caloriesBurnedMen(
+                      props.userProfileDisplay.weight,
+                      props.userProfileDisplay.height,
+                      props.userProfileDisplay.age,
+                      activityLevelPoints[
+                        props.userProfileDisplay.activity_level
+                      ]
+                    )
+                  )}
                 </p>
               </div>
+            ) : infoBool && props.userProfileDisplay.gender === "Female" ? (
               <div className="flex">
-                <label>Gender: </label>
-                <p className="item">{props.userProfileDisplay.gender}</p>
+                <label>Estimated Daily Calories Burned: </label>
+                <p className="item">
+                  {Math.floor(
+                    caloriesBurnedWomen(
+                      props.userProfileDisplay.weight,
+                      props.userProfileDisplay.height,
+                      props.userProfileDisplay.age,
+                      activityLevelPoints[
+                        props.userProfileDisplay.activity_level
+                      ]
+                    )
+                  )}
+                </p>
               </div>
-              {infoBool && props.userProfileDisplay.gender === "Male" ? (
-                <div className="flex">
-                  <label>Estimated Daily Calories Burned:</label>
-                  <p className="item">
-                    {Math.floor(
-                      caloriesBurnedMen(
-                        props.userProfileDisplay.weight,
-                        props.userProfileDisplay.height,
-                        props.userProfileDisplay.age,
-                        activityLevelPoints[
-                          props.userProfileDisplay.activity_level
-                        ]
-                      )
-                    )}
-                  </p>
-                </div>
-              ) : infoBool && props.userProfileDisplay.gender === "Female" ? (
-                <div className="flex">
-                  <label>Estimated Daily Calories Burned: </label>
-                  <p className="item">
-                    {Math.floor(
-                      caloriesBurnedWomen(
-                        props.userProfileDisplay.weight,
-                        props.userProfileDisplay.height,
-                        props.userProfileDisplay.age,
-                        activityLevelPoints[
-                          props.userProfileDisplay.activity_level
-                        ]
-                      )
-                    )}
-                  </p>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
-          )}
+            ) : (
+              <div></div>
+            )}
+          </div>
+        )}
 
-          <Link to="/profile-form">
-            <div className="button-container">
-              <button>Edit Profile</button>
-            </div>
-          </Link>
-        </div>
+        <Link to="/profile-form">
+          <div className="button-container">
+            <button>Edit Profile</button>
+          </div>
+        </Link>
       </div>
     </div>
   );

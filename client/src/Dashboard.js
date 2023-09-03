@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   return (
     <div className="App">
-      <h1>Dashboard</h1>
+      <div className="flex">
+        <div className="weight container">
+          <div className="dashboard flex">
+            <h2>Weight</h2>
+            <Link>
+              <h2 id="plus">+</h2>
+            </Link>
+          </div>
+        </div>
+        <div className="routine container">
+          <div className="dashboard flex">
+            <h2>Exercise Routines</h2>
+            <Link>
+              <h2 id="plus">+</h2>
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
