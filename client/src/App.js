@@ -13,6 +13,7 @@ import Login from "./Login";
 import Root from "./Root";
 import ProfilePage from "./ProfilePage";
 import ProfileForm from "./ProfileForm";
+import RoutineForm from "./RoutineForm";
 import Home from "./Home";
 import "./App.css";
 import Axios from "axios";
@@ -38,7 +39,10 @@ function App(props) {
           path="login"
           element={<Login setLoginStatus={setLoginStatus} />}
         />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route
+          path="dashboard"
+          element={<Dashboard loginStatus={loginStatus} />}
+        />
         <Route
           path="profile"
           element={
@@ -61,12 +65,17 @@ function App(props) {
             />
           }
         />
+        <Route
+          path="routine-form"
+          element={<RoutineForm loginStatus={loginStatus} />}
+        />
         <Route path="logout" />
       </Route>
     )
   );
 
   useEffect(() => {
+    console.log(loginStatus);
     Axios.get("http://localhost:3001/api/login")
       .then((response) => {
         if (response.data.loggedIn === true) {

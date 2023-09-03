@@ -116,6 +116,11 @@ a {
   justify-content: space-between;
 }
 
+.weight,
+.routine {
+  align-self: flex-start;
+}
+
 .item {
   padding: 3px 4px;
 }
@@ -128,4 +133,49 @@ a {
 
 .flex #plus:hover {
   color: rgba(159, 225, 255, 0.87);
+  cursor: pointer;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-flex {
+  display: flex;
+}
+
+.modal-content {
+  background-color: #303030;
+  max-width: 40rem;
+  min-width: 400px;
+  width: 100%;
+}
+
+.modal-header {
+  text-align: center;
+  padding: 1.5%;
+}
+
+.modal-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.modal-button {
+  padding: 0.3rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  margin: 0.5rem 0.25rem;
 }

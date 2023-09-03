@@ -209,7 +209,8 @@ app.post("/api/insert/routine", (req, res) => {
   const userId = req.body.userId;
   const name = req.body.name;
 
-  const sqlInsert = "INSERT INTO user_profiles (user_id, namee) VALUES (?, ?)";
+  const sqlInsert =
+    "INSERT INTO exercise_routines (user_id, name) VALUES (?, ?)";
   db.query(sqlInsert, [userId, name], (err, result) => {
     if (err) {
       res.status(500).json({ error: "Internal Server Error" });
