@@ -101,7 +101,6 @@ const ProfileForm = (props) => {
       }
     )
       .then((response) => {
-        console.log(response.data);
         props.setUserProfileDisplay(response.data);
         navigate("/profile");
       })
@@ -135,6 +134,34 @@ const ProfileForm = (props) => {
     return Number(cm.toFixed(0));
   };
 
+  const safeParseFloat = (str) => {
+    try {
+      const parsedValue = parseFloat(str);
+      if (!isNaN(parsedValue)) {
+        return parsedValue;
+      } else {
+        throw new Error("Value is not a valid number.");
+      }
+    } catch (error) {
+      console.error("Error parsing value:", error);
+      return 0;
+    }
+  };
+
+  const safeParseInt = (str) => {
+    try {
+      const parsedValue = parseInt(str);
+      if (!isNaN(parsedValue)) {
+        return parsedValue;
+      } else {
+        throw new Error("Value is not a valid number.");
+      }
+    } catch (error) {
+      console.error("Error parsing value:", error);
+      return 0;
+    }
+  };
+
   return (
     <div className="App">
       <div className="profile container">
@@ -161,7 +188,7 @@ const ProfileForm = (props) => {
                   id="input"
                   value={weightReg}
                   onChange={(e) => {
-                    setWeightReg(parseFloat(e.target.value));
+                    setWeightReg(safeParseFloat(e.target.value));
                   }}
                 />
                 <label>lbs</label>
@@ -172,7 +199,7 @@ const ProfileForm = (props) => {
                   id="input"
                   value={feet}
                   onChange={(e) => {
-                    const newFeet = parseInt(e.target.value);
+                    const newFeet = safeParseInt(e.target.value);
                     const newHeight = convertHeightImperial(newFeet, inches);
                     setFeet(newFeet);
                     setCm(defaultConvertHeightMetric(newFeet * 12 + inches));
@@ -185,7 +212,7 @@ const ProfileForm = (props) => {
                   id="input"
                   value={inches}
                   onChange={(e) => {
-                    const newInches = parseInt(e.target.value);
+                    const newInches = safeParseInt(e.target.value);
                     const newHeight = convertHeightImperial(feet, newInches);
                     setInches(newInches);
                     setCm(defaultConvertHeightMetric(feet * 12 + newInches));
@@ -203,7 +230,7 @@ const ProfileForm = (props) => {
                   id="input"
                   value={defaultConvertWeight(weightReg)}
                   onChange={(e) => {
-                    setWeightReg(convertWeight(parseFloat(e.target.value)));
+                    setWeightReg(convertWeight(safeParseFloat(e.target.value)));
                   }}
                 />
                 <label> kg</label>
@@ -214,7 +241,7 @@ const ProfileForm = (props) => {
                   id="input"
                   value={cm}
                   onChange={(e) => {
-                    const newCm = parseInt(e.target.value);
+                    const newCm = safeParseInt(e.target.value);
                     const newHeight = convertHeightMetric(newCm);
                     setCm(newCm);
                     setFeet(Math.floor(convertHeightMetric(newCm) / 12));
@@ -232,7 +259,7 @@ const ProfileForm = (props) => {
                 id="input"
                 value={ageReg}
                 onChange={(e) => {
-                  setAgeReg(parseInt(e.target.value));
+                  setAgeReg(safeParseInt(e.target.value));
                 }}
               />
             </div>

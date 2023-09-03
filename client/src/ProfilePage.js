@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -21,7 +20,9 @@ const ProfilePage = (props) => {
           const userProfileWithNA = Object.keys(response.data).reduce(
             (acc, key) => {
               acc[key] =
-                response.data[key] === 0 || response.data[key] === ""
+                response.data[key] === 0 ||
+                response.data[key] === "" ||
+                response.data[key] === null
                   ? "N/A"
                   : response.data[key];
               return acc;
