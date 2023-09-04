@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 
-const WeightFormModal = ({
-  setUserProfile,
-  userProfile,
-  loginStatus,
-  onClose,
-}) => {
+const WeightFormModal = (props) => {
   const [weightReg, setWeightReg] = useState(
-    userProfile && userProfile.weight ? userProfile.weight : 0
+    props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
   );
+  const [previousWeight, setPreviousWeight] = useState("");
+
   const [dateReg, setDateReg] = useState(new Date());
   const formattedDate = dateReg.toISOString().split("T")[0];
   const monthNames = [
@@ -27,33 +24,89 @@ const WeightFormModal = ({
     "Dec",
   ];
 
+  useEffect(() => {
+    // const { loginStatus, setPreviousWeight } = props;
+
+    if (props.loginStatus) {
+      Axios.get(`http://localhost:3001/api/get/weight/${props.loginStatus.id}`)
+        .then((response) => {
+          console.log(response.data.date.slice(0, 10));
+          setPreviousWeight(response.data.date.slice(0, 10));
+        })
+        .catch((error) => {
+          console.error("Error fetching weight data:", error);
+        });
+    }
+  }, [props]);
+
+  useEffect(() => {
+    const savedFormData = JSON.parse(localStorage.getItem("weightFormData"));
+    if (savedFormData) {
+      setWeightReg(savedFormData.weight);
+      setPreviousWeight(savedFormData.previousWeight);
+    }
+  }, [props]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "weightFormData",
+      JSON.stringify({
+        weight: weightReg,
+        previousWeight: previousWeight,
+      })
+    );
+    return () => {
+      localStorage.removeItem("weightFormData");
+    };
+  });
+
   const setWeight = () => {
-    Axios.put(`http://localhost:3001/api/update/profile/${loginStatus.id}`, {
-      userId: loginStatus.id,
-      weight: weightReg,
-      height: userProfile.height,
-      age: userProfile.age,
-      activityLevel: userProfile.activity_level,
-      gender: userProfile.gender,
-      measurementType: userProfile.measurement_type,
-    })
+    Axios.put(
+      `http://localhost:3001/api/update/profile/${props.loginStatus.id}`,
+      {
+        userId: props.loginStatus.id,
+        weight: weightReg,
+        height: props.userProfile.height,
+        age: props.userProfile.age,
+        activityLevel: props.userProfile.activity_level,
+        gender: props.userProfile.gender,
+        measurementType: props.userProfile.measurement_type,
+      }
+    )
       .then((response) => {
         console.log(response.data);
       })
       .catch((error) => {
         console.error("Error updating weight:", error);
       });
-    Axios.post("http://localhost:3001/api/insert/weight", {
-      userId: loginStatus.id,
-      weight: weightReg,
-      date: formattedDate,
-    })
-      .then((response) => {
-        onClose();
+    if (previousWeight === formattedDate) {
+      Axios.put(
+        `http://localhost:3001/api/update/weight/${props.loginStatus.id}`,
+        {
+          userId: props.loginStatus.id,
+          weight: weightReg,
+          date: formattedDate,
+        }
+      )
+        .then((response) => {
+          props.onClose();
+        })
+        .catch((error) => {
+          console.error("Error setting weight:", error);
+        });
+    } else {
+      Axios.post("http://localhost:3001/api/insert/weight", {
+        userId: props.loginStatus.id,
+        weight: weightReg,
+        date: formattedDate,
       })
-      .catch((error) => {
-        console.error("Error setting:", error);
-      });
+        .then((response) => {
+          props.onClose();
+        })
+        .catch((error) => {
+          console.error("Error setting weight:", error);
+        });
+    }
   };
 
   const safeParseFloat = (str) => {
@@ -103,7 +156,7 @@ const WeightFormModal = ({
               <button className="modal-button" onClick={setWeight}>
                 Confirm
               </button>
-              <button className="modal-button" onClick={onClose}>
+              <button className="modal-button" onClick={props.onClose}>
                 Cancel
               </button>
             </span>

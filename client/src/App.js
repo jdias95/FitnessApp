@@ -4,7 +4,6 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
-  useNavigate,
 } from "react-router-dom";
 import NavbarLoggedIn from "./NavbarLoggedIn";
 import NavbarLoggedOut from "./NavbarLoggedOut";
@@ -14,11 +13,9 @@ import Login from "./Login";
 import Root from "./Root";
 import ProfilePage from "./ProfilePage";
 import ProfileForm from "./ProfileForm";
-import RoutineFormModal from "./RoutineFormModal";
 import Home from "./Home";
 import "./App.css";
 import Axios from "axios";
-import WeightFormModal from "./WeightFormModal";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState("");
@@ -87,6 +84,7 @@ function App() {
         if (response.data.loggedIn === true) {
           setLoginStatus(response.data.user);
         } else {
+          localStorage.clear();
           setLoginStatus("");
         }
       })

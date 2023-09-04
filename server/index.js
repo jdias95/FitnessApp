@@ -238,6 +238,39 @@ app.post("/api/insert/weight", (req, res) => {
   });
 });
 
+app.get("/api/get/weight/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const sqlSelect = "SELECT * FROM weight_times WHERE user_id = ?";
+
+  db.query(sqlSelect, userId, (err, result) => {
+    if (err) {
+      console.error("Error retrieving weights:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (result.length === 0) {
+      res.status(404).json({ error: "Weights not found" });
+    } else {
+      res.status(200).json(result[0]);
+    }
+  });
+});
+
+app.put("/api/update/weight/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const weight = req.body.weight;
+  const date = req.body.date;
+
+  const sqlUpdate = `UPDATE weight_times SET weight = ? WHERE user_id = ? AND date = ?`;
+
+  db.query(sqlUpdate, [weight, userId, date], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });

@@ -82,6 +82,9 @@ const ProfileForm = (props) => {
         cm: cm,
       })
     );
+    return () => {
+      localStorage.removeItem("profileFormData");
+    };
   }, [
     weightReg,
     heightReg,
@@ -108,7 +111,6 @@ const ProfileForm = (props) => {
     )
       .then((response) => {
         props.setUserProfileDisplay(response.data);
-        localStorage.removeItem("profileFormData");
         navigate("/profile");
       })
       .catch((error) => {
