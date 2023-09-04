@@ -20,14 +20,20 @@ const Login = (props) => {
     Axios.post("http://localhost:3001/api/login", {
       email: email,
       password: password,
-    }).then((response) => {
-      if (response.data.message) {
-        props.setLoginStatus(response.data.message);
-      } else {
-        props.setLoginStatus(response.data[0]);
-        navigate("/dashboard");
-      }
-    });
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.message) {
+          props.setLoginStatus(response.data.message);
+        } else {
+          localStorage.setItem("authToken", response.data[0].first_name);
+          props.setLoginStatus(response.data[0]);
+          navigate("/dashboard");
+        }
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
+      });
   };
 
   return (

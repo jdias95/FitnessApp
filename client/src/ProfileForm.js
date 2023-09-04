@@ -45,7 +45,7 @@ const ProfileForm = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!props.loginStatus) {
+    if (!localStorage.getItem("authToken")) {
       navigate("/login");
     }
   });
@@ -108,6 +108,7 @@ const ProfileForm = (props) => {
     )
       .then((response) => {
         props.setUserProfileDisplay(response.data);
+        localStorage.removeItem("profileFormData");
         navigate("/profile");
       })
       .catch((error) => {
@@ -117,7 +118,7 @@ const ProfileForm = (props) => {
 
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
-    return Number(lbs.toFixed(2));
+    return Number(lbs.toFixed(1));
   };
 
   const convertHeightMetric = (cm) => {
@@ -132,7 +133,7 @@ const ProfileForm = (props) => {
 
   const defaultConvertWeight = (lbs) => {
     const kgs = lbs / 2.20462262185;
-    return Number(kgs.toFixed(2));
+    return Number(kgs.toFixed(1));
   };
 
   const defaultConvertHeightMetric = (inches) => {
@@ -188,7 +189,7 @@ const ProfileForm = (props) => {
                 <label>Weight: </label>
                 <input
                   type="number"
-                  step="0.01"
+                  step="0.1"
                   id="input"
                   value={weightReg}
                   onChange={(e) => {
@@ -230,7 +231,7 @@ const ProfileForm = (props) => {
                 <label>Weight: </label>
                 <input
                   type="number"
-                  step="0.01"
+                  step="0.1"
                   id="input"
                   value={defaultConvertWeight(weightReg)}
                   onChange={(e) => {

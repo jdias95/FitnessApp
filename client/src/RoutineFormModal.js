@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 
-const RoutineForm = ({ loginStatus, onClose }) => {
+const RoutineFormModal = ({ loginStatus, onClose }) => {
   const [nameReg, setNameReg] = useState("");
 
   const createRoutine = () => {
-    console.log(loginStatus);
     Axios.post("http://localhost:3001/api/insert/routine", {
       userId: loginStatus.id,
       name: nameReg,
@@ -17,10 +16,6 @@ const RoutineForm = ({ loginStatus, onClose }) => {
         console.error("Error creating routine:", error);
       });
   };
-
-  useEffect(() => {
-    console.log(nameReg);
-  });
 
   return (
     <div className="modal">
@@ -54,4 +49,4 @@ const RoutineForm = ({ loginStatus, onClose }) => {
   );
 };
 
-export default RoutineForm;
+export default RoutineFormModal;

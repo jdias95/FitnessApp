@@ -18,9 +18,9 @@ const Root = (props) => {
   return (
     <>
       <div className="nav">
-        {props.loginStatus ? (
+        {localStorage.getItem("authToken") ? (
           <>
-            <h1 className="name">Hello {props.loginStatus.first_name}</h1>
+            <h1 className="name">Hello {localStorage.getItem("authToken")}</h1>
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/profile">Profile</Link>
             <Link to="/logout" onClick={logout}>

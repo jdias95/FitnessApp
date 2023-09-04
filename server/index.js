@@ -221,6 +221,23 @@ app.post("/api/insert/routine", (req, res) => {
   });
 });
 
+app.post("/api/insert/weight", (req, res) => {
+  const userId = req.body.userId;
+  const weight = req.body.weight;
+  const date = req.body.date;
+
+  const sqlInsert =
+    "INSERT INTO weight_times (user_id, weight, date) VALUES (?, ?, ?)";
+  db.query(sqlInsert, [userId, weight, date], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });

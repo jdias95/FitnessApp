@@ -14,12 +14,13 @@ import Login from "./Login";
 import Root from "./Root";
 import ProfilePage from "./ProfilePage";
 import ProfileForm from "./ProfileForm";
-import RoutineForm from "./RoutineForm";
+import RoutineFormModal from "./RoutineFormModal";
 import Home from "./Home";
 import "./App.css";
 import Axios from "axios";
+import WeightFormModal from "./WeightFormModal";
 
-function App(props) {
+function App() {
   const [loginStatus, setLoginStatus] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [userProfileDisplay, setUserProfileDisplay] = useState(null);
@@ -45,7 +46,13 @@ function App(props) {
         />
         <Route
           path="dashboard"
-          element={<Dashboard loginStatus={loginStatus} />}
+          element={
+            <Dashboard
+              loginStatus={loginStatus}
+              userProfile={userProfile}
+              setUserProfile={setUserProfile}
+            />
+          }
         />
         <Route
           path="profile"
@@ -68,10 +75,6 @@ function App(props) {
               setUserProfileDisplay={setUserProfileDisplay}
             />
           }
-        />
-        <Route
-          path="routine-form"
-          element={<RoutineForm loginStatus={loginStatus} />}
         />
         <Route path="logout" />
       </Route>
@@ -137,7 +140,11 @@ function App(props) {
   return (
     <div className="App">
       <RouterProvider router={router}>
-        {loginStatus ? <NavbarLoggedIn /> : <NavbarLoggedOut />}
+        {localStorage.getItem("authToken") ? (
+          <NavbarLoggedIn />
+        ) : (
+          <NavbarLoggedOut />
+        )}
       </RouterProvider>
     </div>
   );

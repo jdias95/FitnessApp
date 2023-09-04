@@ -1,23 +1,34 @@
 import React, { useState, useEffect } from "react";
-import RoutineForm from "./RoutineForm";
+import RoutineFormModal from "./RoutineFormModal";
+import WeightFormModal from "./WeightFormModal";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
 
 const Dashboard = (props) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showRoutineModal, setShowRoutineModal] = useState(false);
+  const [showWeightModal, setShowWeightModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!props.loginStatus) {
+    if (!localStorage.getItem("authToken")) {
       navigate("/login");
     }
   });
 
-  const openModal = () => {
-    setShowModal(true);
+  const openWeightModal = () => {
+    setShowWeightModal(true);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
+  const closeWeightModal = () => {
+    setShowWeightModal(false);
+  };
+
+  const openRoutineModal = () => {
+    setShowRoutineModal(true);
+  };
+
+  const closeRoutineModal = () => {
+    setShowRoutineModal(false);
   };
 
   return (
@@ -26,7 +37,7 @@ const Dashboard = (props) => {
         <div className="weight container">
           <div className="dashboard flex">
             <h2>Weight</h2>
-            <h1 id="plus" onClick={openModal}>
+            <h1 id="plus" onClick={openWeightModal}>
               +
             </h1>
           </div>
@@ -34,15 +45,26 @@ const Dashboard = (props) => {
         <div className="routine container">
           <div className="dashboard flex">
             <h2>Exercise Routines</h2>
-            <h2 id="plus" onClick={openModal}>
+            <h2 id="plus" onClick={openRoutineModal}>
               +
             </h2>
           </div>
         </div>
       </div>
 
-      {showModal && (
-        <RoutineForm loginStatus={props.loginStatus} onClose={closeModal} />
+      {showWeightModal && (
+        <WeightFormModal
+          loginStatus={props.loginStatus}
+          userProfile={props.userProfile}
+          onClose={closeWeightModal}
+        />
+      )}
+
+      {showRoutineModal && (
+        <RoutineFormModal
+          loginStatus={props.loginStatus}
+          onClose={closeRoutineModal}
+        />
       )}
     </div>
   );

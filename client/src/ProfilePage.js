@@ -7,7 +7,7 @@ const ProfilePage = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!props.loginStatus) {
+    if (!localStorage.getItem("authToken")) {
       navigate("/login");
     }
   });
@@ -88,7 +88,7 @@ const ProfilePage = (props) => {
         {props.userProfileDisplay && (
           <div>
             <h2>Profile</h2>
-            {props.userProfileDisplay.measurement_type === "imperial" ? (
+            {props.userProfileDisplay.measurement_type !== "metric" ? (
               <div>
                 {props.userProfileDisplay.weight === "N/A" ? (
                   <div className="flex">
