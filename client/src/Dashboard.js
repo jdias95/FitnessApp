@@ -13,6 +13,9 @@ const Dashboard = (props) => {
     if (!localStorage.getItem("authToken")) {
       navigate("/login");
     }
+    return () => {
+      localStorage.removeItem("weightFormData");
+    };
   });
 
   const openWeightModal = () => {

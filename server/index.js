@@ -242,14 +242,14 @@ app.get("/api/get/weight/:userId", (req, res) => {
   const userId = req.params.userId;
   const sqlSelect = "SELECT * FROM weight_times WHERE user_id = ?";
 
-  db.query(sqlSelect, userId, (err, result) => {
+  db.query(sqlSelect, [userId], (err, result) => {
     if (err) {
       console.error("Error retrieving weights:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else if (result.length === 0) {
       res.status(404).json({ error: "Weights not found" });
     } else {
-      res.status(200).json(result[0]);
+      res.status(200).json(result);
     }
   });
 });
