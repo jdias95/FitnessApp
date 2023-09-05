@@ -5,7 +5,6 @@ const WeightFormModal = (props) => {
   const [weightReg, setWeightReg] = useState(
     props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
   );
-  const [previousWeight, setPreviousWeight] = useState({});
 
   const [dateReg, setDateReg] = useState(new Date());
   const formattedDate = dateReg.toISOString().split("T")[0];
@@ -25,31 +24,26 @@ const WeightFormModal = (props) => {
   ];
 
   useEffect(() => {
-    if (props.loginStatus) {
-      Axios.get(`http://localhost:3001/api/get/weight/${props.loginStatus.id}`)
-        .then((response) => {
-          setPreviousWeight(response.data[response.data.length - 1]);
-        })
-        .catch((error) => {
-          console.error("Error fetching weight data:", error);
-        });
+    const weightFormData = JSON.parse(localStorage.getItem("weightFormData"));
+    const savedPreviousWeight = JSON.parse(
+      localStorage.getItem("previousWeight")
+    );
+    if (weightFormData) {
+      setWeightReg(weightFormData.weight);
     }
-  }, [props]);
-
-  useEffect(() => {
-    const savedFormData = JSON.parse(localStorage.getItem("weightFormData"));
-    if (savedFormData) {
-      setWeightReg(savedFormData.weight);
-      setPreviousWeight(savedFormData.previousWeight);
+    if (savedPreviousWeight) {
+      props.setPreviousWeight(savedPreviousWeight.previousWeight);
     }
-  }, [props]);
+    console.log(
+      savedPreviousWeight.previousWeight.date.slice(0, 10) === formattedDate
+    );
+  }, []);
 
   useEffect(() => {
     localStorage.setItem(
       "weightFormData",
       JSON.stringify({
         weight: weightReg,
-        previousWeight: previousWeight,
       })
     );
   });
@@ -73,7 +67,7 @@ const WeightFormModal = (props) => {
       .catch((error) => {
         console.error("Error updating weight:", error);
       });
-    if (previousWeight.date.slice(0, 10) === formattedDate) {
+    if (props.previousWeight.date.slice(0, 10) === formattedDate) {
       Axios.put(
         `http://localhost:3001/api/update/weight/${props.loginStatus.id}`,
         {
@@ -101,6 +95,9 @@ const WeightFormModal = (props) => {
           console.error("Error setting weight:", error);
         });
     }
+    const data = JSON.parse(localStorage.getItem("previousWeight"));
+    data.previousWeight.weight = weightReg;
+    localStorage.setItem("previousWeight", JSON.stringify(data));
   };
 
   const safeParseFloat = (str) => {
@@ -114,6 +111,12 @@ const WeightFormModal = (props) => {
     } catch (error) {
       return 0;
     }
+  };
+
+  const updatePreviousWeight = () => {
+    const data = JSON.parse(localStorage.getItem("previousWeight"));
+    data.weight = weightReg;
+    localStorage.setItem("previousWeight", JSON.stringify(data));
   };
 
   const convertWeight = (kgs) => {
@@ -150,7 +153,7 @@ const WeightFormModal = (props) => {
               <button className="modal-button" onClick={setWeight}>
                 Confirm
               </button>
-              <button className="modal-button" onClick={props.onClose}>
+              <button className="modal-button" onClick={props.onCancel}>
                 Cancel
               </button>
             </span>

@@ -21,6 +21,7 @@ function App() {
   const [loginStatus, setLoginStatus] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [userProfileDisplay, setUserProfileDisplay] = useState(null);
+  const [previousWeight, setPreviousWeight] = useState({});
 
   Axios.defaults.withCredentials = true;
 
@@ -48,6 +49,8 @@ function App() {
               loginStatus={loginStatus}
               userProfile={userProfile}
               setUserProfile={setUserProfile}
+              previousWeight={previousWeight}
+              setPreviousWeight={setPreviousWeight}
             />
           }
         />
@@ -95,6 +98,13 @@ function App() {
 
   useEffect(() => {
     if (loginStatus) {
+      Axios.get(`http://localhost:3001/api/get/weight/${loginStatus.id}`)
+        .then((response) => {
+          setPreviousWeight(response.data[response.data.length - 1]);
+        })
+        .catch((error) => {
+          console.error("Error fetching weight data:", error);
+        });
       Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
         .then((response) => {
           setUserProfile(response.data);
@@ -134,6 +144,15 @@ function App() {
         });
     }
   }, [loginStatus]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "previousWeight",
+      JSON.stringify({
+        previousWeight: previousWeight,
+      })
+    );
+  });
 
   return (
     <div className="App">

@@ -13,9 +13,6 @@ const Dashboard = (props) => {
     if (!localStorage.getItem("authToken")) {
       navigate("/login");
     }
-    return () => {
-      localStorage.removeItem("weightFormData");
-    };
   });
 
   const openWeightModal = () => {
@@ -24,6 +21,15 @@ const Dashboard = (props) => {
 
   const closeWeightModal = () => {
     setShowWeightModal(false);
+  };
+
+  const cancelWeightModal = () => {
+    setShowWeightModal(false);
+    const data = JSON.parse(localStorage.getItem("weightFormData"));
+    data.weight = JSON.parse(
+      localStorage.getItem("previousWeight")
+    ).previousWeight.weight;
+    localStorage.setItem("weightFormData", JSON.stringify(data));
   };
 
   const openRoutineModal = () => {
@@ -60,6 +66,9 @@ const Dashboard = (props) => {
           loginStatus={props.loginStatus}
           userProfile={props.userProfile}
           onClose={closeWeightModal}
+          onCancel={cancelWeightModal}
+          previousWeight={props.previousWeight}
+          setPreviousWeight={props.setPreviousWeight}
         />
       )}
 
