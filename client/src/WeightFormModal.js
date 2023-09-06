@@ -2,11 +2,6 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 
 const WeightFormModal = (props) => {
-  const [weightReg, setWeightReg] = useState(
-    props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
-  );
-  const dateReg = new Date();
-  const formattedDate = dateReg.toISOString().split("T")[0];
   const {
     loginStatus,
     userProfile,
@@ -15,6 +10,11 @@ const WeightFormModal = (props) => {
     previousWeight,
     setPreviousWeight,
   } = props;
+  const [weightReg, setWeightReg] = useState(
+    props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
+  );
+  const dateReg = new Date();
+  const formattedDate = dateReg.toISOString().split("T")[0];
   const monthNames = [
     "Jan",
     "Feb",

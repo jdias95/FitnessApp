@@ -2,14 +2,15 @@ import React, { useEffect } from "react";
 import Axios from "axios";
 
 export default function Home(props) {
+  const { setLoginStatus } = props;
   useEffect(() => {
     Axios.delete("http://localhost:3001/api/logout").then((response) => {
       if (response.status === 200) {
-        props.setLoginStatus("");
+        setLoginStatus("");
         localStorage.clear();
       }
     });
-  }, [props]);
+  }, [setLoginStatus]);
 
   return (
     <div className="App">

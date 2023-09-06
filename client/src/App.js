@@ -27,12 +27,7 @@ function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route
-        path="/"
-        element={
-          <Root setLoginStatus={setLoginStatus} loginStatus={loginStatus} />
-        }
-      >
+      <Route path="/" element={<Root setLoginStatus={setLoginStatus} />}>
         <Route index element={<Home setLoginStatus={setLoginStatus} />} />
         <Route
           path="register"
@@ -48,7 +43,6 @@ function App() {
             <Dashboard
               loginStatus={loginStatus}
               userProfile={userProfile}
-              setUserProfile={setUserProfile}
               previousWeight={previousWeight}
               setPreviousWeight={setPreviousWeight}
             />
@@ -59,7 +53,6 @@ function App() {
           element={
             <ProfilePage
               loginStatus={loginStatus}
-              userProfile={userProfile}
               userProfileDisplay={userProfileDisplay}
               setUserProfile={setUserProfile}
               setUserProfileDisplay={setUserProfileDisplay}

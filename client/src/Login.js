@@ -3,6 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
+  const { setLoginStatus } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -10,11 +11,11 @@ const Login = (props) => {
   useEffect(() => {
     Axios.delete("http://localhost:3001/api/logout").then((response) => {
       if (response.status === 200) {
-        props.setLoginStatus("");
+        setLoginStatus("");
         localStorage.clear();
       }
     });
-  }, [props]);
+  }, [setLoginStatus]);
 
   const login = () => {
     Axios.post("http://localhost:3001/api/login", {
@@ -24,7 +25,7 @@ const Login = (props) => {
       .then((response) => {
         console.log(response.data);
         if (response.data.message) {
-          props.setLoginStatus(response.data.message);
+          setLoginStatus(response.data.message);
         } else {
           localStorage.setItem(
             "authToken",
@@ -33,7 +34,7 @@ const Login = (props) => {
               expirationTime: new Date().getTime() + 500000,
             })
           );
-          props.setLoginStatus(response.data[0]);
+          setLoginStatus(response.data[0]);
           navigate("/dashboard");
         }
       })
