@@ -30,7 +30,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 60 * 60 * 24 * 1000,
+      expires: 500000,
     },
   })
 );
@@ -113,7 +113,7 @@ app.delete("/api/logout", (req, res) => {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        expires: 60 * 60 * 24 * 1000,
+        expires: 500000,
       },
     });
 

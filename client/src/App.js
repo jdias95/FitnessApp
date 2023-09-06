@@ -82,6 +82,18 @@ function App() {
   );
 
   useEffect(() => {
+    const storedData = localStorage.getItem("authToken");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      const currentTime = new Date().getTime();
+
+      if (
+        parsedData.expirationTime &&
+        currentTime >= parsedData.expirationTime
+      ) {
+        localStorage.clear();
+      }
+    }
     Axios.get("http://localhost:3001/api/login")
       .then((response) => {
         if (response.data.loggedIn === true) {
@@ -100,7 +112,16 @@ function App() {
     if (loginStatus) {
       Axios.get(`http://localhost:3001/api/get/weight/${loginStatus.id}`)
         .then((response) => {
-          setPreviousWeight(response.data[response.data.length - 1]);
+          const weightData = response.data;
+          const mostRecentWeight = weightData[weightData.length - 1];
+          setPreviousWeight(mostRecentWeight);
+
+          localStorage.setItem(
+            "previousWeight",
+            JSON.stringify({
+              previousWeight: mostRecentWeight,
+            })
+          );
         })
         .catch((error) => {
           console.error("Error fetching weight data:", error);
@@ -144,15 +165,6 @@ function App() {
         });
     }
   }, [loginStatus]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      "previousWeight",
-      JSON.stringify({
-        previousWeight: previousWeight,
-      })
-    );
-  });
 
   return (
     <div className="App">

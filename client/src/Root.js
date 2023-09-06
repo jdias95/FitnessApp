@@ -20,7 +20,9 @@ const Root = (props) => {
       <div className="nav">
         {localStorage.getItem("authToken") ? (
           <>
-            <h1 className="name">Hello {localStorage.getItem("authToken")}</h1>
+            <h1 className="name">
+              Hello {JSON.parse(localStorage.getItem("authToken")).firstName}
+            </h1>
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/profile">Profile</Link>
             <Link to="/logout" onClick={logout}>

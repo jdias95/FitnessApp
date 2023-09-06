@@ -26,7 +26,13 @@ const Login = (props) => {
         if (response.data.message) {
           props.setLoginStatus(response.data.message);
         } else {
-          localStorage.setItem("authToken", response.data[0].first_name);
+          localStorage.setItem(
+            "authToken",
+            JSON.stringify({
+              firstName: response.data[0].first_name,
+              expirationTime: new Date().getTime() + 500000,
+            })
+          );
           props.setLoginStatus(response.data[0]);
           navigate("/dashboard");
         }
