@@ -3,46 +3,47 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const ProfileForm = (props) => {
+  const {
+    loginStatus,
+    userProfile,
+    setUserProfileDisplay,
+    previousWeight,
+    setPreviousWeight,
+  } = props;
   const [weightReg, setWeightReg] = useState(
-    props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
+    userProfile && userProfile.weight ? userProfile.weight : 0
   );
   const [heightReg, setHeightReg] = useState(
-    props.userProfile && props.userProfile.height ? props.userProfile.height : 0
+    userProfile && userProfile.height ? userProfile.height : 0
   );
   const [feet, setFeet] = useState(
-    props.userProfile && props.userProfile.height
-      ? Math.floor(props.userProfile.height / 12)
-      : 0
+    userProfile && userProfile.height ? Math.floor(userProfile.height / 12) : 0
   );
   const [inches, setInches] = useState(
-    props.userProfile && props.userProfile.height
-      ? props.userProfile.height % 12
-      : 0
+    userProfile && userProfile.height ? userProfile.height % 12 : 0
   );
   const [cm, setCm] = useState(
-    props.userProfile && props.userProfile.height
-      ? Math.floor(props.userProfile.height / 0.3937008)
+    userProfile && userProfile.height
+      ? Math.floor(userProfile.height / 0.3937008)
       : 0
   );
   const [ageReg, setAgeReg] = useState(
-    props.userProfile && props.userProfile.age ? props.userProfile.age : 0
+    userProfile && userProfile.age ? userProfile.age : 0
   );
   const [activityLevelReg, setActivityLevelReg] = useState(
-    props.userProfile && props.userProfile.activity_level
-      ? props.userProfile.activity_level
-      : ""
+    userProfile && userProfile.activity_level ? userProfile.activity_level : ""
   );
   const [genderReg, setGenderReg] = useState(
-    props.userProfile && props.userProfile.gender
-      ? props.userProfile.gender
-      : ""
+    userProfile && userProfile.gender ? userProfile.gender : ""
   );
   const [measurementType, setMeasurementType] = useState(
-    props.userProfile && props.userProfile.measurement_type
-      ? props.userProfile.measurement_type
+    userProfile && userProfile.measurement_type
+      ? userProfile.measurement_type
       : ""
   );
   const navigate = useNavigate();
+  const dateReg = new Date();
+  const formattedDate = dateReg.toISOString().split("T")[0];
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
@@ -51,8 +52,10 @@ const ProfileForm = (props) => {
   });
 
   useEffect(() => {
-    // Load data from local storage if available
     const savedFormData = JSON.parse(localStorage.getItem("profileFormData"));
+    const savedPreviousWeight = JSON.parse(
+      localStorage.getItem("previousWeight")
+    );
     if (savedFormData) {
       setWeightReg(savedFormData.weight);
       setHeightReg(savedFormData.height);
@@ -64,10 +67,12 @@ const ProfileForm = (props) => {
       setInches(savedFormData.inches);
       setCm(savedFormData.cm);
     }
-  }, []);
+    if (savedPreviousWeight) {
+      setPreviousWeight(savedPreviousWeight.previousWeight);
+    }
+  }, [setPreviousWeight]);
 
   useEffect(() => {
-    // Save data to local storage whenever the state changes
     localStorage.setItem(
       "profileFormData",
       JSON.stringify({
@@ -95,27 +100,68 @@ const ProfileForm = (props) => {
     feet,
     inches,
     cm,
+    userProfile,
   ]);
 
   const profileUpdate = () => {
-    Axios.put(
-      `http://localhost:3001/api/update/profile/${props.loginStatus.id}`,
-      {
-        weight: weightReg,
-        height: heightReg,
-        age: ageReg,
-        activityLevel: activityLevelReg,
-        gender: genderReg,
-        measurementType: measurementType,
-      }
-    )
+    Axios.put(`http://localhost:3001/api/update/profile/${loginStatus.id}`, {
+      weight: weightReg,
+      height: heightReg,
+      age: ageReg,
+      activityLevel: activityLevelReg,
+      gender: genderReg,
+      measurementType: measurementType,
+    })
       .then((response) => {
-        props.setUserProfileDisplay(response.data);
+        setUserProfileDisplay(response.data);
         navigate("/profile");
       })
       .catch((error) => {
         console.error("Error updating profile:", error);
       });
+    if (
+      userProfile !== weightReg &&
+      previousWeight.date.slice(0, 10) === formattedDate
+    ) {
+      Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
+        userId: loginStatus.id,
+        weight: weightReg,
+        date: formattedDate,
+      })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error setting weight:", error);
+        });
+    } else if (
+      userProfile !== weightReg &&
+      previousWeight.date.slice(0, 10) !== formattedDate
+    ) {
+      Axios.post("http://localhost:3001/api/insert/weight", {
+        userId: loginStatus.id,
+        weight: weightReg,
+        date: formattedDate,
+      })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error setting weight:", error);
+        });
+    }
+    const previousWeightData = JSON.parse(
+      localStorage.getItem("previousWeight")
+    );
+    previousWeightData.previousWeight.weight = weightReg;
+    localStorage.setItem("previousWeight", JSON.stringify(previousWeightData));
+    const weightFormData = JSON.parse(localStorage.getItem("weightFormData"));
+    if (weightFormData) {
+      localStorage.setItem(
+        "weightFormData",
+        JSON.stringify({ weight: weightReg })
+      );
+    }
   };
 
   const convertWeight = (kgs) => {
@@ -172,7 +218,7 @@ const ProfileForm = (props) => {
   return (
     <div className="App">
       <div className="profile container">
-        {props.userProfile && (
+        {userProfile && (
           <div className="form">
             <h1>Profile</h1>
             <select

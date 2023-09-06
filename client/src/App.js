@@ -73,6 +73,8 @@ function App() {
               loginStatus={loginStatus}
               userProfile={userProfile}
               setUserProfileDisplay={setUserProfileDisplay}
+              previousWeight={previousWeight}
+              setPreviousWeight={setPreviousWeight}
             />
           }
         />

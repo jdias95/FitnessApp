@@ -5,7 +5,7 @@ const WeightFormModal = (props) => {
   const [weightReg, setWeightReg] = useState(
     props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
   );
-  const [dateReg, setDateReg] = useState(new Date());
+  const dateReg = new Date();
   const formattedDate = dateReg.toISOString().split("T")[0];
   const {
     loginStatus,
