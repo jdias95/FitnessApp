@@ -9,6 +9,7 @@ const ProfileForm = (props) => {
     setUserProfileDisplay,
     previousWeight,
     setPreviousWeight,
+    formattedDate,
   } = props;
   const [weightReg, setWeightReg] = useState(
     userProfile && userProfile.weight ? userProfile.weight : 0
@@ -42,14 +43,13 @@ const ProfileForm = (props) => {
       : ""
   );
   const navigate = useNavigate();
-  const dateReg = new Date();
-  const formattedDate = dateReg.toISOString().split("T")[0];
 
   useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
+    if (!loginStatus) {
+      localStorage.clear();
       navigate("/login");
     }
-  });
+  }, [loginStatus, navigate]);
 
   useEffect(() => {
     const savedFormData = JSON.parse(localStorage.getItem("profileFormData"));
@@ -119,10 +119,7 @@ const ProfileForm = (props) => {
       .catch((error) => {
         console.error("Error updating profile:", error);
       });
-    if (
-      userProfile !== weightReg &&
-      previousWeight.date.slice(0, 10) === formattedDate
-    ) {
+    if (previousWeight.date === formattedDate) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
         weight: weightReg,
@@ -134,10 +131,7 @@ const ProfileForm = (props) => {
         .catch((error) => {
           console.error("Error setting weight:", error);
         });
-    } else if (
-      userProfile !== weightReg &&
-      previousWeight.date.slice(0, 10) !== formattedDate
-    ) {
+    } else if (previousWeight.date !== formattedDate) {
       Axios.post("http://localhost:3001/api/insert/weight", {
         userId: loginStatus.id,
         weight: weightReg,
@@ -154,6 +148,7 @@ const ProfileForm = (props) => {
       localStorage.getItem("previousWeight")
     );
     previousWeightData.previousWeight.weight = weightReg;
+    previousWeightData.previousWeight.date = formattedDate;
     localStorage.setItem("previousWeight", JSON.stringify(previousWeightData));
     const weightFormData = JSON.parse(localStorage.getItem("weightFormData"));
     if (weightFormData) {

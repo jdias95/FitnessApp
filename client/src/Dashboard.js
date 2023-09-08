@@ -4,16 +4,23 @@ import WeightFormModal from "./WeightFormModal";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = (props) => {
-  const { loginStatus, userProfile, previousWeight, setPreviousWeight } = props;
+  const {
+    loginStatus,
+    userProfile,
+    previousWeight,
+    setPreviousWeight,
+    formattedDate,
+  } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
+    if (!loginStatus) {
+      localStorage.clear();
       navigate("/login");
     }
-  });
+  }, [loginStatus, navigate]);
 
   const openWeightModal = () => {
     setShowWeightModal(true);
@@ -69,6 +76,7 @@ const Dashboard = (props) => {
           onCancel={cancelWeightModal}
           previousWeight={previousWeight}
           setPreviousWeight={setPreviousWeight}
+          formattedDate={formattedDate}
         />
       )}
 

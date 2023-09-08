@@ -13,10 +13,11 @@ const ProfilePage = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
+    if (!loginStatus) {
+      localStorage.clear();
       navigate("/login");
     }
-  });
+  }, [loginStatus, navigate]);
 
   const activityLevelPoints = {
     Sedentary: 1.2,

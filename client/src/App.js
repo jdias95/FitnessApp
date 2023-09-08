@@ -22,6 +22,11 @@ function App() {
   const [userProfile, setUserProfile] = useState(null);
   const [userProfileDisplay, setUserProfileDisplay] = useState(null);
   const [previousWeight, setPreviousWeight] = useState({});
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
 
   Axios.defaults.withCredentials = true;
 
@@ -45,6 +50,7 @@ function App() {
               userProfile={userProfile}
               previousWeight={previousWeight}
               setPreviousWeight={setPreviousWeight}
+              formattedDate={formattedDate}
             />
           }
         />
@@ -68,6 +74,7 @@ function App() {
               setUserProfileDisplay={setUserProfileDisplay}
               previousWeight={previousWeight}
               setPreviousWeight={setPreviousWeight}
+              formattedDate={formattedDate}
             />
           }
         />
@@ -109,12 +116,13 @@ function App() {
         .then((response) => {
           const weightData = response.data;
           const mostRecentWeight = weightData[weightData.length - 1];
-          setPreviousWeight(mostRecentWeight);
+          const formattedDate = mostRecentWeight.date.slice(0, 10);
+          setPreviousWeight({ ...mostRecentWeight, date: formattedDate });
 
           localStorage.setItem(
             "previousWeight",
             JSON.stringify({
-              previousWeight: mostRecentWeight,
+              previousWeight: { ...mostRecentWeight, date: formattedDate },
             })
           );
         })
@@ -159,7 +167,7 @@ function App() {
           console.log(error);
         });
     }
-  }, [loginStatus]);
+  }, [loginStatus, setPreviousWeight]);
 
   return (
     <div className="App">

@@ -23,7 +23,6 @@ const Login = (props) => {
       password: password,
     })
       .then((response) => {
-        console.log(response.data);
         if (response.data.message) {
           setLoginStatus(response.data.message);
         } else {

@@ -9,12 +9,11 @@ const WeightFormModal = (props) => {
     onCancel,
     previousWeight,
     setPreviousWeight,
+    formattedDate,
   } = props;
   const [weightReg, setWeightReg] = useState(
     props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
   );
-  const dateReg = new Date();
-  const formattedDate = dateReg.toISOString().split("T")[0];
   const monthNames = [
     "Jan",
     "Feb",
@@ -41,10 +40,7 @@ const WeightFormModal = (props) => {
     if (savedPreviousWeight) {
       setPreviousWeight(savedPreviousWeight.previousWeight);
     }
-    console.log(
-      savedPreviousWeight.previousWeight.date.slice(0, 10) === formattedDate
-    );
-  }, [formattedDate, setPreviousWeight]);
+  }, [setPreviousWeight]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -53,7 +49,7 @@ const WeightFormModal = (props) => {
         weight: weightReg,
       })
     );
-  });
+  }, [weightReg]);
 
   const setWeight = () => {
     Axios.put(`http://localhost:3001/api/update/profile/${loginStatus.id}`, {
@@ -71,7 +67,7 @@ const WeightFormModal = (props) => {
       .catch((error) => {
         console.error("Error updating weight:", error);
       });
-    if (previousWeight.date.slice(0, 10) === formattedDate) {
+    if (previousWeight.date === formattedDate) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
         weight: weightReg,
