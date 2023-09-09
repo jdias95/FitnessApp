@@ -34,9 +34,11 @@ const WeightFormModal = (props) => {
     const savedPreviousWeight = JSON.parse(
       localStorage.getItem("previousWeight")
     );
+
     if (weightFormData) {
       setWeightReg(weightFormData.weight);
     }
+
     if (savedPreviousWeight) {
       setPreviousWeight(savedPreviousWeight.previousWeight);
     }
@@ -49,6 +51,10 @@ const WeightFormModal = (props) => {
         weight: weightReg,
       })
     );
+
+    const data = JSON.parse(localStorage.getItem("previousWeight"));
+    data.previousWeight.weight = weightReg;
+    localStorage.setItem("previousWeight", JSON.stringify(data));
   }, [weightReg]);
 
   const setWeight = () => {
@@ -67,6 +73,7 @@ const WeightFormModal = (props) => {
       .catch((error) => {
         console.error("Error updating weight:", error);
       });
+
     if (previousWeight.date === formattedDate) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
@@ -92,9 +99,6 @@ const WeightFormModal = (props) => {
           console.error("Error setting weight:", error);
         });
     }
-    const data = JSON.parse(localStorage.getItem("previousWeight"));
-    data.previousWeight.weight = weightReg;
-    localStorage.setItem("previousWeight", JSON.stringify(data));
   };
 
   const safeParseFloat = (str) => {
@@ -128,35 +132,64 @@ const WeightFormModal = (props) => {
 
   return (
     <div className="modal">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h1>Weight</h1>
-        </div>
-        <div className="modal-flex">
-          <div className="modal-body">
-            <span>
-              <input
-                type="number"
-                step="0.1"
-                id="input"
-                value={weightReg}
-                onChange={(e) => {
-                  setWeightReg(safeParseFloat(e.target.value));
-                }}
-              />
-              <label>lbs</label>
-            </span>
-            <span>
-              <button className="modal-button" onClick={setWeight}>
-                Confirm
-              </button>
-              <button className="modal-button" onClick={onCancel}>
-                Cancel
-              </button>
-            </span>
+      {userProfile && (
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1>Weight</h1>
+          </div>
+          <div className="modal-flex">
+            {userProfile.measurement_type !== "metric" ? (
+              <div className="modal-body">
+                <span>
+                  <input
+                    type="number"
+                    step="0.1"
+                    id="input"
+                    value={weightReg}
+                    onChange={(e) => {
+                      setWeightReg(safeParseFloat(e.target.value));
+                    }}
+                  />
+                  <label>lbs</label>
+                </span>
+                <span>
+                  <button className="modal-button" onClick={setWeight}>
+                    Confirm
+                  </button>
+                  <button className="modal-button" onClick={onCancel}>
+                    Cancel
+                  </button>
+                </span>
+              </div>
+            ) : (
+              <div className="modal-body">
+                <span>
+                  <input
+                    type="number"
+                    step="0.1"
+                    id="input"
+                    value={defaultConvertWeight(weightReg)}
+                    onChange={(e) => {
+                      setWeightReg(
+                        convertWeight(safeParseFloat(e.target.value))
+                      );
+                    }}
+                  />
+                  <label>kgs</label>
+                </span>
+                <span>
+                  <button className="modal-button" onClick={setWeight}>
+                    Confirm
+                  </button>
+                  <button className="modal-button" onClick={onCancel}>
+                    Cancel
+                  </button>
+                </span>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

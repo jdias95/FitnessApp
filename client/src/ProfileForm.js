@@ -42,10 +42,11 @@ const ProfileForm = (props) => {
       ? userProfile.measurement_type
       : ""
   );
+  const previousWeightData = JSON.parse(localStorage.getItem("previousWeight"));
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loginStatus) {
+    if (loginStatus === false) {
       localStorage.clear();
       navigate("/login");
     }
@@ -56,6 +57,7 @@ const ProfileForm = (props) => {
     const savedPreviousWeight = JSON.parse(
       localStorage.getItem("previousWeight")
     );
+
     if (savedFormData) {
       setWeightReg(savedFormData.weight);
       setHeightReg(savedFormData.height);
@@ -67,6 +69,7 @@ const ProfileForm = (props) => {
       setInches(savedFormData.inches);
       setCm(savedFormData.cm);
     }
+
     if (savedPreviousWeight) {
       setPreviousWeight(savedPreviousWeight.previousWeight);
     }
@@ -87,6 +90,14 @@ const ProfileForm = (props) => {
         cm: cm,
       })
     );
+
+    const weightFormData = JSON.parse(localStorage.getItem("weightFormData"));
+    if (weightFormData) {
+      localStorage.setItem(
+        "weightFormData",
+        JSON.stringify({ weight: weightReg })
+      );
+    }
     return () => {
       localStorage.removeItem("profileFormData");
     };
@@ -119,6 +130,7 @@ const ProfileForm = (props) => {
       .catch((error) => {
         console.error("Error updating profile:", error);
       });
+
     if (previousWeight.date === formattedDate) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
@@ -144,19 +156,9 @@ const ProfileForm = (props) => {
           console.error("Error setting weight:", error);
         });
     }
-    const previousWeightData = JSON.parse(
-      localStorage.getItem("previousWeight")
-    );
     previousWeightData.previousWeight.weight = weightReg;
     previousWeightData.previousWeight.date = formattedDate;
     localStorage.setItem("previousWeight", JSON.stringify(previousWeightData));
-    const weightFormData = JSON.parse(localStorage.getItem("weightFormData"));
-    if (weightFormData) {
-      localStorage.setItem(
-        "weightFormData",
-        JSON.stringify({ weight: weightReg })
-      );
-    }
   };
 
   const convertWeight = (kgs) => {
@@ -227,7 +229,7 @@ const ProfileForm = (props) => {
               <option value="imperial">Imperial</option>
               <option value="metric">Metric</option>
             </select>
-            {measurementType === "imperial" ? (
+            {measurementType !== "metric" ? (
               <div>
                 <label>Weight: </label>
                 <input

@@ -13,7 +13,7 @@ const ProfilePage = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loginStatus) {
+    if (loginStatus === false) {
       localStorage.clear();
       navigate("/login");
     }
@@ -67,7 +67,7 @@ const ProfilePage = (props) => {
 
   const defaultConvertWeight = (lbs) => {
     const kgs = lbs / 2.20462262185;
-    return Number(kgs.toFixed(2));
+    return Number(kgs.toFixed(1));
   };
 
   const defaultConvertHeightMetric = (inches) => {

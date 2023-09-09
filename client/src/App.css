@@ -114,6 +114,22 @@ a {
 
 .dashboard {
   justify-content: space-between;
+  position: relative;
+}
+
+.dashboard button {
+  width: 4rem;
+}
+
+.dashboard h3 {
+  margin: 1rem 0;
+}
+
+.caret {
+  position: absolute;
+  left: 50%;
+  margin-bottom: 0;
+  align-self: flex-end;
 }
 
 .weight,

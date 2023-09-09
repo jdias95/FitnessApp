@@ -10,13 +10,16 @@ const Dashboard = (props) => {
     previousWeight,
     setPreviousWeight,
     formattedDate,
+    routineData,
+    routines,
+    setRoutines,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loginStatus) {
+    if (loginStatus === false) {
       localStorage.clear();
       navigate("/login");
     }
@@ -65,6 +68,20 @@ const Dashboard = (props) => {
               +
             </h2>
           </div>
+          <div className="routine-card">
+            {routines.map((val) => {
+              return (
+                <div key={val.id} className="dashboard flex">
+                  <h3>{val.name}</h3>
+                  <h5 className="caret">&or;</h5>
+                  <div className="flex">
+                    <button>Edit</button>
+                    <button>Delete</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -84,6 +101,9 @@ const Dashboard = (props) => {
         <RoutineFormModal
           loginStatus={loginStatus}
           onClose={closeRoutineModal}
+          routineData={routineData}
+          routines={routines}
+          setRoutines={setRoutines}
         />
       )}
     </div>

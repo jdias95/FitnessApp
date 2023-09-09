@@ -22,6 +22,8 @@ function App() {
   const [userProfile, setUserProfile] = useState(null);
   const [userProfileDisplay, setUserProfileDisplay] = useState(null);
   const [previousWeight, setPreviousWeight] = useState({});
+  const [routines, setRoutines] = useState([]);
+  const routineData = JSON.parse(localStorage.getItem("routines"));
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -51,6 +53,9 @@ function App() {
               previousWeight={previousWeight}
               setPreviousWeight={setPreviousWeight}
               formattedDate={formattedDate}
+              routineData={routineData}
+              routines={routines}
+              setRoutines={setRoutines}
             />
           }
         />
@@ -102,7 +107,7 @@ function App() {
           setLoginStatus(response.data.user);
         } else {
           localStorage.clear();
-          setLoginStatus("");
+          setLoginStatus(false);
         }
       })
       .catch((error) => {
@@ -129,6 +134,16 @@ function App() {
         .catch((error) => {
           console.error("Error fetching weight data:", error);
         });
+
+      Axios.get(
+        `http://localhost:3001/api/get/routines/${loginStatus.id}`
+      ).then((response) => {
+        setRoutines(response.data);
+
+        const routineNames = response.data.map((routine) => routine.name);
+        localStorage.setItem("routines", JSON.stringify(routineNames));
+      });
+
       Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
         .then((response) => {
           setUserProfile(response.data);

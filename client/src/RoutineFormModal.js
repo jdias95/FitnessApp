@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 
 const RoutineFormModal = (props) => {
-  const { loginStatus, onClose } = props;
+  const { loginStatus, onClose, routineData, routines, setRoutines } = props;
   const [nameReg, setNameReg] = useState("");
 
   const createRoutine = () => {
@@ -11,6 +11,11 @@ const RoutineFormModal = (props) => {
       name: nameReg,
     })
       .then((response) => {
+        setRoutines(...routines, response.data);
+        if (routineData) {
+          routineData.push(nameReg);
+          localStorage.setItem("routines", JSON.stringify(routineData));
+        }
         onClose();
       })
       .catch((error) => {
