@@ -3,6 +3,7 @@ import RoutineFormModal from "./RoutineFormModal";
 import WeightFormModal from "./WeightFormModal";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import DeleteRoutineModal from "./DeleteRoutineModal";
 
 const Dashboard = (props) => {
   const {
@@ -11,12 +12,13 @@ const Dashboard = (props) => {
     previousWeight,
     setPreviousWeight,
     formattedDate,
-    routineData,
     routines,
     setRoutines,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
+  const [showDeleteRoutineModal, setShowDeleteRoutineModal] = useState(false);
+  const [selectedRoutine, setSelectedRoutine] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +27,17 @@ const Dashboard = (props) => {
       navigate("/login");
     }
   }, [loginStatus, navigate]);
+
+  //   const deleteRoutine = (id) => {
+  //     Axios.delete(`http://localhost:3001/api/delete/routine/${id}`)
+  //       .then((response) => {
+  //         const updatedRoutines = routines.filter((routine) => routine.id !== id);
+  //         setRoutines(updatedRoutines);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error deleting routine:", error);
+  //       });
+  //   };
 
   const openWeightModal = () => {
     setShowWeightModal(true);
@@ -51,6 +64,14 @@ const Dashboard = (props) => {
     setShowRoutineModal(false);
   };
 
+  const openDeleteRoutineModal = () => {
+    setShowDeleteRoutineModal(true);
+  };
+
+  const closeDeleteRoutineModal = () => {
+    setShowDeleteRoutineModal(false);
+  };
+
   return (
     <div className="App">
       <div className="flex">
@@ -73,11 +94,21 @@ const Dashboard = (props) => {
             {routines.map((val) => {
               return (
                 <div key={val.id} className="dashboard flex">
-                  <h3>{val.name}</h3>
-                  <h5 className="caret">&or;</h5>
-                  <div className="flex">
-                    <button>Edit</button>
-                    <button>Delete</button>
+                  <h3 key={val.name}>{val.name}</h3>
+                  <h5 key={`caret-${val.id}`} className="caret">
+                    &or;
+                  </h5>
+                  <div key={`buttons-${val.id}`} className="flex">
+                    <button key={`edit-${val.id}`}>Edit</button>
+                    <button
+                      key={`delete-${val.id}`}
+                      onClick={() => {
+                        setSelectedRoutine(val);
+                        openDeleteRoutineModal();
+                      }}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               );
@@ -102,9 +133,20 @@ const Dashboard = (props) => {
         <RoutineFormModal
           loginStatus={loginStatus}
           onClose={closeRoutineModal}
-          routineData={routineData}
           routines={routines}
           setRoutines={setRoutines}
+        />
+      )}
+
+      {showDeleteRoutineModal && (
+        <DeleteRoutineModal
+          onClose={() => {
+            setSelectedRoutine(null);
+            closeDeleteRoutineModal();
+          }}
+          setRoutines={setRoutines}
+          routines={routines}
+          selectedRoutine={selectedRoutine}
         />
       )}
     </div>

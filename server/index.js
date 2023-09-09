@@ -30,7 +30,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 500000,
+      expires: 20000000,
     },
   })
 );
@@ -233,6 +233,20 @@ app.get("/api/get/routines/:userId", (req, res) => {
       res.status(404).json({ error: "Routines not found" });
     } else {
       res.status(200).json(result);
+    }
+  });
+});
+
+app.delete("/api/delete/routine/:id", (req, res) => {
+  const id = req.params.id;
+  const sqlDelete = "DELETE FROM exercise_routines WHERE id = ?";
+
+  db.query(sqlDelete, id, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error deleting routine:", err);
+    } else {
+      res.status(204).send();
     }
   });
 });

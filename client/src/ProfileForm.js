@@ -111,7 +111,6 @@ const ProfileForm = (props) => {
     feet,
     inches,
     cm,
-    userProfile,
   ]);
 
   const profileUpdate = () => {
@@ -125,7 +124,6 @@ const ProfileForm = (props) => {
     })
       .then((response) => {
         setUserProfileDisplay(response.data);
-        navigate("/profile");
       })
       .catch((error) => {
         console.error("Error updating profile:", error);
@@ -136,29 +134,22 @@ const ProfileForm = (props) => {
         userId: loginStatus.id,
         weight: weightReg,
         date: formattedDate,
-      })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error("Error setting weight:", error);
-        });
+      }).catch((error) => {
+        console.error("Error setting weight:", error);
+      });
     } else if (previousWeight.date !== formattedDate) {
       Axios.post("http://localhost:3001/api/insert/weight", {
         userId: loginStatus.id,
         weight: weightReg,
         date: formattedDate,
-      })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error("Error setting weight:", error);
-        });
+      }).catch((error) => {
+        console.error("Error setting weight:", error);
+      });
     }
     previousWeightData.previousWeight.weight = weightReg;
     previousWeightData.previousWeight.date = formattedDate;
     localStorage.setItem("previousWeight", JSON.stringify(previousWeightData));
+    navigate("/profile");
   };
 
   const convertWeight = (kgs) => {

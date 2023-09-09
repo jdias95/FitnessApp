@@ -135,14 +135,15 @@ function App() {
           console.error("Error fetching weight data:", error);
         });
 
-      Axios.get(
-        `http://localhost:3001/api/get/routines/${loginStatus.id}`
-      ).then((response) => {
-        setRoutines(response.data);
-
-        const routineNames = response.data.map((routine) => routine.name);
-        localStorage.setItem("routines", JSON.stringify(routineNames));
-      });
+      Axios.get(`http://localhost:3001/api/get/routines/${loginStatus.id}`)
+        .then((response) => {
+          if (response.data.length > 0) {
+            setRoutines(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching routines:", error);
+        });
 
       Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
         .then((response) => {
