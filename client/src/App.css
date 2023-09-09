@@ -128,11 +128,30 @@ a {
 .caret {
   position: absolute;
   left: 50%;
-  margin-bottom: 0;
+  transform: translate(-50%, 0);
+  margin: 0 0 0.25rem 0;
   align-self: flex-end;
 }
 
 .caret:hover {
+  cursor: pointer;
+  color: rgba(159, 225, 255, 0.87);
+}
+
+.dropdown-menu {
+  background-color: #1b1b1b;
+}
+
+.plus-container {
+  text-align: center;
+}
+
+#list-plus {
+  display: inline-block;
+  margin: 0;
+}
+
+#list-plus:hover {
   cursor: pointer;
   color: rgba(159, 225, 255, 0.87);
 }

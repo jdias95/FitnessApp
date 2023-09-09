@@ -21,6 +21,7 @@ const Dashboard = (props) => {
   const [showUpdateRoutineModal, setShowUpdateRoutineModal] = useState(false);
   const [showDeleteRoutineModal, setShowDeleteRoutineModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
+  const [openMenus, setOpenMenus] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -91,32 +92,46 @@ const Dashboard = (props) => {
           </div>
           <div className="routine-card">
             {routines.map((val) => {
+              const isMenuOpen = openMenus[val.id] || false;
+
               return (
-                <div key={val.id} className="dashboard flex">
-                  <h3 key={val.name}>{val.name}</h3>
-                  <h5 key={`caret-${val.id}`} className="caret">
-                    &or;
-                  </h5>
-                  <div key={`buttons-${val.id}`} className="flex">
-                    <button
-                      key={`edit-${val.id}`}
+                <div key={`${val.name}-routine`}>
+                  <div className="dashboard flex">
+                    <h3>{val.name}</h3>
+                    <h5
+                      className="caret"
                       onClick={() => {
-                        setSelectedRoutine(val);
-                        openUpdateRoutineModal();
+                        setOpenMenus({ ...openMenus, [val.id]: !isMenuOpen });
                       }}
                     >
-                      Edit
-                    </button>
-                    <button
-                      key={`delete-${val.id}`}
-                      onClick={() => {
-                        setSelectedRoutine(val);
-                        openDeleteRoutineModal();
-                      }}
-                    >
-                      Delete
-                    </button>
+                      &or;
+                    </h5>
+                    <div className="flex">
+                      <button
+                        onClick={() => {
+                          setSelectedRoutine(val);
+                          openUpdateRoutineModal();
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedRoutine(val);
+                          openDeleteRoutineModal();
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
+                  {isMenuOpen && (
+                    <div className="dropdown-menu">
+                      <div className="plus-container">
+                        <h1 id="list-plus">+</h1>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
