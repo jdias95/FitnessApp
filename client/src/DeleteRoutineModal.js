@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Axios from "axios";
 
 const DeleteRoutineModal = (props) => {
   const { onClose, setRoutines, routines, selectedRoutine } = props;
+
   const deleteRoutine = (id) => {
     Axios.delete(`http://localhost:3001/api/delete/routine/${id}`)
       .then((response) => {

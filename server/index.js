@@ -237,6 +237,22 @@ app.get("/api/get/routines/:userId", (req, res) => {
   });
 });
 
+app.put("/api/update/routine/:id", (req, res) => {
+  const id = req.params.id;
+  const name = req.body.name;
+
+  const sqlUpdate = `UPDATE exercise_routines SET name = ? WHERE id = ?`;
+
+  db.query(sqlUpdate, [name, id], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 app.delete("/api/delete/routine/:id", (req, res) => {
   const id = req.params.id;
   const sqlDelete = "DELETE FROM exercise_routines WHERE id = ?";

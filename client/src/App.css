@@ -132,6 +132,11 @@ a {
   align-self: flex-end;
 }
 
+.caret:hover {
+  cursor: pointer;
+  color: rgba(159, 225, 255, 0.87);
+}
+
 .weight,
 .routine {
   align-self: flex-start;

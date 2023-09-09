@@ -4,6 +4,7 @@ import WeightFormModal from "./WeightFormModal";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import DeleteRoutineModal from "./DeleteRoutineModal";
+import UpdateRoutineModal from "./UpdateRoutineModal";
 
 const Dashboard = (props) => {
   const {
@@ -17,6 +18,7 @@ const Dashboard = (props) => {
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
+  const [showUpdateRoutineModal, setShowUpdateRoutineModal] = useState(false);
   const [showDeleteRoutineModal, setShowDeleteRoutineModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const navigate = useNavigate();
@@ -27,17 +29,6 @@ const Dashboard = (props) => {
       navigate("/login");
     }
   }, [loginStatus, navigate]);
-
-  //   const deleteRoutine = (id) => {
-  //     Axios.delete(`http://localhost:3001/api/delete/routine/${id}`)
-  //       .then((response) => {
-  //         const updatedRoutines = routines.filter((routine) => routine.id !== id);
-  //         setRoutines(updatedRoutines);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error deleting routine:", error);
-  //       });
-  //   };
 
   const openWeightModal = () => {
     setShowWeightModal(true);
@@ -62,6 +53,14 @@ const Dashboard = (props) => {
 
   const closeRoutineModal = () => {
     setShowRoutineModal(false);
+  };
+
+  const openUpdateRoutineModal = () => {
+    setShowUpdateRoutineModal(true);
+  };
+
+  const closeUpdateRoutineModal = () => {
+    setShowUpdateRoutineModal(false);
   };
 
   const openDeleteRoutineModal = () => {
@@ -99,7 +98,15 @@ const Dashboard = (props) => {
                     &or;
                   </h5>
                   <div key={`buttons-${val.id}`} className="flex">
-                    <button key={`edit-${val.id}`}>Edit</button>
+                    <button
+                      key={`edit-${val.id}`}
+                      onClick={() => {
+                        setSelectedRoutine(val);
+                        openUpdateRoutineModal();
+                      }}
+                    >
+                      Edit
+                    </button>
                     <button
                       key={`delete-${val.id}`}
                       onClick={() => {
@@ -135,6 +142,18 @@ const Dashboard = (props) => {
           onClose={closeRoutineModal}
           routines={routines}
           setRoutines={setRoutines}
+        />
+      )}
+
+      {showUpdateRoutineModal && (
+        <UpdateRoutineModal
+          onClose={() => {
+            setSelectedRoutine(null);
+            closeUpdateRoutineModal();
+          }}
+          routines={routines}
+          setRoutines={setRoutines}
+          selectedRoutine={selectedRoutine}
         />
       )}
 
