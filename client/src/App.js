@@ -182,7 +182,7 @@ function App() {
           console.log(error);
         });
     }
-  }, [loginStatus, setPreviousWeight]);
+  }, [loginStatus, routines, setPreviousWeight]);
 
   return (
     <div className="App">

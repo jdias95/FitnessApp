@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import RoutineFormModal from "./RoutineFormModal";
 import WeightFormModal from "./WeightFormModal";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
 
 const Dashboard = (props) => {
   const {

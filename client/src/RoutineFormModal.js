@@ -11,7 +11,7 @@ const RoutineFormModal = (props) => {
       name: nameReg,
     })
       .then((response) => {
-        setRoutines(...routines, response.data);
+        setRoutines([...routines, response.data]);
         if (routineData) {
           routineData.push(nameReg);
           localStorage.setItem("routines", JSON.stringify(routineData));
