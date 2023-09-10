@@ -129,6 +129,14 @@ a {
   margin: 1rem 0;
 }
 
+.title {
+  border-bottom: 2px solid rgba(27, 27, 27, 1);
+}
+
+.routine-card {
+  border-bottom: 2px solid rgba(27, 27, 27, 1);
+}
+
 .caret {
   position: absolute;
   left: 50%;

@@ -75,7 +75,7 @@ const ExerciseFormModal = (props) => {
   const safeParseInt = (str) => {
     try {
       const parsedValue = parseInt(str);
-      if (!isNaN(parsedValue)) {
+      if (!isNaN(parsedValue) && parsedValue >= 0) {
         return parsedValue;
       } else {
         throw new Error("Value is not a valid number.");
@@ -88,7 +88,7 @@ const ExerciseFormModal = (props) => {
   const safeParseFloat = (str) => {
     try {
       const parsedValue = parseFloat(str);
-      if (!isNaN(parsedValue)) {
+      if (!isNaN(parsedValue) && parsedValue >= 0) {
         return parsedValue;
       } else {
         throw new Error("Value is not a valid number.");

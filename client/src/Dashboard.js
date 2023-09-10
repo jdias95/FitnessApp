@@ -115,20 +115,20 @@ const Dashboard = (props) => {
           </div>
         </div>
         <div className="routine container">
-          <div className="dashboard flex">
+          <div className="dashboard flex title">
             <h2>Workout Routines</h2>
             <h2 id="plus" onClick={openRoutineModal}>
               +
             </h2>
           </div>
-          <div className="routine-card">
+          <div>
             {routines.map((val) => {
               const isMenuOpen = openMenus[val.id] || false;
               const exerciseList = routineExercises[val.id] || [];
 
               return (
                 <div key={`${val.name}-routine`}>
-                  <div className="dashboard flex">
+                  <div className="dashboard flex routine-card">
                     <h3>{val.name}</h3>
                     <h5
                       className="caret"
