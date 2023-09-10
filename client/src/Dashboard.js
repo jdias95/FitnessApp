@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import DeleteRoutineModal from "./DeleteRoutineModal";
 import UpdateRoutineModal from "./UpdateRoutineModal";
+import ExerciseFormModal from "./ExerciseFormModal";
 
 const Dashboard = (props) => {
   const {
@@ -20,6 +21,7 @@ const Dashboard = (props) => {
   const [showWeightModal, setShowWeightModal] = useState(false);
   const [showUpdateRoutineModal, setShowUpdateRoutineModal] = useState(false);
   const [showDeleteRoutineModal, setShowDeleteRoutineModal] = useState(false);
+  const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
   const navigate = useNavigate();
@@ -72,6 +74,14 @@ const Dashboard = (props) => {
     setShowDeleteRoutineModal(false);
   };
 
+  const openExerciseModal = () => {
+    setShowExerciseModal(true);
+  };
+
+  const closeExerciseModal = () => {
+    setShowExerciseModal(false);
+  };
+
   return (
     <div className="App">
       <div className="flex">
@@ -85,7 +95,7 @@ const Dashboard = (props) => {
         </div>
         <div className="routine container">
           <div className="dashboard flex">
-            <h2>Exercise Routines</h2>
+            <h2>Workout Routines</h2>
             <h2 id="plus" onClick={openRoutineModal}>
               +
             </h2>
@@ -128,7 +138,15 @@ const Dashboard = (props) => {
                   {isMenuOpen && (
                     <div className="dropdown-menu">
                       <div className="plus-container">
-                        <h1 id="list-plus">+</h1>
+                        <h1
+                          id="list-plus"
+                          onClick={() => {
+                            setSelectedRoutine(val);
+                            openExerciseModal();
+                          }}
+                        >
+                          +
+                        </h1>
                       </div>
                     </div>
                   )}
@@ -180,6 +198,17 @@ const Dashboard = (props) => {
           }}
           setRoutines={setRoutines}
           routines={routines}
+          selectedRoutine={selectedRoutine}
+        />
+      )}
+
+      {showExerciseModal && (
+        <ExerciseFormModal
+          loginStatus={loginStatus}
+          onClose={() => {
+            setSelectedRoutine(null);
+            closeExerciseModal();
+          }}
           selectedRoutine={selectedRoutine}
         />
       )}

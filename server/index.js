@@ -317,6 +317,33 @@ app.put("/api/update/weight/:userId", (req, res) => {
   });
 });
 
+app.post("/api/insert/exercise", (req, res) => {
+  const userId = req.body.userId;
+  const routineId = req.body.routineId;
+  const name = req.body.name;
+  const repsHigh = req.body.repsHigh;
+  const repsLow = req.body.repsLow;
+  const sets = req.body.sets;
+  const weight = req.body.weight;
+  const tracked = req.body.tracked;
+  const bw = req.body.bw;
+
+  const sqlInsert =
+    "INSERT INTO exercises (user_id, routine_id, name, reps_high, reps_low, sets, weight, tracked, bw) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(
+    sqlInsert,
+    [userId, routineId, name, repsHigh, repsLow, sets, weight, tracked, bw],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.log(err);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
+});
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });

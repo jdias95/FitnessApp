@@ -112,6 +112,10 @@ a {
   align-items: center;
 }
 
+.flex button {
+  margin: 0.5rem 0.1rem;
+}
+
 .dashboard {
   justify-content: space-between;
   position: relative;
@@ -154,6 +158,38 @@ a {
 #list-plus:hover {
   cursor: pointer;
   color: rgba(159, 225, 255, 0.87);
+}
+
+.exercise-modal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.exercise-modal-body #name {
+  width: 10rem;
+}
+
+.exercise-modal-body #wide {
+  width: 6rem;
+}
+
+.exercise-modal-body #narrow {
+  width: 2rem;
+}
+
+.exercise-modal-body p {
+  margin: 0;
+}
+
+.exercise-modal-body div {
+  margin: 0.3rem 0;
+}
+
+.modal-button-container {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .weight,
@@ -217,5 +253,6 @@ a {
   padding: 0.3rem;
   margin-left: 0.5rem;
   cursor: pointer;
-  margin: 0.5rem 0.25rem;
+  margin: 0.5rem 0.1rem;
+  width: 4.5rem;
 }
