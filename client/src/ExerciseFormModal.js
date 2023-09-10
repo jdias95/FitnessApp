@@ -12,9 +12,9 @@ const ExerciseFormModal = (props) => {
     setRoutineExercises,
   } = props;
   const [nameReg, setNameReg] = useState("");
-  const [repsHighReg, setRepsHighReg] = useState(0);
-  const [repsLowReg, setRepsLowReg] = useState(0);
-  const [setsReg, setSetsReg] = useState(0);
+  const [repsHighReg, setRepsHighReg] = useState();
+  const [repsLowReg, setRepsLowReg] = useState(1);
+  const [setsReg, setSetsReg] = useState(1);
   const [weightReg, setWeightReg] = useState(0);
   const [trackReg, setTrackReg] = useState(false);
   const [bwReg, setBwReg] = useState(false);
@@ -35,20 +35,6 @@ const ExerciseFormModal = (props) => {
         const existingExercisesForRoutine =
           routineExercises[selectedRoutine.id] || [];
 
-        setExercises((prevExercises) => [
-          ...prevExercises,
-          {
-            id: response.data.insertId,
-            name: nameReg,
-            repsHigh: repsHighReg,
-            repsLow: repsLowReg,
-            sets: setsReg,
-            weight: weightReg,
-            tracked: trackReg,
-            bw: bwReg,
-          },
-        ]);
-
         setRoutineExercises((prevRoutineExercises) => ({
           ...prevRoutineExercises,
           [selectedRoutine.id]: [
@@ -56,8 +42,8 @@ const ExerciseFormModal = (props) => {
             {
               id: response.data.insertId,
               name: nameReg,
-              repsHigh: repsHighReg,
-              repsLow: repsLowReg,
+              reps_high: repsHighReg,
+              reps_low: repsLowReg,
               sets: setsReg,
               weight: weightReg,
               tracked: trackReg,
@@ -65,6 +51,21 @@ const ExerciseFormModal = (props) => {
             },
           ],
         }));
+
+        setExercises((prevExercises) => [
+          ...prevExercises,
+          {
+            id: response.data.insertId,
+            name: nameReg,
+            reps_high: repsHighReg,
+            reps_low: repsLowReg,
+            sets: setsReg,
+            weight: weightReg,
+            tracked: trackReg,
+            bw: bwReg,
+          },
+        ]);
+
         onClose();
       })
       .catch((error) => {
@@ -72,16 +73,33 @@ const ExerciseFormModal = (props) => {
       });
   };
 
-  const safeParseInt = (str) => {
+  const safeParseInt2 = (str) => {
     try {
       const parsedValue = parseInt(str);
-      if (!isNaN(parsedValue) && parsedValue >= 0) {
+      if (!isNaN(parsedValue) && parsedValue >= 1) {
         return parsedValue;
       } else {
         throw new Error("Value is not a valid number.");
       }
     } catch (error) {
-      return 0;
+      return 1;
+    }
+  };
+
+  const safeParseInt3 = (str) => {
+    try {
+      if (str === null) {
+        return null;
+      }
+
+      const parsedValue = parseInt(str);
+      if (!isNaN(parsedValue) && parsedValue >= 1) {
+        return parsedValue;
+      } else {
+        throw new Error("Value is not a valid number.");
+      }
+    } catch (error) {
+      return null;
     }
   };
 
@@ -122,6 +140,7 @@ const ExerciseFormModal = (props) => {
                 <input
                   type="text"
                   id="name"
+                  placeholder="Ex: Bench Press"
                   value={nameReg}
                   onChange={(e) => {
                     setNameReg(e.target.value);
@@ -135,7 +154,7 @@ const ExerciseFormModal = (props) => {
                   id="narrow"
                   value={setsReg}
                   onChange={(e) => {
-                    setSetsReg(safeParseInt(e.target.value));
+                    setSetsReg(safeParseInt2(e.target.value));
                   }}
                 />
               </div>
@@ -146,16 +165,16 @@ const ExerciseFormModal = (props) => {
                   id="narrow"
                   value={repsLowReg}
                   onChange={(e) => {
-                    setRepsLowReg(safeParseInt(e.target.value));
+                    setRepsLowReg(safeParseInt2(e.target.value));
                   }}
                 />
                 <p>-</p>
                 <input
                   type="number"
                   id="narrow"
-                  value={repsHighReg}
+                  value={repsHighReg === null ? "" : repsHighReg}
                   onChange={(e) => {
-                    setRepsHighReg(safeParseInt(e.target.value));
+                    setRepsHighReg(safeParseInt3(e.target.value));
                   }}
                 />
               </div>

@@ -360,6 +360,46 @@ app.get("/api/get/exercises/:userId", (req, res) => {
   });
 });
 
+app.put("/api/update/exercise/:id", (req, res) => {
+  const id = req.params.id;
+  const name = req.body.name;
+  const repsHigh = req.body.repsHigh;
+  const repsLow = req.body.repsLow;
+  const sets = req.body.sets;
+  const weight = req.body.weight;
+  const tracked = req.body.tracked;
+  const bw = req.body.bw;
+
+  const sqlUpdate = `UPDATE exercises SET name = ?, reps_high = ?, reps_low = ?, sets = ?, weight = ?, tracked = ?, bw = ? WHERE id = ?`;
+
+  db.query(
+    sqlUpdate,
+    [name, repsHigh, repsLow, sets, weight, tracked, bw, id],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.log(err);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
+});
+
+app.delete("/api/delete/exercise/:id", (req, res) => {
+  const id = req.params.id;
+  const sqlDelete = "DELETE FROM exercises WHERE id = ?";
+
+  db.query(sqlDelete, id, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error deleting exercise:", err);
+    } else {
+      res.status(204).send();
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });

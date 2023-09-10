@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import DeleteRoutineModal from "./DeleteRoutineModal";
 import UpdateRoutineModal from "./UpdateRoutineModal";
 import ExerciseFormModal from "./ExerciseFormModal";
+import UpdateExerciseModal from "./UpdateExerciseModal";
+import DeleteExerciseModal from "./DeleteExerciseModal";
 
 const Dashboard = (props) => {
   const {
@@ -23,9 +25,13 @@ const Dashboard = (props) => {
   const [showUpdateRoutineModal, setShowUpdateRoutineModal] = useState(false);
   const [showDeleteRoutineModal, setShowDeleteRoutineModal] = useState(false);
   const [showExerciseModal, setShowExerciseModal] = useState(false);
+  const [showUpdateExerciseModal, setShowUpdateExerciseModal] = useState(false);
+  const [showDeleteExerciseModal, setShowDeleteExerciseModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
+  const [selectedExercise, setSelectedExercise] = useState({});
+  const [exerciseList, setExerciseList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,6 +90,22 @@ const Dashboard = (props) => {
     setShowExerciseModal(false);
   };
 
+  const openUpdateExerciseModal = () => {
+    setShowUpdateExerciseModal(true);
+  };
+
+  const closeUpdateExerciseModal = () => {
+    setShowUpdateExerciseModal(false);
+  };
+
+  const openDeleteExerciseModal = () => {
+    setShowDeleteExerciseModal(true);
+  };
+
+  const closeDeleteExerciseModal = () => {
+    setShowDeleteExerciseModal(false);
+  };
+
   const getExercisesForRoutine = (routineId) => {
     return exercises.filter((exercise) => exercise.routine_id === routineId);
   };
@@ -103,11 +125,16 @@ const Dashboard = (props) => {
     }
   };
 
+  const defaultConvertWeight = (lbs) => {
+    const kgs = lbs / 2.20462262185;
+    return Number(kgs.toFixed(1));
+  };
+
   return (
     <div className="App">
       <div className="flex">
         <div className="weight container">
-          <div className="dashboard flex">
+          <div className="dashboard flex title">
             <h2>Weight</h2>
             <h1 id="plus" onClick={openWeightModal}>
               +
@@ -161,7 +188,42 @@ const Dashboard = (props) => {
                     <div className="dropdown-menu">
                       <ul>
                         {exerciseList.map((exercise) => (
-                          <li key={exercise.id}>{exercise.name}</li>
+                          <li key={exercise.id} className="dashboard flex">
+                            {exercise.name} | {exercise.sets} x{" "}
+                            {exercise.reps_low}
+                            {exercise.reps_high ? `-${exercise.reps_high}` : ""}
+                            {exercise.weight &&
+                            userProfile.measurement_type === "imperial"
+                              ? ` | ${exercise.weight} lbs`
+                              : exercise.weight &&
+                                userProfile.measurement_type === "metric"
+                              ? ` | ${defaultConvertWeight(
+                                  exercise.weight
+                                )} kgs`
+                              : ""}
+                            <div className="flex">
+                              <button
+                                onClick={() => {
+                                  setSelectedRoutine(val);
+                                  setExerciseList(exerciseList);
+                                  setSelectedExercise(exercise);
+                                  openUpdateExerciseModal();
+                                }}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setSelectedRoutine(val);
+                                  setExerciseList(exerciseList);
+                                  setSelectedExercise(exercise);
+                                  openDeleteExerciseModal();
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </li>
                         ))}
                       </ul>
                       <div className="plus-container">
@@ -237,6 +299,36 @@ const Dashboard = (props) => {
             setSelectedRoutine(null);
             closeExerciseModal();
           }}
+          selectedRoutine={selectedRoutine}
+          setExercises={setExercises}
+          routineExercises={routineExercises}
+          setRoutineExercises={setRoutineExercises}
+        />
+      )}
+
+      {showUpdateExerciseModal && (
+        <UpdateExerciseModal
+          userProfile={userProfile}
+          onClose={() => {
+            setSelectedRoutine(null);
+            closeUpdateExerciseModal();
+          }}
+          selectedRoutine={selectedRoutine}
+          setExercises={setExercises}
+          routineExercises={routineExercises}
+          setRoutineExercises={setRoutineExercises}
+        />
+      )}
+
+      {showDeleteExerciseModal && (
+        <DeleteExerciseModal
+          onClose={() => {
+            setSelectedRoutine(null);
+            closeDeleteExerciseModal();
+          }}
+          selectedExercise={selectedExercise}
+          exerciseList={exerciseList}
+          setExerciseList={setExerciseList}
           selectedRoutine={selectedRoutine}
           setExercises={setExercises}
           routineExercises={routineExercises}

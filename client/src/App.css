@@ -154,6 +154,12 @@ a {
   background-color: #1b1b1b;
 }
 
+.dropdown-menu button {
+  height: 1.5rem;
+  width: 4rem;
+  margin: 0.25rem 0.05rem;
+}
+
 .plus-container {
   text-align: center;
 }
