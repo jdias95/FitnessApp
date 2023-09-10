@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import RoutineFormModal from "./RoutineFormModal";
 import WeightFormModal from "./WeightFormModal";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios";
 import DeleteRoutineModal from "./DeleteRoutineModal";
 import UpdateRoutineModal from "./UpdateRoutineModal";
 import ExerciseFormModal from "./ExerciseFormModal";
@@ -126,7 +125,6 @@ const Dashboard = (props) => {
             {routines.map((val) => {
               const isMenuOpen = openMenus[val.id] || false;
               const exerciseList = routineExercises[val.id] || [];
-              //   console.log(exerciseList);
 
               return (
                 <div key={`${val.name}-routine`}>
@@ -138,7 +136,7 @@ const Dashboard = (props) => {
                         toggleMenu(val.id);
                       }}
                     >
-                      &or;
+                      &diams;
                     </h5>
                     <div className="flex">
                       <button
@@ -239,7 +237,6 @@ const Dashboard = (props) => {
             closeExerciseModal();
           }}
           selectedRoutine={selectedRoutine}
-          exercises={exercises}
           setExercises={setExercises}
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}

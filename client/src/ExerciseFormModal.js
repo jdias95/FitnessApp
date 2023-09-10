@@ -6,7 +6,6 @@ const ExerciseFormModal = (props) => {
     loginStatus,
     onClose,
     selectedRoutine,
-    exercises,
     setExercises,
     routineExercises,
     setRoutineExercises,
@@ -151,6 +150,7 @@ const ExerciseFormModal = (props) => {
                 type="checkbox"
                 id="checkbox"
                 checked={bwReg}
+                disabled={!trackReg}
                 onChange={() => {
                   setBwReg(!bwReg);
                 }}
