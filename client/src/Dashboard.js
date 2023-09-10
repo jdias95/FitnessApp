@@ -232,6 +232,7 @@ const Dashboard = (props) => {
       {showExerciseModal && (
         <ExerciseFormModal
           loginStatus={loginStatus}
+          userProfile={userProfile}
           onClose={() => {
             setSelectedRoutine(null);
             closeExerciseModal();

@@ -114,12 +114,6 @@ const WeightFormModal = (props) => {
     }
   };
 
-  const updatePreviousWeight = () => {
-    const data = JSON.parse(localStorage.getItem("previousWeight"));
-    data.weight = weightReg;
-    localStorage.setItem("previousWeight", JSON.stringify(data));
-  };
-
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
     return Number(lbs.toFixed(1));
