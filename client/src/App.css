@@ -192,6 +192,15 @@ a {
   justify-content: flex-end;
 }
 
+.dropdown-menu ul {
+  margin: 0;
+  padding: 1rem 0 0 1rem;
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
 .weight,
 .routine {
   align-self: flex-start;

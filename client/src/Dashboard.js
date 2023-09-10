@@ -16,6 +16,8 @@ const Dashboard = (props) => {
     formattedDate,
     routines,
     setRoutines,
+    exercises,
+    setExercises,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -24,6 +26,7 @@ const Dashboard = (props) => {
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
+  const [routineExercises, setRoutineExercises] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,6 +85,25 @@ const Dashboard = (props) => {
     setShowExerciseModal(false);
   };
 
+  const getExercisesForRoutine = (routineId) => {
+    return exercises.filter((exercise) => exercise.routine_id === routineId);
+  };
+
+  const toggleMenu = (routineId) => {
+    setOpenMenus((prevOpenMenus) => ({
+      ...prevOpenMenus,
+      [routineId]: !prevOpenMenus[routineId],
+    }));
+
+    if (!routineExercises[routineId]) {
+      const exercisesForRoutine = getExercisesForRoutine(routineId);
+      setRoutineExercises((prevRoutineExercises) => ({
+        ...prevRoutineExercises,
+        [routineId]: exercisesForRoutine,
+      }));
+    }
+  };
+
   return (
     <div className="App">
       <div className="flex">
@@ -103,6 +125,8 @@ const Dashboard = (props) => {
           <div className="routine-card">
             {routines.map((val) => {
               const isMenuOpen = openMenus[val.id] || false;
+              const exerciseList = routineExercises[val.id] || [];
+              //   console.log(exerciseList);
 
               return (
                 <div key={`${val.name}-routine`}>
@@ -111,7 +135,7 @@ const Dashboard = (props) => {
                     <h5
                       className="caret"
                       onClick={() => {
-                        setOpenMenus({ ...openMenus, [val.id]: !isMenuOpen });
+                        toggleMenu(val.id);
                       }}
                     >
                       &or;
@@ -137,6 +161,11 @@ const Dashboard = (props) => {
                   </div>
                   {isMenuOpen && (
                     <div className="dropdown-menu">
+                      <ul>
+                        {exerciseList.map((exercise) => (
+                          <li key={exercise.id}>{exercise.name}</li>
+                        ))}
+                      </ul>
                       <div className="plus-container">
                         <h1
                           id="list-plus"
@@ -210,6 +239,10 @@ const Dashboard = (props) => {
             closeExerciseModal();
           }}
           selectedRoutine={selectedRoutine}
+          exercises={exercises}
+          setExercises={setExercises}
+          routineExercises={routineExercises}
+          setRoutineExercises={setRoutineExercises}
         />
       )}
     </div>

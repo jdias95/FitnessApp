@@ -11,6 +11,7 @@ const RoutineFormModal = (props) => {
       name: nameReg,
     })
       .then((response) => {
+        console.log(response.data);
         setRoutines([...routines, response.data]);
         onClose();
       })

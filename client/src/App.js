@@ -23,6 +23,7 @@ function App() {
   const [userProfileDisplay, setUserProfileDisplay] = useState(null);
   const [previousWeight, setPreviousWeight] = useState({});
   const [routines, setRoutines] = useState([]);
+  const [exercises, setExercises] = useState([]);
   const routineData = JSON.parse(localStorage.getItem("routines"));
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -56,6 +57,8 @@ function App() {
               routineData={routineData}
               routines={routines}
               setRoutines={setRoutines}
+              exercises={exercises}
+              setExercises={setExercises}
             />
           }
         />
@@ -145,6 +148,16 @@ function App() {
           console.error("Error fetching routines:", error);
         });
 
+      Axios.get(`http://localhost:3001/api/get/exercises/${loginStatus.id}`)
+        .then((response) => {
+          if (response.data.length > 0) {
+            setExercises(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching exercises:", error);
+        });
+
       Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
         .then((response) => {
           setUserProfile(response.data);
@@ -183,7 +196,7 @@ function App() {
           console.log(error);
         });
     }
-  }, [loginStatus, routines, setPreviousWeight]);
+  }, [loginStatus, routines, setPreviousWeight, exercises]);
 
   return (
     <div className="App">

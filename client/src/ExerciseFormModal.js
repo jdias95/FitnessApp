@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import Axios from "axios";
 
 const ExerciseFormModal = (props) => {
-  const { loginStatus, onClose, selectedRoutine } = props;
+  const {
+    loginStatus,
+    onClose,
+    selectedRoutine,
+    exercises,
+    setExercises,
+    routineExercises,
+    setRoutineExercises,
+  } = props;
   const [nameReg, setNameReg] = useState("");
   const [repsHighReg, setRepsHighReg] = useState(0);
   const [repsLowReg, setRepsLowReg] = useState(0);
@@ -24,6 +32,39 @@ const ExerciseFormModal = (props) => {
       bw: bwReg,
     })
       .then((response) => {
+        const existingExercisesForRoutine =
+          routineExercises[selectedRoutine.id] || [];
+
+        setExercises((prevExercises) => [
+          ...prevExercises,
+          {
+            id: response.data.insertId,
+            name: nameReg,
+            repsHigh: repsHighReg,
+            repsLow: repsLowReg,
+            sets: setsReg,
+            weight: weightReg,
+            tracked: trackReg,
+            bw: bwReg,
+          },
+        ]);
+
+        setRoutineExercises((prevRoutineExercises) => ({
+          ...prevRoutineExercises,
+          [selectedRoutine.id]: [
+            ...existingExercisesForRoutine,
+            {
+              id: response.data.insertId,
+              name: nameReg,
+              repsHigh: repsHighReg,
+              repsLow: repsLowReg,
+              sets: setsReg,
+              weight: weightReg,
+              tracked: trackReg,
+              bw: bwReg,
+            },
+          ],
+        }));
         onClose();
       })
       .catch((error) => {

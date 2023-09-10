@@ -344,6 +344,22 @@ app.post("/api/insert/exercise", (req, res) => {
   );
 });
 
+app.get("/api/get/exercises/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const sqlSelect = "SELECT * FROM exercises WHERE user_id = ?";
+
+  db.query(sqlSelect, [userId], (err, result) => {
+    if (err) {
+      console.error("Error retrieving weights:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (result.length === 0) {
+      res.status(404).json({ error: "Weights not found" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
