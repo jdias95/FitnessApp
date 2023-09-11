@@ -14,7 +14,7 @@ const UpdateExerciseModal = (props) => {
   const [repsHighReg, setRepsHighReg] = useState(selectedExercise.reps_high);
   const [setsReg, setSetsReg] = useState(selectedExercise.sets);
   const [weightReg, setWeightReg] = useState(selectedExercise.weight);
-  const [trackedReg, setTrackedReg] = useState(selectedExercise.tracked);
+  const [trackReg, setTrackReg] = useState(selectedExercise.tracked);
   const [bwReg, setBwReg] = useState(selectedExercise.bw);
 
   const updateExercise = (id) => {
@@ -24,7 +24,7 @@ const UpdateExerciseModal = (props) => {
       repsHigh: repsHighReg,
       sets: setsReg,
       weight: weightReg,
-      tracked: trackedReg,
+      tracked: trackReg,
       bw: bwReg,
     })
       .then((response) => {
@@ -45,7 +45,7 @@ const UpdateExerciseModal = (props) => {
               reps_high: repsHighReg,
               sets: setsReg,
               weight: weightReg,
-              tracked: trackedReg,
+              tracked: trackReg,
               bw: bwReg,
             };
           }
@@ -202,9 +202,9 @@ const UpdateExerciseModal = (props) => {
                 <input
                   type="checkbox"
                   id="checkbox"
-                  checked={trackedReg}
+                  checked={trackReg}
                   onChange={() => {
-                    setTrackedReg(!trackedReg);
+                    setTrackReg(!trackReg);
                   }}
                 />
               </div>
@@ -214,7 +214,7 @@ const UpdateExerciseModal = (props) => {
                   type="checkbox"
                   id="checkbox"
                   checked={bwReg}
-                  disabled={!trackedReg}
+                  disabled={!trackReg}
                   onChange={() => {
                     setBwReg(!bwReg);
                   }}
