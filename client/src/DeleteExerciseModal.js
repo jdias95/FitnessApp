@@ -2,16 +2,8 @@ import React from "react";
 import Axios from "axios";
 
 const DeleteExerciseModal = (props) => {
-  const {
-    onClose,
-    selectedExercise,
-    exerciseList,
-    setExerciseList,
-    selectedRoutine,
-    setExercises,
-    routineExercises,
-    setRoutineExercises,
-  } = props;
+  const { onClose, selectedExercise, selectedRoutine, setRoutineExercises } =
+    props;
 
   const deleteExercise = (id) => {
     Axios.delete(`http://localhost:3001/api/delete/exercise/${id}`)
@@ -45,10 +37,6 @@ const DeleteExerciseModal = (props) => {
       <div className="modal-content">
         <div className="modal-flex">
           <div className="modal-body">
-            {console.log(
-              routineExercises[selectedRoutine.id],
-              selectedExercise
-            )}
             <p>Are you sure you want to delete {selectedExercise.name}?</p>
             <span>
               <button

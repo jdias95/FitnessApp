@@ -7,7 +7,6 @@ const ExerciseFormModal = (props) => {
     userProfile,
     onClose,
     selectedRoutine,
-    setExercises,
     routineExercises,
     setRoutineExercises,
   } = props;
@@ -51,20 +50,6 @@ const ExerciseFormModal = (props) => {
             },
           ],
         }));
-
-        setExercises((prevExercises) => [
-          ...prevExercises,
-          {
-            id: response.data.insertId,
-            name: nameReg,
-            reps_high: repsHighReg,
-            reps_low: repsLowReg,
-            sets: setsReg,
-            weight: weightReg,
-            tracked: trackReg,
-            bw: bwReg,
-          },
-        ]);
 
         onClose();
       })

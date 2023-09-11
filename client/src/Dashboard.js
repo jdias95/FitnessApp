@@ -18,7 +18,6 @@ const Dashboard = (props) => {
     routines,
     setRoutines,
     exercises,
-    setExercises,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -31,7 +30,6 @@ const Dashboard = (props) => {
   const [openMenus, setOpenMenus] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
   const [selectedExercise, setSelectedExercise] = useState({});
-  const [exerciseList, setExerciseList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -205,7 +203,6 @@ const Dashboard = (props) => {
                               <button
                                 onClick={() => {
                                   setSelectedRoutine(val);
-                                  setExerciseList(exerciseList);
                                   setSelectedExercise(exercise);
                                   openUpdateExerciseModal();
                                 }}
@@ -215,7 +212,6 @@ const Dashboard = (props) => {
                               <button
                                 onClick={() => {
                                   setSelectedRoutine(val);
-                                  setExerciseList(exerciseList);
                                   setSelectedExercise(exercise);
                                   openDeleteExerciseModal();
                                 }}
@@ -300,13 +296,12 @@ const Dashboard = (props) => {
             closeExerciseModal();
           }}
           selectedRoutine={selectedRoutine}
-          setExercises={setExercises}
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
         />
       )}
 
-      {showUpdateExerciseModal && (
+      {showUpdateExerciseModal && selectedExercise && (
         <UpdateExerciseModal
           userProfile={userProfile}
           onClose={() => {
@@ -314,24 +309,19 @@ const Dashboard = (props) => {
             closeUpdateExerciseModal();
           }}
           selectedRoutine={selectedRoutine}
-          setExercises={setExercises}
-          routineExercises={routineExercises}
+          selectedExercise={selectedExercise}
           setRoutineExercises={setRoutineExercises}
         />
       )}
 
-      {showDeleteExerciseModal && (
+      {showDeleteExerciseModal && selectedExercise && (
         <DeleteExerciseModal
           onClose={() => {
             setSelectedRoutine(null);
             closeDeleteExerciseModal();
           }}
           selectedExercise={selectedExercise}
-          exerciseList={exerciseList}
-          setExerciseList={setExerciseList}
           selectedRoutine={selectedRoutine}
-          setExercises={setExercises}
-          routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
         />
       )}

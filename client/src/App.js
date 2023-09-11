@@ -58,7 +58,6 @@ function App() {
               routines={routines}
               setRoutines={setRoutines}
               exercises={exercises}
-              setExercises={setExercises}
             />
           }
         />
