@@ -91,18 +91,6 @@ function App() {
   );
 
   useEffect(() => {
-    const storedData = localStorage.getItem("authToken");
-    if (storedData) {
-      const parsedData = JSON.parse(storedData);
-      const currentTime = new Date().getTime();
-
-      if (
-        parsedData.expirationTime &&
-        currentTime >= parsedData.expirationTime
-      ) {
-        localStorage.clear();
-      }
-    }
     Axios.get("http://localhost:3001/api/login")
       .then((response) => {
         if (response.data.loggedIn === true) {

@@ -54,9 +54,6 @@ const ProfileForm = (props) => {
 
   useEffect(() => {
     const savedFormData = JSON.parse(localStorage.getItem("profileFormData"));
-    const savedPreviousWeight = JSON.parse(
-      localStorage.getItem("previousWeight")
-    );
 
     if (savedFormData) {
       setWeightReg(savedFormData.weight);
@@ -70,10 +67,10 @@ const ProfileForm = (props) => {
       setCm(savedFormData.cm);
     }
 
-    if (savedPreviousWeight) {
-      setPreviousWeight(savedPreviousWeight.previousWeight);
+    if (previousWeightData) {
+      setPreviousWeight(previousWeightData.previousWeight);
     }
-  }, [setPreviousWeight]);
+  }, [setPreviousWeight, previousWeightData]);
 
   useEffect(() => {
     localStorage.setItem(

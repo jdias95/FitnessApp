@@ -30,7 +30,6 @@ const Login = (props) => {
             "authToken",
             JSON.stringify({
               firstName: response.data[0].first_name,
-              expirationTime: new Date().getTime() + 20000000,
             })
           );
           setLoginStatus(response.data[0]);
