@@ -217,7 +217,8 @@ a {
 }
 
 .weight,
-.routine {
+.routine,
+.tracked {
   align-self: flex-start;
 }
 

@@ -12,9 +12,8 @@ const WeightFormModal = (props) => {
     formattedDate,
   } = props;
   const [weightReg, setWeightReg] = useState(
-    props.userProfile && props.userProfile.weight ? props.userProfile.weight : 0
+    previousWeight ? previousWeight.weight : 0
   );
-  const previousWeightData = JSON.parse(localStorage.getItem("previousWeight"));
   const monthNames = [
     "Jan",
     "Feb",
@@ -29,27 +28,6 @@ const WeightFormModal = (props) => {
     "Nov",
     "Dec",
   ];
-
-  useEffect(() => {
-    const weightFormData = JSON.parse(localStorage.getItem("weightFormData"));
-
-    if (weightFormData) {
-      setWeightReg(weightFormData.weight);
-    }
-
-    if (previousWeightData) {
-      setPreviousWeight(previousWeightData.previousWeight);
-    }
-  }, [setPreviousWeight, previousWeightData]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      "weightFormData",
-      JSON.stringify({
-        weight: weightReg,
-      })
-    );
-  }, [weightReg]);
 
   const setWeight = () => {
     Axios.put(`http://localhost:3001/api/update/profile/${loginStatus.id}`, {
@@ -93,9 +71,11 @@ const WeightFormModal = (props) => {
           console.error("Error setting weight:", error);
         });
     }
-    previousWeightData.previousWeight.weight = weightReg;
-    previousWeightData.previousWeight.date = formattedDate;
-    localStorage.setItem("previousWeight", JSON.stringify(previousWeightData));
+    setPreviousWeight({
+      ...previousWeight,
+      weight: weightReg,
+      date: formattedDate,
+    });
   };
 
   const safeParseFloat = (str) => {

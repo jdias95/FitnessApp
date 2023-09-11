@@ -353,7 +353,7 @@ app.get("/api/get/exercises/:userId", (req, res) => {
       console.error("Error retrieving weights:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else if (result.length === 0) {
-      res.status(404).json({ error: "Weights not found" });
+      res.status(404).json({ error: "Exercises not found" });
     } else {
       res.status(200).json(result);
     }
@@ -396,6 +396,48 @@ app.delete("/api/delete/exercise/:id", (req, res) => {
       console.error("Error deleting exercise:", err);
     } else {
       res.status(204).send();
+    }
+  });
+});
+
+app.post("/api/insert/tracked-exercise", (req, res) => {
+  const userId = req.body.userId;
+  const exerciseId = req.body.exerciseId;
+  const name = req.body.name;
+  const sets = req.body.sets;
+  const repsHigh = req.body.repsHigh;
+  const repsLow = req.body.repsLow;
+  const weight = req.body.weight;
+  const date = req.body.date;
+
+  const sqlInsert =
+    "INSERT INTO tracked_exercises (user_id, exercise_id, name, sets, reps_high, reps_low, weight, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(
+    sqlInsert,
+    [userId, exerciseId, name, sets, repsHigh, repsLow, weight, date],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Internal Server Error" });
+        console.log(err);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
+});
+
+app.get("/api/get/tracked-exercises/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const sqlSelect = "SELECT * FROM tracked_exercises WHERE user_id = ?";
+
+  db.query(sqlSelect, [userId], (err, result) => {
+    if (err) {
+      console.error("Error retrieving weights:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (result.length === 0) {
+      res.status(404).json({ error: "Exercises not found" });
+    } else {
+      res.status(200).json(result);
     }
   });
 });

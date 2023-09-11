@@ -42,7 +42,6 @@ const ProfileForm = (props) => {
       ? userProfile.measurement_type
       : ""
   );
-  const previousWeightData = JSON.parse(localStorage.getItem("previousWeight"));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,11 +65,7 @@ const ProfileForm = (props) => {
       setInches(savedFormData.inches);
       setCm(savedFormData.cm);
     }
-
-    if (previousWeightData) {
-      setPreviousWeight(previousWeightData.previousWeight);
-    }
-  }, [setPreviousWeight, previousWeightData]);
+  }, [setPreviousWeight]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -87,14 +82,6 @@ const ProfileForm = (props) => {
         cm: cm,
       })
     );
-
-    const weightFormData = JSON.parse(localStorage.getItem("weightFormData"));
-    if (weightFormData) {
-      localStorage.setItem(
-        "weightFormData",
-        JSON.stringify({ weight: weightReg })
-      );
-    }
     return () => {
       localStorage.removeItem("profileFormData");
     };
@@ -143,9 +130,11 @@ const ProfileForm = (props) => {
         console.error("Error setting weight:", error);
       });
     }
-    previousWeightData.previousWeight.weight = weightReg;
-    previousWeightData.previousWeight.date = formattedDate;
-    localStorage.setItem("previousWeight", JSON.stringify(previousWeightData));
+    setPreviousWeight({
+      ...previousWeight,
+      weight: weightReg,
+      date: formattedDate,
+    });
     navigate("/profile");
   };
 

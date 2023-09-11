@@ -8,6 +8,7 @@ const UpdateExerciseModal = (props) => {
     selectedRoutine,
     selectedExercise,
     setRoutineExercises,
+    formattedDate,
   } = props;
   const [nameReg, setNameReg] = useState(selectedExercise.name);
   const [repsLowReg, setRepsLowReg] = useState(selectedExercise.reps_low);

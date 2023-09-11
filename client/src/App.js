@@ -24,6 +24,7 @@ function App() {
   const [previousWeight, setPreviousWeight] = useState({});
   const [routines, setRoutines] = useState([]);
   const [exercises, setExercises] = useState([]);
+  const [trackedExercises, setTrackedExercises] = useState([]);
   const routineData = JSON.parse(localStorage.getItem("routines"));
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -58,6 +59,7 @@ function App() {
               routines={routines}
               setRoutines={setRoutines}
               exercises={exercises}
+              trackedExercises={trackedExercises}
             />
           }
         />
@@ -113,13 +115,6 @@ function App() {
           const mostRecentWeight = weightData[weightData.length - 1];
           const formattedDate = mostRecentWeight.date.slice(0, 10);
           setPreviousWeight({ ...mostRecentWeight, date: formattedDate });
-
-          localStorage.setItem(
-            "previousWeight",
-            JSON.stringify({
-              previousWeight: { ...mostRecentWeight, date: formattedDate },
-            })
-          );
         })
         .catch((error) => {
           console.error("Error fetching weight data:", error);
@@ -184,6 +179,20 @@ function App() {
         });
     }
   }, [loginStatus, routines, setPreviousWeight, exercises]);
+
+  useEffect(() => {
+    Axios.get(
+      `http://localhost:3001/api/get/tracked-exercises/${loginStatus.id}`
+    )
+      .then((response) => {
+        if (response.data.length > 0) {
+          setTrackedExercises(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching exercises:", error);
+      });
+  }, [trackedExercises]);
 
   return (
     <div className="App">

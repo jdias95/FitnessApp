@@ -18,6 +18,7 @@ const Dashboard = (props) => {
     routines,
     setRoutines,
     exercises,
+    trackedExercises,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -240,6 +241,11 @@ const Dashboard = (props) => {
             })}
           </div>
         </div>
+        <div className="tracked container">
+          <div className="dashboard flex title">
+            <h2>Tracked Exercises</h2>
+          </div>
+        </div>
       </div>
 
       {showWeightModal && (
@@ -298,6 +304,7 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
+          formattedDate={formattedDate}
         />
       )}
 
@@ -311,6 +318,7 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           selectedExercise={selectedExercise}
           setRoutineExercises={setRoutineExercises}
+          formattedDate={formattedDate}
         />
       )}
 

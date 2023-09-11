@@ -9,6 +9,7 @@ const ExerciseFormModal = (props) => {
     selectedRoutine,
     routineExercises,
     setRoutineExercises,
+    formattedDate,
   } = props;
   const [nameReg, setNameReg] = useState("");
   const [repsHighReg, setRepsHighReg] = useState();
