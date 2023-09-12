@@ -19,6 +19,7 @@ const Dashboard = (props) => {
     setRoutines,
     exercises,
     trackedExercises,
+    setTrackedExercises,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -50,11 +51,6 @@ const Dashboard = (props) => {
 
   const cancelWeightModal = () => {
     setShowWeightModal(false);
-    const data = JSON.parse(localStorage.getItem("weightFormData"));
-    data.weight = JSON.parse(
-      localStorage.getItem("previousWeight")
-    ).previousWeight.weight;
-    localStorage.setItem("weightFormData", JSON.stringify(data));
   };
 
   const openRoutineModal = () => {
@@ -305,11 +301,13 @@ const Dashboard = (props) => {
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
+          setTrackedExercises={setTrackedExercises}
         />
       )}
 
       {showUpdateExerciseModal && selectedExercise && (
         <UpdateExerciseModal
+          loginStatus={loginStatus}
           userProfile={userProfile}
           onClose={() => {
             setSelectedRoutine(null);
@@ -319,6 +317,7 @@ const Dashboard = (props) => {
           selectedExercise={selectedExercise}
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
+          setTrackedExercises={setTrackedExercises}
         />
       )}
 

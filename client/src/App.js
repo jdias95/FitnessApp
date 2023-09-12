@@ -60,6 +60,7 @@ function App() {
               setRoutines={setRoutines}
               exercises={exercises}
               trackedExercises={trackedExercises}
+              setTrackedExercises={setTrackedExercises}
             />
           }
         />
@@ -181,17 +182,19 @@ function App() {
   }, [loginStatus, routines, setPreviousWeight, exercises]);
 
   useEffect(() => {
-    Axios.get(
-      `http://localhost:3001/api/get/tracked-exercises/${loginStatus.id}`
-    )
-      .then((response) => {
-        if (response.data.length > 0) {
-          setTrackedExercises(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching exercises:", error);
-      });
+    if (loginStatus) {
+      Axios.get(
+        `http://localhost:3001/api/get/tracked-exercises/${loginStatus.id}`
+      )
+        .then((response) => {
+          if (response.data.length > 0) {
+            setTrackedExercises(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching exercises:", error);
+        });
+    }
   }, [trackedExercises]);
 
   return (

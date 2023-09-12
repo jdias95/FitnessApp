@@ -3,12 +3,14 @@ import Axios from "axios";
 
 const UpdateExerciseModal = (props) => {
   const {
+    loginStatus,
     userProfile,
     onClose,
     selectedRoutine,
     selectedExercise,
     setRoutineExercises,
     formattedDate,
+    setTrackedExercises,
   } = props;
   const [nameReg, setNameReg] = useState(selectedExercise.name);
   const [repsLowReg, setRepsLowReg] = useState(selectedExercise.reps_low);
@@ -49,6 +51,39 @@ const UpdateExerciseModal = (props) => {
               tracked: trackReg,
               bw: bwReg,
             };
+          }
+
+          if (trackReg) {
+            Axios.post("http://localhost:3001/api/insert/tracked-exercise", {
+              userId: loginStatus.id,
+              exerciseId: id,
+              name: nameReg,
+              repsHigh: repsHighReg,
+              repsLow: repsLowReg,
+              sets: setsReg,
+              weight: weightReg,
+              date: formattedDate,
+            })
+              .then((response) => {
+                const newTrackedExercise = {
+                  id: response.data.insertId,
+                  exercise_id: id,
+                  name: nameReg,
+                  sets: setsReg,
+                  reps_high: repsHighReg,
+                  reps_low: repsLowReg,
+                  weight: weightReg,
+                  date: formattedDate,
+                };
+
+                setTrackedExercises((prevTrackedExercises) => [
+                  ...prevTrackedExercises,
+                  newTrackedExercise,
+                ]);
+              })
+              .catch((error) => {
+                console.error("Error tracking exercise:", error);
+              });
           }
 
           return {
@@ -121,7 +156,7 @@ const UpdateExerciseModal = (props) => {
     <div className="modal">
       <div className="modal-content">
         <div className="modal-header">
-          <h1>Add Exercise</h1>
+          <h1>Update Exercise</h1>
         </div>
         {userProfile && (
           <div className="modal-flex">

@@ -10,6 +10,7 @@ const ExerciseFormModal = (props) => {
     routineExercises,
     setRoutineExercises,
     formattedDate,
+    setTrackedExercises,
   } = props;
   const [nameReg, setNameReg] = useState("");
   const [repsHighReg, setRepsHighReg] = useState();
@@ -51,6 +52,39 @@ const ExerciseFormModal = (props) => {
             },
           ],
         }));
+
+        if (trackReg) {
+          Axios.post("http://localhost:3001/api/insert/tracked-exercise", {
+            userId: loginStatus.id,
+            exerciseId: response.data.insertId,
+            name: nameReg,
+            repsHigh: repsHighReg,
+            repsLow: repsLowReg,
+            sets: setsReg,
+            weight: weightReg,
+            date: formattedDate,
+          })
+            .then((response) => {
+              const newTrackedExercise = {
+                id: response.data.insertId,
+                exercise_id: response.data.insertId,
+                name: nameReg,
+                sets: setsReg,
+                reps_high: repsHighReg,
+                reps_low: repsLowReg,
+                weight: weightReg,
+                date: formattedDate,
+              };
+
+              setTrackedExercises((prevTrackedExercises) => [
+                ...prevTrackedExercises,
+                newTrackedExercise,
+              ]);
+            })
+            .catch((error) => {
+              console.error("Error tracking exercise:", error);
+            });
+        }
 
         onClose();
       })
