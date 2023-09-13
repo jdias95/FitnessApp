@@ -24,7 +24,7 @@ function App() {
   const [previousWeight, setPreviousWeight] = useState({});
   const [routines, setRoutines] = useState([]);
   const [exercises, setExercises] = useState([]);
-  const [trackedExercises, setTrackedExercises] = useState([]);
+  const [trackedExercises, setTrackedExercises] = useState({});
   const routineData = JSON.parse(localStorage.getItem("routines"));
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -188,14 +188,26 @@ function App() {
       )
         .then((response) => {
           if (response.data.length > 0) {
-            setTrackedExercises(response.data);
+            const groupedExercises = {};
+
+            response.data.forEach((exercise) => {
+              const exerciseName = exercise.name;
+
+              if (!groupedExercises[exerciseName]) {
+                groupedExercises[exerciseName] = [];
+              }
+
+              groupedExercises[exerciseName].push(exercise);
+            });
+
+            setTrackedExercises(groupedExercises);
           }
         })
         .catch((error) => {
           console.error("Error fetching exercises:", error);
         });
     }
-  }, [trackedExercises]);
+  }, [loginStatus, trackedExercises]);
 
   return (
     <div className="App">

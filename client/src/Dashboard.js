@@ -120,6 +120,13 @@ const Dashboard = (props) => {
     }
   };
 
+  const toggleTrackedMenu = (exerciseName) => {
+    setOpenMenus((prevState) => ({
+      ...prevState,
+      [exerciseName]: !prevState[exerciseName],
+    }));
+  };
+
   const defaultConvertWeight = (lbs) => {
     const kgs = lbs / 2.20462262185;
     return Number(kgs.toFixed(1));
@@ -240,6 +247,39 @@ const Dashboard = (props) => {
         <div className="tracked container">
           <div className="dashboard flex title">
             <h2>Tracked Exercises</h2>
+          </div>
+          <div>
+            {Object.keys(trackedExercises).map((exerciseName) => (
+              <div key={exerciseName}>
+                <div className="dashboard flex">
+                  <h3>{exerciseName}</h3>
+                  <h5
+                    onClick={() => {
+                      toggleTrackedMenu(exerciseName);
+                    }}
+                    className="caret"
+                  >
+                    &diams;
+                  </h5>
+                </div>
+                {openMenus[exerciseName] && (
+                  <div className="dropdown-menu">
+                    {trackedExercises[exerciseName].map((exercise) => (
+                      <div key={exercise.id} className="flex">
+                        <p>ID: {exercise.id}</p>
+                        <p>Exercise ID: {exercise.exercise_id}</p>
+                        <p>Name: {exercise.name}</p>
+                        <p>Sets: {exercise.sets}</p>
+                        <p>Reps High: {exercise.reps_high}</p>
+                        <p>Reps Low: {exercise.reps_low}</p>
+                        <p>Weight: {exercise.weight}</p>
+                        <p>Date: {exercise.date}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>

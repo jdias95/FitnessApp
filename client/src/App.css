@@ -131,6 +131,7 @@ a {
 
 .title {
   border-bottom: 2px solid rgba(27, 27, 27, 1);
+  height: 5rem;
 }
 
 .routine-card {

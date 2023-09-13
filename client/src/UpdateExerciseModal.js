@@ -64,22 +64,43 @@ const UpdateExerciseModal = (props) => {
               weight: weightReg,
               date: formattedDate,
             })
-              .then((response) => {
-                const newTrackedExercise = {
-                  id: response.data.insertId,
-                  exercise_id: id,
-                  name: nameReg,
-                  sets: setsReg,
-                  reps_high: repsHighReg,
-                  reps_low: repsLowReg,
-                  weight: weightReg,
-                  date: formattedDate,
-                };
-
-                setTrackedExercises((prevTrackedExercises) => [
-                  ...prevTrackedExercises,
-                  newTrackedExercise,
-                ]);
+              .then((response2) => {
+                setTrackedExercises((prevTrackedExercises) => {
+                  if (prevTrackedExercises.hasOwnProperty(nameReg)) {
+                    return {
+                      ...prevTrackedExercises,
+                      [nameReg]: [
+                        ...prevTrackedExercises[nameReg],
+                        {
+                          id: response2.data.insertId,
+                          exercise_id: id,
+                          name: nameReg,
+                          sets: setsReg,
+                          reps_high: repsHighReg,
+                          reps_low: repsLowReg,
+                          weight: weightReg,
+                          date: formattedDate,
+                        },
+                      ],
+                    };
+                  } else {
+                    return {
+                      ...prevTrackedExercises,
+                      [nameReg]: [
+                        {
+                          id: response2.data.insertId,
+                          exercise_id: id,
+                          name: nameReg,
+                          sets: setsReg,
+                          reps_high: repsHighReg,
+                          reps_low: repsLowReg,
+                          weight: weightReg,
+                          date: formattedDate,
+                        },
+                      ],
+                    };
+                  }
+                });
               })
               .catch((error) => {
                 console.error("Error tracking exercise:", error);
