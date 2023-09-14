@@ -107,7 +107,14 @@ const ProfileForm = (props) => {
       measurementType: measurementType,
     })
       .then((response) => {
-        setUserProfileDisplay(response.data);
+        setUserProfileDisplay({
+          weight: weightReg,
+          height: heightReg,
+          age: ageReg,
+          activityLevel: activityLevelReg,
+          gender: genderReg,
+          measurementType: measurementType,
+        });
       })
       .catch((error) => {
         console.error("Error updating profile:", error);
@@ -194,133 +201,173 @@ const ProfileForm = (props) => {
       <div className="profile container">
         {userProfile && (
           <div className="form">
-            <h1>Profile</h1>
-            <select
-              name="measurementType"
-              id="input"
-              value={measurementType}
-              onChange={(e) => {
-                setMeasurementType(e.target.value);
-              }}
-            >
-              <option value="imperial">Imperial</option>
-              <option value="metric">Metric</option>
-            </select>
+            <h2>Profile</h2>
+            <div className="spec">
+              <select
+                name="measurementType"
+                id="input"
+                value={measurementType}
+                onChange={(e) => {
+                  setMeasurementType(e.target.value);
+                }}
+              >
+                <option value="imperial">Imperial</option>
+                <option value="metric">Metric</option>
+              </select>
+            </div>
             {measurementType !== "metric" ? (
               <div>
-                <label>Weight: </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  id="input"
-                  value={weightReg}
-                  onChange={(e) => {
-                    setWeightReg(safeParseFloat(e.target.value));
-                  }}
-                />
-                <label>lbs</label>
-                <br></br>
-                <label>Height: </label>
-                <input
-                  type="number"
-                  id="input"
-                  value={feet}
-                  onChange={(e) => {
-                    const newFeet = safeParseInt(e.target.value);
-                    const newHeight = convertHeightImperial(newFeet, inches);
-                    setFeet(newFeet);
-                    setCm(defaultConvertHeightMetric(newFeet * 12 + inches));
-                    setHeightReg(newHeight);
-                  }}
-                />
-                <label> ft </label>
-                <input
-                  type="number"
-                  id="input"
-                  value={inches}
-                  onChange={(e) => {
-                    const newInches = safeParseInt(e.target.value);
-                    const newHeight = convertHeightImperial(feet, newInches);
-                    setInches(newInches);
-                    setCm(defaultConvertHeightMetric(feet * 12 + newInches));
-                    setHeightReg(newHeight);
-                  }}
-                />
-                <label> in</label>
+                <div className="flex spec">
+                  <label>Weight: </label>
+                  <div className="flex">
+                    <input
+                      type="number"
+                      step="0.1"
+                      id="wide"
+                      value={weightReg}
+                      onChange={(e) => {
+                        setWeightReg(safeParseFloat(e.target.value));
+                      }}
+                    />
+                    <p>lbs</p>
+                  </div>
+                </div>
+                <div className="flex spec">
+                  <label>Height: </label>
+                  <div className="flex">
+                    <input
+                      type="number"
+                      id="wide"
+                      value={feet}
+                      onChange={(e) => {
+                        const newFeet = safeParseInt(e.target.value);
+                        const newHeight = convertHeightImperial(
+                          newFeet,
+                          inches
+                        );
+                        setFeet(newFeet);
+                        setCm(
+                          defaultConvertHeightMetric(newFeet * 12 + inches)
+                        );
+                        setHeightReg(newHeight);
+                      }}
+                    />
+                    <label>ft </label>
+                    <input
+                      type="number"
+                      id="wide"
+                      value={inches}
+                      onChange={(e) => {
+                        const newInches = safeParseInt(e.target.value);
+                        const newHeight = convertHeightImperial(
+                          feet,
+                          newInches
+                        );
+                        setInches(newInches);
+                        setCm(
+                          defaultConvertHeightMetric(feet * 12 + newInches)
+                        );
+                        setHeightReg(newHeight);
+                      }}
+                    />
+                    <label>in</label>
+                  </div>
+                </div>
               </div>
             ) : (
               <div>
-                <label>Weight: </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  id="input"
-                  value={defaultConvertWeight(weightReg)}
-                  onChange={(e) => {
-                    setWeightReg(convertWeight(safeParseFloat(e.target.value)));
-                  }}
-                />
-                <label> kg</label>
-                <br></br>
-                <label>Height: </label>
-                <input
-                  type="number"
-                  id="input"
-                  value={cm}
-                  onChange={(e) => {
-                    const newCm = safeParseInt(e.target.value);
-                    const newHeight = convertHeightMetric(newCm);
-                    setCm(newCm);
-                    setFeet(Math.floor(convertHeightMetric(newCm) / 12));
-                    setInches(convertHeightMetric(newCm) % 12);
-                    setHeightReg(newHeight);
-                  }}
-                />
-                <label> cm</label>
+                <div className="flex spec">
+                  <label>Weight: </label>
+                  <div className="flex">
+                    <input
+                      type="number"
+                      step="0.1"
+                      id="wide"
+                      value={defaultConvertWeight(weightReg)}
+                      onChange={(e) => {
+                        setWeightReg(
+                          convertWeight(safeParseFloat(e.target.value))
+                        );
+                      }}
+                    />
+                    <label>kg</label>
+                  </div>
+                </div>
+                <div className="flex spec">
+                  <label>Height: </label>
+                  <div className="flex">
+                    <input
+                      type="number"
+                      id="wide"
+                      value={cm}
+                      onChange={(e) => {
+                        const newCm = safeParseInt(e.target.value);
+                        const newHeight = convertHeightMetric(newCm);
+                        setCm(newCm);
+                        setFeet(Math.floor(convertHeightMetric(newCm) / 12));
+                        setInches(convertHeightMetric(newCm) % 12);
+                        setHeightReg(newHeight);
+                      }}
+                    />
+                    <label>cm</label>
+                  </div>
+                </div>
               </div>
             )}
             <div>
-              <label>Age: </label>
-              <input
-                type="number"
-                id="input"
-                value={ageReg}
-                onChange={(e) => {
-                  setAgeReg(safeParseInt(e.target.value));
-                }}
-              />
+              <div className="flex spec">
+                <label>Age: </label>
+                <div className="flex">
+                  <input
+                    type="number"
+                    id="wide"
+                    value={ageReg}
+                    onChange={(e) => {
+                      setAgeReg(safeParseInt(e.target.value));
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex spec">
+                  <label>Activity Level: </label>
+                  <div className="flex">
+                    <select
+                      name="activityLevel"
+                      id="input"
+                      value={activityLevelReg}
+                      onChange={(e) => {
+                        setActivityLevelReg(e.target.value);
+                      }}
+                    >
+                      <option value="">Please Select</option>
+                      <option value="Sedentary">Sedentary</option>
+                      <option value="Lightly Active">Lightly Active</option>
+                      <option value="Active">Active</option>
+                      <option value="Very Active">Very Active</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div>
-              <label>Activity Level: </label>
-              <select
-                name="activityLevel"
-                id="input"
-                value={activityLevelReg}
-                onChange={(e) => {
-                  setActivityLevelReg(e.target.value);
-                }}
-              >
-                <option value="">Please Select</option>
-                <option value="Sedentary">Sedentary</option>
-                <option value="Lightly Active">Lightly Active</option>
-                <option value="Active">Active</option>
-                <option value="Very Active">Very Active</option>
-              </select>
-            </div>
-            <div>
-              <label>Gender: </label>
-              <select
-                name="gender"
-                id="input"
-                value={genderReg}
-                onChange={(e) => {
-                  setGenderReg(e.target.value);
-                }}
-              >
-                <option value="">Please Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
+              <div className="flex spec">
+                <label>Gender: </label>
+                <div className="flex">
+                  <select
+                    name="gender"
+                    id="input"
+                    value={genderReg}
+                    onChange={(e) => {
+                      setGenderReg(e.target.value);
+                    }}
+                  >
+                    <option value="">Please Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+              </div>
             </div>
             <div className="button-container">
               <button onClick={profileUpdate}>Confirm</button>

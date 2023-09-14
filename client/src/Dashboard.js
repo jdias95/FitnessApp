@@ -34,6 +34,21 @@ const Dashboard = (props) => {
   const [selectedExercise, setSelectedExercise] = useState({});
   const navigate = useNavigate();
 
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
   useEffect(() => {
     if (loginStatus === false) {
       localStorage.clear();
@@ -130,6 +145,10 @@ const Dashboard = (props) => {
   const defaultConvertWeight = (lbs) => {
     const kgs = lbs / 2.20462262185;
     return Number(kgs.toFixed(1));
+  };
+
+  const compareBW = (bw, weight) => {
+    return Number(weight / bw).toFixed(2);
   };
 
   return (
@@ -246,7 +265,7 @@ const Dashboard = (props) => {
         </div>
         <div className="tracked container">
           <div className="dashboard flex title">
-            <h2>Tracked Exercises</h2>
+            <h2>Track Progress</h2>
           </div>
           <div>
             {Object.keys(trackedExercises).map((exerciseName) => (
@@ -263,19 +282,40 @@ const Dashboard = (props) => {
                   </h5>
                 </div>
                 {openMenus[exerciseName] && (
-                  <div className="dropdown-menu">
-                    {trackedExercises[exerciseName].map((exercise) => (
-                      <div key={exercise.id} className="flex">
-                        <p>ID: {exercise.id}</p>
-                        <p>Exercise ID: {exercise.exercise_id}</p>
-                        <p>Name: {exercise.name}</p>
-                        <p>Sets: {exercise.sets}</p>
-                        <p>Reps High: {exercise.reps_high}</p>
-                        <p>Reps Low: {exercise.reps_low}</p>
-                        <p>Weight: {exercise.weight}</p>
-                        <p>Date: {exercise.date}</p>
-                      </div>
-                    ))}
+                  <div className="tracked-dropdown dropdown-menu">
+                    <ul>
+                      {trackedExercises[exerciseName]
+                        .slice()
+                        .reverse()
+                        .map((exercise) => (
+                          <li key={exercise.id} className="dashboard flex">
+                            {`${
+                              monthNames[
+                                parseInt(exercise.date.slice(5, 7) - 1)
+                              ]
+                            } ${exercise.date.slice(8)} ${exercise.date.slice(
+                              0,
+                              4
+                            )}`}
+                            :{" "}
+                            {exercise.weight &&
+                            userProfile.measurement_type === "imperial"
+                              ? `${exercise.weight} lbs `
+                              : exercise.weight &&
+                                userProfile.measurement_type === "metric"
+                              ? `${defaultConvertWeight(exercise.weight)} kgs `
+                              : " "}
+                            {exercise.bw
+                              ? `(${compareBW(
+                                  userProfile.weight,
+                                  exercise.weight
+                                )}xBW) `
+                              : " "}
+                            | {exercise.sets} x {exercise.reps_low}
+                            {exercise.reps_high ? `-${exercise.reps_high}` : ""}
+                          </li>
+                        ))}
+                    </ul>
                   </div>
                 )}
               </div>

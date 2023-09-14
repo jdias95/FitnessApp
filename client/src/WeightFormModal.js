@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 
 const WeightFormModal = (props) => {
@@ -14,20 +14,6 @@ const WeightFormModal = (props) => {
   const [weightReg, setWeightReg] = useState(
     previousWeight ? previousWeight.weight : 0
   );
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   const setWeight = () => {
     Axios.put(`http://localhost:3001/api/update/profile/${loginStatus.id}`, {

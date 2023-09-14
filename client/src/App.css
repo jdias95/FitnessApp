@@ -107,6 +107,19 @@ a {
   border: 2px;
 }
 
+.profile .spec {
+  justify-content: space-between;
+  width: 50%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  height: 3.5rem;
+}
+
+.profile h2 {
+  border-bottom: 2px solid rgba(27, 27, 27, 1);
+  padding: 1rem 0;
+  margin: 0;
+}
+
 .flex {
   display: flex;
   align-items: center;
@@ -155,6 +168,12 @@ a {
   background-color: #1b1b1b;
 }
 
+.tracked-dropdown {
+  max-height: 10rem;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+}
+
 .dropdown-menu button {
   height: 1.5rem;
   width: 4rem;
@@ -186,11 +205,11 @@ a {
   width: 10rem;
 }
 
-.exercise-modal-body #wide {
+#wide {
   width: 4rem;
 }
 
-.exercise-modal-body #narrow {
+#narrow {
   width: 2rem;
 }
 

@@ -96,40 +96,44 @@ const ProfilePage = (props) => {
             {userProfileDisplay.measurement_type !== "metric" ? (
               <div>
                 {userProfileDisplay.weight === "N/A" ? (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Weight: </label>
                     <p className="item">N/A</p>
                   </div>
                 ) : (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Weight: </label>
                     <p className="item">{userProfileDisplay.weight} lbs</p>
                   </div>
                 )}
                 {userProfileDisplay.height === "N/A" ? (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Height: </label>
                     <p className="item">N/A</p>
                   </div>
                 ) : (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Height: </label>
-                    <p className="item">
-                      {Math.floor(userProfileDisplay.height / 12)} ft
-                    </p>
-                    <p className="item">{userProfileDisplay.height % 12} in</p>
+                    <div className="flex">
+                      <p className="item">
+                        {Math.floor(userProfileDisplay.height / 12)} ft
+                      </p>
+                      <p className="item">
+                        {userProfileDisplay.height % 12} in
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
             ) : (
               <div>
                 {userProfileDisplay.weight === "N/A" ? (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Weight: </label>
                     <p className="item">N/A</p>
                   </div>
                 ) : (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Weight: </label>
                     <p className="item">
                       {defaultConvertWeight(userProfileDisplay.weight)} kg
@@ -137,12 +141,12 @@ const ProfilePage = (props) => {
                   </div>
                 )}
                 {userProfileDisplay.height === "N/A" ? (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Height: </label>
                     <p className="item">N/A</p>
                   </div>
                 ) : (
-                  <div className="flex">
+                  <div className="flex spec">
                     <label>Height: </label>
                     <p className="item">
                       {defaultConvertHeightMetric(userProfileDisplay.height)} cm
@@ -151,20 +155,20 @@ const ProfilePage = (props) => {
                 )}
               </div>
             )}
-            <div className="flex">
+            <div className="flex spec">
               <label>Age: </label>
               <p className="item">{userProfileDisplay.age}</p>
             </div>
-            <div className="flex">
+            <div className="flex spec">
               <label>Activity Level: </label>
               <p className="item">{userProfileDisplay.activity_level}</p>
             </div>
-            <div className="flex">
+            <div className="flex spec">
               <label>Gender: </label>
               <p className="item">{userProfileDisplay.gender}</p>
             </div>
             {infoBool && userProfileDisplay.gender === "Male" ? (
-              <div className="flex">
+              <div className="flex spec">
                 <label>Estimated Daily Calories Burned:</label>
                 <p className="item">
                   {Math.floor(
@@ -178,7 +182,7 @@ const ProfilePage = (props) => {
                 </p>
               </div>
             ) : infoBool && userProfileDisplay.gender === "Female" ? (
-              <div className="flex">
+              <div className="flex spec">
                 <label>Estimated Daily Calories Burned: </label>
                 <p className="item">
                   {Math.floor(

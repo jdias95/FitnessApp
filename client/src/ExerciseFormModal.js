@@ -62,6 +62,7 @@ const ExerciseFormModal = (props) => {
             repsLow: repsLowReg,
             sets: setsReg,
             weight: weightReg,
+            bw: bwReg,
             date: formattedDate,
           })
             .then((response2) => {
@@ -79,6 +80,7 @@ const ExerciseFormModal = (props) => {
                         reps_high: repsHighReg,
                         reps_low: repsLowReg,
                         weight: weightReg,
+                        bw: bwReg,
                         date: formattedDate,
                       },
                     ],
@@ -95,6 +97,7 @@ const ExerciseFormModal = (props) => {
                         reps_high: repsHighReg,
                         reps_low: repsLowReg,
                         weight: weightReg,
+                        bw: bwReg,
                         date: formattedDate,
                       },
                     ],

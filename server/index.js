@@ -408,13 +408,14 @@ app.post("/api/insert/tracked-exercise", (req, res) => {
   const repsHigh = req.body.repsHigh;
   const repsLow = req.body.repsLow;
   const weight = req.body.weight;
+  const bw = req.body.bw;
   const date = req.body.date;
 
   const sqlInsert =
-    "INSERT INTO tracked_exercises (user_id, exercise_id, name, sets, reps_high, reps_low, weight, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO tracked_exercises (user_id, exercise_id, name, sets, reps_high, reps_low, weight, bw, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlInsert,
-    [userId, exerciseId, name, sets, repsHigh, repsLow, weight, date],
+    [userId, exerciseId, name, sets, repsHigh, repsLow, weight, bw, date],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });
