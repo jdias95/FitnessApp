@@ -281,7 +281,7 @@ const Dashboard = (props) => {
           <div>
             {Object.keys(trackedExercises).map((exerciseName) => (
               <div key={exerciseName}>
-                <div className="dashboard flex">
+                <div className="dashboard flex list-title-card">
                   <h3>{exerciseName}</h3>
                   <h5
                     onClick={() => {
@@ -437,6 +437,7 @@ const Dashboard = (props) => {
           onClose={closeDeleteTrackedExerciseModal}
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
+          monthNames={monthNames}
         />
       )}
     </div>

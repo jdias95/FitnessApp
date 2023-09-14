@@ -97,18 +97,18 @@ const WeightFormModal = (props) => {
           <div className="modal-flex">
             {userProfile.measurement_type !== "metric" ? (
               <div className="modal-body">
-                <span>
+                <div>
                   <input
                     type="number"
                     step="0.1"
-                    id="input"
+                    id="wide"
                     value={weightReg}
                     onChange={(e) => {
                       setWeightReg(safeParseFloat(e.target.value));
                     }}
                   />
                   <label>lbs</label>
-                </span>
+                </div>
                 <span>
                   <button className="modal-button" onClick={setWeight}>
                     Confirm

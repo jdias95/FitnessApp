@@ -147,7 +147,7 @@ a {
   height: 5rem;
 }
 
-.routine-card {
+.list-title-card {
   border-bottom: 2px solid rgba(27, 27, 27, 1);
 }
 
@@ -172,6 +172,10 @@ a {
   max-height: 10rem;
   overflow-y: auto;
   transition: max-height 0.3s ease;
+}
+
+.tracked .dropdown-menu {
+  padding-bottom: 1rem;
 }
 
 .dropdown-menu button {

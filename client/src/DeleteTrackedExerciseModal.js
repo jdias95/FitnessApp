@@ -2,7 +2,7 @@ import React from "react";
 import Axios from "axios";
 
 const DeleteTrackedExerciseModal = (props) => {
-  const { onClose, selectedExercise, setTrackedExercises } = props;
+  const { onClose, selectedExercise, setTrackedExercises, monthNames } = props;
 
   const deleteExercise = (id) => {
     Axios.delete(`http://localhost:3001/api/delete/tracked-exercise/${id}`)
@@ -39,7 +39,13 @@ const DeleteTrackedExerciseModal = (props) => {
           <div className="modal-body">
             <p>
               Are you sure you want to delete {selectedExercise.name}:{" "}
-              {selectedExercise.date}?
+              {`${
+                monthNames[parseInt(selectedExercise.date.slice(5, 7) - 1)]
+              } ${selectedExercise.date.slice(
+                8,
+                10
+              )} ${selectedExercise.date.slice(0, 4)}`}
+              ?
             </p>
             <span>
               <button
