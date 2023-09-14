@@ -73,6 +73,29 @@
   font-weight: bold;
 }
 
+.img {
+  width: 1.5rem;
+  margin: 0 0.25rem;
+}
+
+.delete:hover {
+  cursor: pointer;
+  content: url("../public/delete-hover.png");
+  transition: content 0.3s;
+}
+
+.x:hover {
+  cursor: pointer;
+  content: url("../public/x-hover.png");
+  transition: content 0.3s;
+}
+
+.edit:hover {
+  cursor: pointer;
+  content: url("../public/edit-hover.png");
+  transition: content 0.3s;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -195,7 +218,7 @@ a {
 
 #list-plus:hover {
   cursor: pointer;
-  color: rgba(159, 225, 255, 0.87);
+  color: rgba(93, 190, 163, 0.87);
 }
 
 .exercise-modal-body {
@@ -257,7 +280,7 @@ a {
 }
 
 .flex #plus:hover {
-  color: rgba(159, 225, 255, 0.87);
+  color: rgba(93, 190, 163, 0.87);
   cursor: pointer;
 }
 

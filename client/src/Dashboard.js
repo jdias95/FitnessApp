@@ -187,7 +187,7 @@ const Dashboard = (props) => {
 
               return (
                 <div key={`${val.name}-routine`}>
-                  <div className="dashboard flex routine-card">
+                  <div className="dashboard flex list-title-card">
                     <h3>{val.name}</h3>
                     <h5
                       className="caret"
@@ -198,22 +198,24 @@ const Dashboard = (props) => {
                       &diams;
                     </h5>
                     <div className="flex">
-                      <button
+                      <img
+                        className="img edit"
+                        src={process.env.PUBLIC_URL + "/edit.png"}
                         onClick={() => {
                           setSelectedRoutine(val);
                           openUpdateRoutineModal();
                         }}
-                      >
-                        Edit
-                      </button>
-                      <button
+                        alt="edit"
+                      />
+                      <img
+                        className="img delete"
+                        src={process.env.PUBLIC_URL + "/delete.png"}
                         onClick={() => {
                           setSelectedRoutine(val);
                           openDeleteRoutineModal();
                         }}
-                      >
-                        Delete
-                      </button>
+                        alt="delete"
+                      />
                     </div>
                   </div>
                   {isMenuOpen && (
@@ -234,24 +236,26 @@ const Dashboard = (props) => {
                                 )} kgs`
                               : ""}
                             <div className="flex">
-                              <button
+                              <img
+                                className="img edit"
+                                src={process.env.PUBLIC_URL + "/edit.png"}
                                 onClick={() => {
                                   setSelectedRoutine(val);
                                   setSelectedExercise(exercise);
                                   openUpdateExerciseModal();
                                 }}
-                              >
-                                Edit
-                              </button>
-                              <button
+                                alt="edit"
+                              />
+                              <img
+                                className="img x"
+                                src={process.env.PUBLIC_URL + "/x.png"}
                                 onClick={() => {
                                   setSelectedRoutine(val);
                                   setSelectedExercise(exercise);
                                   openDeleteExerciseModal();
                                 }}
-                              >
-                                Delete
-                              </button>
+                                alt="delete"
+                              />
                             </div>
                           </li>
                         ))}
@@ -324,14 +328,15 @@ const Dashboard = (props) => {
                               : " "}
                             | {exercise.sets} x {exercise.reps_low}
                             {exercise.reps_high ? `-${exercise.reps_high}` : ""}
-                            <button
+                            <img
+                              className="img x"
+                              src={process.env.PUBLIC_URL + "/x.png"}
                               onClick={() => {
                                 setSelectedExercise(exercise);
                                 openDeleteTrackedExerciseModal();
                               }}
-                            >
-                              Delete
-                            </button>
+                              alt="delete"
+                            />
                           </li>
                         ))}
                     </ul>
