@@ -294,10 +294,30 @@ a {
   width: 100%;
 }
 
+.modal-body span {
+  width: 27%;
+}
+
 .modal-button {
   padding: 0.3rem;
   margin-left: 0.5rem;
   cursor: pointer;
   margin: 0.5rem 0.1rem;
   width: 4.5rem;
+}
+
+@media (max-width: 1000px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .container {
+    width: 95%;
+  }
+
+  .nav .name {
+    left: 2rem;
+    transform: none;
+    width: auto;
+  }
 }

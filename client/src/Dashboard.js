@@ -7,6 +7,7 @@ import UpdateRoutineModal from "./UpdateRoutineModal";
 import ExerciseFormModal from "./ExerciseFormModal";
 import UpdateExerciseModal from "./UpdateExerciseModal";
 import DeleteExerciseModal from "./DeleteExerciseModal";
+import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
 
 const Dashboard = (props) => {
   const {
@@ -28,6 +29,8 @@ const Dashboard = (props) => {
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [showUpdateExerciseModal, setShowUpdateExerciseModal] = useState(false);
   const [showDeleteExerciseModal, setShowDeleteExerciseModal] = useState(false);
+  const [showDeleteTrackedExerciseModal, setShowDeleteTrackedExerciseModal] =
+    useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
@@ -116,6 +119,14 @@ const Dashboard = (props) => {
     setShowDeleteExerciseModal(false);
   };
 
+  const openDeleteTrackedExerciseModal = () => {
+    setShowDeleteTrackedExerciseModal(true);
+  };
+
+  const closeDeleteTrackedExerciseModal = () => {
+    setShowDeleteTrackedExerciseModal(false);
+  };
+
   const getExercisesForRoutine = (routineId) => {
     return exercises.filter((exercise) => exercise.routine_id === routineId);
   };
@@ -153,7 +164,7 @@ const Dashboard = (props) => {
 
   return (
     <div className="App">
-      <div className="flex">
+      <div className="row flex">
         <div className="weight container">
           <div className="dashboard flex title">
             <h2>Weight</h2>
@@ -313,6 +324,14 @@ const Dashboard = (props) => {
                               : " "}
                             | {exercise.sets} x {exercise.reps_low}
                             {exercise.reps_high ? `-${exercise.reps_high}` : ""}
+                            <button
+                              onClick={() => {
+                                setSelectedExercise(exercise);
+                                openDeleteTrackedExerciseModal();
+                              }}
+                            >
+                              Delete
+                            </button>
                           </li>
                         ))}
                     </ul>
@@ -410,6 +429,14 @@ const Dashboard = (props) => {
           selectedExercise={selectedExercise}
           selectedRoutine={selectedRoutine}
           setRoutineExercises={setRoutineExercises}
+        />
+      )}
+
+      {showDeleteTrackedExerciseModal && selectedExercise && (
+        <DeleteTrackedExerciseModal
+          onClose={closeDeleteTrackedExerciseModal}
+          selectedExercise={selectedExercise}
+          setTrackedExercises={setTrackedExercises}
         />
       )}
     </div>

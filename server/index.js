@@ -443,6 +443,20 @@ app.get("/api/get/tracked-exercises/:userId", (req, res) => {
   });
 });
 
+app.delete("/api/delete/tracked-exercise/:id", (req, res) => {
+  const id = req.params.id;
+  const sqlDelete = "DELETE FROM tracked_exercises WHERE id = ?";
+
+  db.query(sqlDelete, id, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error deleting exercise:", err);
+    } else {
+      res.status(204).send();
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
