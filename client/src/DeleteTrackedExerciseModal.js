@@ -20,10 +20,16 @@ const DeleteTrackedExerciseModal = (props) => {
             updatedTrackedExercises.splice(indexToDelete, 1);
           }
 
-          return {
-            ...prevTrackedExercises,
-            [selectedExercise.name]: updatedTrackedExercises,
-          };
+          if (updatedTrackedExercises.length === 0) {
+            const updatedTrackedExercisesObj = { ...prevTrackedExercises };
+            delete updatedTrackedExercisesObj[selectedExercise.name];
+            return updatedTrackedExercisesObj;
+          } else {
+            return {
+              ...prevTrackedExercises,
+              [selectedExercise.name]: updatedTrackedExercises,
+            };
+          }
         });
         onClose();
       })
@@ -47,7 +53,7 @@ const DeleteTrackedExerciseModal = (props) => {
               )} ${selectedExercise.date.slice(0, 4)}`}
               ?
             </p>
-            <span>
+            <span className="modal-button-container">
               <button
                 className="modal-button"
                 onClick={() => deleteExercise(selectedExercise.id)}

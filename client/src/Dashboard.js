@@ -8,6 +8,7 @@ import ExerciseFormModal from "./ExerciseFormModal";
 import UpdateExerciseModal from "./UpdateExerciseModal";
 import DeleteExerciseModal from "./DeleteExerciseModal";
 import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
+import NotesModal from "./NotesModal";
 
 const Dashboard = (props) => {
   const {
@@ -31,6 +32,7 @@ const Dashboard = (props) => {
   const [showDeleteExerciseModal, setShowDeleteExerciseModal] = useState(false);
   const [showDeleteTrackedExerciseModal, setShowDeleteTrackedExerciseModal] =
     useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
@@ -75,6 +77,9 @@ const Dashboard = (props) => {
         break;
       case "exercise":
         setShowExerciseModal(isOpen);
+        break;
+      case "notes":
+        setShowNotesModal(isOpen);
         break;
       case "updateExercise":
         setShowUpdateExerciseModal(isOpen);
@@ -196,18 +201,33 @@ const Dashboard = (props) => {
                       <ul>
                         {exerciseList.map((exercise) => (
                           <li key={exercise.id} className="dashboard flex">
-                            {exercise.name} | {exercise.sets} x{" "}
-                            {exercise.reps_low}
-                            {exercise.reps_high ? `-${exercise.reps_high}` : ""}
-                            {exercise.weight &&
-                            userProfile.measurement_type === "imperial"
-                              ? ` | ${exercise.weight} lbs`
-                              : exercise.weight &&
-                                userProfile.measurement_type === "metric"
-                              ? ` | ${defaultConvertWeight(
-                                  exercise.weight
-                                )} kgs`
-                              : ""}
+                            <div>
+                              {exercise.name} | {exercise.sets} x{" "}
+                              {exercise.reps_low}
+                              {exercise.reps_high
+                                ? `-${exercise.reps_high}`
+                                : ""}
+                              {exercise.weight &&
+                              userProfile.measurement_type === "imperial"
+                                ? ` | ${exercise.weight} lbs`
+                                : exercise.weight &&
+                                  userProfile.measurement_type === "metric"
+                                ? ` | ${defaultConvertWeight(
+                                    exercise.weight
+                                  )} kgs`
+                                : ""}
+                              {exercise.notes && (
+                                <img
+                                  className="img notes"
+                                  src={process.env.PUBLIC_URL + "/notes.png"}
+                                  onClick={() => {
+                                    setSelectedExercise(exercise);
+                                    toggleModal("notes", true);
+                                  }}
+                                  alt="notes"
+                                />
+                              )}
+                            </div>
                             <div className="flex">
                               <img
                                 className="img edit"
@@ -421,6 +441,15 @@ const Dashboard = (props) => {
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
           monthNames={monthNames}
+        />
+      )}
+
+      {showNotesModal && selectedExercise && (
+        <NotesModal
+          onClose={() => {
+            toggleModal("notes", false);
+          }}
+          selectedExercise={selectedExercise}
         />
       )}
     </div>

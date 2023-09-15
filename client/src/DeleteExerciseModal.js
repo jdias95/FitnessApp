@@ -38,7 +38,7 @@ const DeleteExerciseModal = (props) => {
         <div className="modal-flex">
           <div className="modal-body">
             <p>Are you sure you want to delete {selectedExercise.name}?</p>
-            <span>
+            <span className="modal-button-container">
               <button
                 className="modal-button"
                 onClick={() => deleteExercise(selectedExercise.id)}

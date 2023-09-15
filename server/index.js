@@ -327,12 +327,24 @@ app.post("/api/insert/exercise", (req, res) => {
   const weight = req.body.weight;
   const tracked = req.body.tracked;
   const bw = req.body.bw;
+  const notes = req.body.notes;
 
   const sqlInsert =
-    "INSERT INTO exercises (user_id, routine_id, name, reps_high, reps_low, sets, weight, tracked, bw) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO exercises (user_id, routine_id, name, reps_high, reps_low, sets, weight, tracked, bw, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlInsert,
-    [userId, routineId, name, repsHigh, repsLow, sets, weight, tracked, bw],
+    [
+      userId,
+      routineId,
+      name,
+      repsHigh,
+      repsLow,
+      sets,
+      weight,
+      tracked,
+      bw,
+      notes,
+    ],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });
@@ -369,12 +381,13 @@ app.put("/api/update/exercise/:id", (req, res) => {
   const weight = req.body.weight;
   const tracked = req.body.tracked;
   const bw = req.body.bw;
+  const notes = req.body.notes;
 
-  const sqlUpdate = `UPDATE exercises SET name = ?, reps_high = ?, reps_low = ?, sets = ?, weight = ?, tracked = ?, bw = ? WHERE id = ?`;
+  const sqlUpdate = `UPDATE exercises SET name = ?, reps_high = ?, reps_low = ?, sets = ?, weight = ?, tracked = ?, bw = ?, notes = ? WHERE id = ?`;
 
   db.query(
     sqlUpdate,
-    [name, repsHigh, repsLow, sets, weight, tracked, bw, id],
+    [name, repsHigh, repsLow, sets, weight, tracked, bw, notes, id],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });

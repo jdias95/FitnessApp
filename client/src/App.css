@@ -252,6 +252,8 @@ a {
 .modal-button-container {
   display: flex;
   justify-content: flex-end;
+  align-items: flex-end;
+  height: 100%;
 }
 
 .dropdown-menu ul {
@@ -300,6 +302,7 @@ a {
 
 .modal-flex {
   display: flex;
+  width: 100%;
 }
 
 .modal-content {
@@ -320,18 +323,47 @@ a {
   justify-content: space-between;
   padding: 1.5rem;
   width: 100%;
+  max-width: 100%;
 }
 
-.modal-content span {
+.modal-body span {
   width: 27%;
+}
+
+.modal-body .notes-review {
+  word-wrap: break-word;
+  width: 50%;
 }
 
 .modal-button {
   padding: 0.3rem;
-  margin-left: 0.5rem;
   cursor: pointer;
   margin: 0.5rem 0.1rem;
   width: 4.5rem;
+}
+
+.flex-input {
+  margin-right: 0.3rem;
+}
+
+#notes {
+  align-self: flex-start;
+}
+
+.dropdown-menu li div {
+  display: flex;
+  align-items: center;
+}
+
+.notes {
+  height: 1.3rem;
+  width: 1.3rem;
+}
+
+.notes:hover {
+  cursor: pointer;
+  content: url("../public/notes-hover.png");
+  transition: content 0.3s;
 }
 
 @media (max-width: 1200px) {

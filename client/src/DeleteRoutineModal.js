@@ -22,7 +22,7 @@ const DeleteRoutineModal = (props) => {
         <div className="modal-flex">
           <div className="modal-body">
             <p>Are you sure you want to delete {selectedRoutine.name}?</p>
-            <span>
+            <span className="modal-button-container">
               <button
                 className="modal-button"
                 onClick={() => deleteRoutine(selectedRoutine.id)}

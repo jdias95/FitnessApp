@@ -19,6 +19,7 @@ const ExerciseFormModal = (props) => {
   const [weightReg, setWeightReg] = useState(0);
   const [trackReg, setTrackReg] = useState(false);
   const [bwReg, setBwReg] = useState(false);
+  const [notesReg, setNotesReg] = useState("");
 
   const createExercise = () => {
     Axios.post("http://localhost:3001/api/insert/exercise", {
@@ -31,6 +32,7 @@ const ExerciseFormModal = (props) => {
       weight: weightReg,
       tracked: trackReg,
       bw: bwReg,
+      notes: notesReg,
     })
       .then((response) => {
         const existingExercisesForRoutine =
@@ -49,6 +51,7 @@ const ExerciseFormModal = (props) => {
               weight: weightReg,
               tracked: trackReg,
               bw: bwReg,
+              notes: notesReg,
             },
           ],
         }));
@@ -203,7 +206,7 @@ const ExerciseFormModal = (props) => {
                 />
               </div>
               <div className="flex">
-                <label>Rep-range: </label>
+                <label className="flex-input">Rep-range: </label>
                 <input
                   type="number"
                   id="narrow"
@@ -251,6 +254,19 @@ const ExerciseFormModal = (props) => {
                   <label>kgs</label>
                 </div>
               )}
+              <div className="flex">
+                <label id="notes" className="flex-input">
+                  Notes:
+                </label>
+                <textarea
+                  rows="4"
+                  cols="30"
+                  value={notesReg}
+                  onChange={(e) => {
+                    setNotesReg(e.target.value);
+                  }}
+                />
+              </div>
               <div>
                 <label>Track Progress?: </label>
                 <input

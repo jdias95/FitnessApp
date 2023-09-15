@@ -11,8 +11,14 @@ const RoutineFormModal = (props) => {
       name: nameReg,
     })
       .then((response) => {
-        console.log(response.data);
-        setRoutines([...routines, response.data]);
+        setRoutines([
+          ...routines,
+          {
+            id: response.data.insertId,
+            user_id: loginStatus.id,
+            name: nameReg,
+          },
+        ]);
         onClose();
       })
       .catch((error) => {

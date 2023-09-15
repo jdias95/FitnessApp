@@ -105,24 +105,22 @@ const WeightFormModal = (props) => {
                   <label>lbs</label>
                 </div>
               ) : (
-                <div className="modal-body">
-                  <span>
-                    <input
-                      type="number"
-                      step="0.1"
-                      id="input"
-                      value={defaultConvertWeight(weightReg)}
-                      onChange={(e) => {
-                        setWeightReg(
-                          convertWeight(safeParseFloat(e.target.value))
-                        );
-                      }}
-                    />
-                    <label>kgs</label>
-                  </span>
+                <div>
+                  <input
+                    type="number"
+                    step="0.1"
+                    id="wide"
+                    value={defaultConvertWeight(weightReg)}
+                    onChange={(e) => {
+                      setWeightReg(
+                        convertWeight(safeParseFloat(e.target.value))
+                      );
+                    }}
+                  />
+                  <label>kgs</label>
                 </div>
               )}
-              <span>
+              <span className="modal-button-container">
                 <button className="modal-button" onClick={setWeight}>
                   Confirm
                 </button>

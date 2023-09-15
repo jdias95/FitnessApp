@@ -38,7 +38,7 @@ const UpdateRoutineModal = (props) => {
                 setNameReg(e.target.value);
               }}
             />
-            <span>
+            <span className="modal-button-container">
               <button
                 className="modal-button"
                 onClick={() => updateRoutine(selectedRoutine.id)}
