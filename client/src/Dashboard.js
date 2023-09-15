@@ -59,72 +59,35 @@ const Dashboard = (props) => {
     }
   }, [loginStatus, navigate]);
 
-  const openWeightModal = () => {
-    setShowWeightModal(true);
-  };
-
-  const closeWeightModal = () => {
-    setShowWeightModal(false);
-  };
-
-  const cancelWeightModal = () => {
-    setShowWeightModal(false);
-  };
-
-  const openRoutineModal = () => {
-    setShowRoutineModal(true);
-  };
-
-  const closeRoutineModal = () => {
-    setShowRoutineModal(false);
-  };
-
-  const openUpdateRoutineModal = () => {
-    setShowUpdateRoutineModal(true);
-  };
-
-  const closeUpdateRoutineModal = () => {
-    setShowUpdateRoutineModal(false);
-  };
-
-  const openDeleteRoutineModal = () => {
-    setShowDeleteRoutineModal(true);
-  };
-
-  const closeDeleteRoutineModal = () => {
-    setShowDeleteRoutineModal(false);
-  };
-
-  const openExerciseModal = () => {
-    setShowExerciseModal(true);
-  };
-
-  const closeExerciseModal = () => {
-    setShowExerciseModal(false);
-  };
-
-  const openUpdateExerciseModal = () => {
-    setShowUpdateExerciseModal(true);
-  };
-
-  const closeUpdateExerciseModal = () => {
-    setShowUpdateExerciseModal(false);
-  };
-
-  const openDeleteExerciseModal = () => {
-    setShowDeleteExerciseModal(true);
-  };
-
-  const closeDeleteExerciseModal = () => {
-    setShowDeleteExerciseModal(false);
-  };
-
-  const openDeleteTrackedExerciseModal = () => {
-    setShowDeleteTrackedExerciseModal(true);
-  };
-
-  const closeDeleteTrackedExerciseModal = () => {
-    setShowDeleteTrackedExerciseModal(false);
+  const toggleModal = (modalName, isOpen) => {
+    switch (modalName) {
+      case "weight":
+        setShowWeightModal(isOpen);
+        break;
+      case "routine":
+        setShowRoutineModal(isOpen);
+        break;
+      case "updateRoutine":
+        setShowUpdateRoutineModal(isOpen);
+        break;
+      case "deleteRoutine":
+        setShowDeleteRoutineModal(isOpen);
+        break;
+      case "exercise":
+        setShowExerciseModal(isOpen);
+        break;
+      case "updateExercise":
+        setShowUpdateExerciseModal(isOpen);
+        break;
+      case "deleteExercise":
+        setShowDeleteExerciseModal(isOpen);
+        break;
+      case "deleteTrackedExercise":
+        setShowDeleteTrackedExerciseModal(isOpen);
+        break;
+      default:
+        break;
+    }
   };
 
   const getExercisesForRoutine = (routineId) => {
@@ -168,7 +131,12 @@ const Dashboard = (props) => {
         <div className="weight container">
           <div className="dashboard flex title">
             <h2>Weight</h2>
-            <h1 id="plus" onClick={openWeightModal}>
+            <h1
+              id="plus"
+              onClick={() => {
+                toggleModal("weight", true);
+              }}
+            >
               +
             </h1>
           </div>
@@ -176,7 +144,12 @@ const Dashboard = (props) => {
         <div className="routine container">
           <div className="dashboard flex title">
             <h2>Workout Routines</h2>
-            <h2 id="plus" onClick={openRoutineModal}>
+            <h2
+              id="plus"
+              onClick={() => {
+                toggleModal("routine", true);
+              }}
+            >
               +
             </h2>
           </div>
@@ -203,7 +176,7 @@ const Dashboard = (props) => {
                         src={process.env.PUBLIC_URL + "/edit.png"}
                         onClick={() => {
                           setSelectedRoutine(val);
-                          openUpdateRoutineModal();
+                          toggleModal("updateRoutine", true);
                         }}
                         alt="edit"
                       />
@@ -212,7 +185,7 @@ const Dashboard = (props) => {
                         src={process.env.PUBLIC_URL + "/delete.png"}
                         onClick={() => {
                           setSelectedRoutine(val);
-                          openDeleteRoutineModal();
+                          toggleModal("deleteRoutine", true);
                         }}
                         alt="delete"
                       />
@@ -242,7 +215,7 @@ const Dashboard = (props) => {
                                 onClick={() => {
                                   setSelectedRoutine(val);
                                   setSelectedExercise(exercise);
-                                  openUpdateExerciseModal();
+                                  toggleModal("updateExercise", true);
                                 }}
                                 alt="edit"
                               />
@@ -252,7 +225,7 @@ const Dashboard = (props) => {
                                 onClick={() => {
                                   setSelectedRoutine(val);
                                   setSelectedExercise(exercise);
-                                  openDeleteExerciseModal();
+                                  toggleModal("deleteExercise", true);
                                 }}
                                 alt="delete"
                               />
@@ -265,7 +238,7 @@ const Dashboard = (props) => {
                           id="list-plus"
                           onClick={() => {
                             setSelectedRoutine(val);
-                            openExerciseModal();
+                            toggleModal("exercise", true);
                           }}
                         >
                           +
@@ -333,7 +306,7 @@ const Dashboard = (props) => {
                               src={process.env.PUBLIC_URL + "/x.png"}
                               onClick={() => {
                                 setSelectedExercise(exercise);
-                                openDeleteTrackedExerciseModal();
+                                toggleModal("deleteTrackedExercise", true);
                               }}
                               alt="delete"
                             />
@@ -352,8 +325,12 @@ const Dashboard = (props) => {
         <WeightFormModal
           loginStatus={loginStatus}
           userProfile={userProfile}
-          onClose={closeWeightModal}
-          onCancel={cancelWeightModal}
+          onClose={() => {
+            toggleModal("weight", false);
+          }}
+          onCancel={() => {
+            toggleModal("weight", false);
+          }}
           previousWeight={previousWeight}
           setPreviousWeight={setPreviousWeight}
           formattedDate={formattedDate}
@@ -363,7 +340,9 @@ const Dashboard = (props) => {
       {showRoutineModal && (
         <RoutineFormModal
           loginStatus={loginStatus}
-          onClose={closeRoutineModal}
+          onClose={() => {
+            toggleModal("routine", false);
+          }}
           routines={routines}
           setRoutines={setRoutines}
         />
@@ -373,7 +352,7 @@ const Dashboard = (props) => {
         <UpdateRoutineModal
           onClose={() => {
             setSelectedRoutine(null);
-            closeUpdateRoutineModal();
+            toggleModal("updateRoutine", false);
           }}
           routines={routines}
           setRoutines={setRoutines}
@@ -385,7 +364,7 @@ const Dashboard = (props) => {
         <DeleteRoutineModal
           onClose={() => {
             setSelectedRoutine(null);
-            closeDeleteRoutineModal();
+            toggleModal("deleteRoutine", false);
           }}
           setRoutines={setRoutines}
           routines={routines}
@@ -399,7 +378,7 @@ const Dashboard = (props) => {
           userProfile={userProfile}
           onClose={() => {
             setSelectedRoutine(null);
-            closeExerciseModal();
+            toggleModal("exercise", false);
           }}
           selectedRoutine={selectedRoutine}
           routineExercises={routineExercises}
@@ -415,7 +394,7 @@ const Dashboard = (props) => {
           userProfile={userProfile}
           onClose={() => {
             setSelectedRoutine(null);
-            closeUpdateExerciseModal();
+            toggleModal("updateExercise", false);
           }}
           selectedRoutine={selectedRoutine}
           selectedExercise={selectedExercise}
@@ -429,7 +408,7 @@ const Dashboard = (props) => {
         <DeleteExerciseModal
           onClose={() => {
             setSelectedRoutine(null);
-            closeDeleteExerciseModal();
+            toggleModal("deleteExercise", false);
           }}
           selectedExercise={selectedExercise}
           selectedRoutine={selectedRoutine}
@@ -439,7 +418,9 @@ const Dashboard = (props) => {
 
       {showDeleteTrackedExerciseModal && selectedExercise && (
         <DeleteTrackedExerciseModal
-          onClose={closeDeleteTrackedExerciseModal}
+          onClose={() => {
+            toggleModal("deleteTrackedExercise", false);
+          }}
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
           monthNames={monthNames}

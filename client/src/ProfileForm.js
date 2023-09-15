@@ -128,7 +128,7 @@ const ProfileForm = (props) => {
       }).catch((error) => {
         console.error("Error setting weight:", error);
       });
-    } else if (previousWeight.date !== formattedDate) {
+    } else {
       Axios.post("http://localhost:3001/api/insert/weight", {
         userId: loginStatus.id,
         weight: weightReg,

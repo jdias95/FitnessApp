@@ -24,13 +24,9 @@ const WeightFormModal = (props) => {
       activityLevel: userProfile.activity_level,
       gender: userProfile.gender,
       measurementType: userProfile.measurement_type,
-    })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error updating weight:", error);
-      });
+    }).catch((error) => {
+      console.error("Error updating weight:", error);
+    });
 
     if (previousWeight.date === formattedDate) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
