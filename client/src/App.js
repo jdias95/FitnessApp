@@ -131,6 +131,30 @@ function App() {
           console.error("Error fetching routines:", error);
         });
 
+      Axios.get(
+        `http://localhost:3001/api/get/tracked-exercises/${loginStatus.id}`
+      )
+        .then((response) => {
+          if (response.data.length > 0) {
+            const groupedExercises = {};
+
+            response.data.forEach((exercise) => {
+              const exerciseName = exercise.name;
+
+              if (!groupedExercises[exerciseName]) {
+                groupedExercises[exerciseName] = [];
+              }
+
+              groupedExercises[exerciseName].push(exercise);
+            });
+
+            setTrackedExercises(groupedExercises);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching exercises:", error);
+        });
+
       Axios.get(`http://localhost:3001/api/get/exercises/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
@@ -179,35 +203,7 @@ function App() {
           console.log(error);
         });
     }
-  }, [loginStatus, routines, setPreviousWeight, exercises]);
-
-  useEffect(() => {
-    if (loginStatus) {
-      Axios.get(
-        `http://localhost:3001/api/get/tracked-exercises/${loginStatus.id}`
-      )
-        .then((response) => {
-          if (response.data.length > 0) {
-            const groupedExercises = {};
-
-            response.data.forEach((exercise) => {
-              const exerciseName = exercise.name;
-
-              if (!groupedExercises[exerciseName]) {
-                groupedExercises[exerciseName] = [];
-              }
-
-              groupedExercises[exerciseName].push(exercise);
-            });
-
-            setTrackedExercises(groupedExercises);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching exercises:", error);
-        });
-    }
-  }, [loginStatus, trackedExercises]);
+  }, [loginStatus, setPreviousWeight]);
 
   return (
     <div className="App">

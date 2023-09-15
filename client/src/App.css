@@ -180,6 +180,7 @@ a {
   transform: translate(-50%, 0);
   margin: 0 0 0.25rem 0;
   align-self: flex-end;
+  font-size: large;
 }
 
 .caret:hover {
@@ -333,7 +334,7 @@ a {
   width: 4.5rem;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   .row {
     flex-direction: column;
   }
