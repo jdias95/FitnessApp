@@ -328,9 +328,6 @@ const Dashboard = (props) => {
           onClose={() => {
             toggleModal("weight", false);
           }}
-          onCancel={() => {
-            toggleModal("weight", false);
-          }}
           previousWeight={previousWeight}
           setPreviousWeight={setPreviousWeight}
           formattedDate={formattedDate}
