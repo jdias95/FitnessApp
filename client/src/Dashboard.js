@@ -9,6 +9,7 @@ import UpdateExerciseModal from "./UpdateExerciseModal";
 import DeleteExerciseModal from "./DeleteExerciseModal";
 import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
 import NotesModal from "./NotesModal";
+import WeightGraph from "./WeightGraph";
 
 const Dashboard = (props) => {
   const {
@@ -22,6 +23,9 @@ const Dashboard = (props) => {
     exercises,
     trackedExercises,
     setTrackedExercises,
+    weightData,
+    setWeightData,
+    formatDate,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -144,6 +148,9 @@ const Dashboard = (props) => {
             >
               +
             </h1>
+          </div>
+          <div>
+            <WeightGraph weightData={weightData} />
           </div>
         </div>
         <div className="routine container">
@@ -308,18 +315,20 @@ const Dashboard = (props) => {
                             :{" "}
                             {exercise.weight &&
                             userProfile.measurement_type === "imperial"
-                              ? `${exercise.weight} lbs `
+                              ? `${exercise.weight} lbs | `
                               : exercise.weight &&
                                 userProfile.measurement_type === "metric"
-                              ? `${defaultConvertWeight(exercise.weight)} kgs `
+                              ? `${defaultConvertWeight(
+                                  exercise.weight
+                                )} kgs | `
                               : " "}
                             {exercise.bw
                               ? `(${compareBW(
                                   userProfile.weight,
                                   exercise.weight
-                                )}xBW) `
+                                )}xBW) | `
                               : " "}
-                            | {exercise.sets} x {exercise.reps_low}
+                            {exercise.sets} x {exercise.reps_low}
                             {exercise.reps_high ? `-${exercise.reps_high}` : ""}
                             <img
                               className="img x"
@@ -351,6 +360,9 @@ const Dashboard = (props) => {
           previousWeight={previousWeight}
           setPreviousWeight={setPreviousWeight}
           formattedDate={formattedDate}
+          setWeightData={setWeightData}
+          weightData={weightData}
+          formatDate={formatDate}
         />
       )}
 

@@ -10,6 +10,9 @@ const ProfileForm = (props) => {
     previousWeight,
     setPreviousWeight,
     formattedDate,
+    setWeightData,
+    weightData,
+    formatDate,
   } = props;
   const [weightReg, setWeightReg] = useState(
     userProfile && userProfile.weight ? userProfile.weight : 0
@@ -125,17 +128,38 @@ const ProfileForm = (props) => {
         userId: loginStatus.id,
         weight: weightReg,
         date: formattedDate,
-      }).catch((error) => {
-        console.error("Error setting weight:", error);
-      });
+      })
+        .then((response) => {
+          const updatedWeightData = [...weightData];
+
+          updatedWeightData[updatedWeightData.length - 1] = {
+            weight: weightReg,
+            date: updatedWeightData[updatedWeightData.length - 1].date,
+          };
+
+          setWeightData(updatedWeightData);
+        })
+        .catch((error) => {
+          console.error("Error setting weight:", error);
+        });
     } else {
       Axios.post("http://localhost:3001/api/insert/weight", {
         userId: loginStatus.id,
         weight: weightReg,
         date: formattedDate,
-      }).catch((error) => {
-        console.error("Error setting weight:", error);
-      });
+      })
+        .then((response) => {
+          setWeightData([
+            ...weightData,
+            {
+              weight: weightReg,
+              date: formatDate(formattedDate),
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.error("Error setting weight:", error);
+        });
     }
     setPreviousWeight({
       ...previousWeight,

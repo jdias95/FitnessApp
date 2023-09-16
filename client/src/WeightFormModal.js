@@ -9,6 +9,9 @@ const WeightFormModal = (props) => {
     previousWeight,
     setPreviousWeight,
     formattedDate,
+    setWeightData,
+    weightData,
+    formatDate,
   } = props;
   const [weightReg, setWeightReg] = useState(
     previousWeight ? previousWeight.weight : 0
@@ -34,6 +37,15 @@ const WeightFormModal = (props) => {
         date: formattedDate,
       })
         .then((response) => {
+          const updatedWeightData = [...weightData];
+
+          updatedWeightData[updatedWeightData.length - 1] = {
+            weight: weightReg,
+            date: updatedWeightData[updatedWeightData.length - 1].date,
+          };
+
+          setWeightData(updatedWeightData);
+
           onClose();
         })
         .catch((error) => {
@@ -46,6 +58,14 @@ const WeightFormModal = (props) => {
         date: formattedDate,
       })
         .then((response) => {
+          setWeightData([
+            ...weightData,
+            {
+              weight: weightReg,
+              date: formatDate(formattedDate),
+            },
+          ]);
+
           onClose();
         })
         .catch((error) => {
