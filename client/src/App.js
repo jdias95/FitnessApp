@@ -162,7 +162,7 @@ function App() {
             );
             return existingData ? existingData : { weight: null, date };
           });
-          setWeightData(newData);
+          setWeightData(transformedData);
         })
         .catch((error) => {
           console.error("Error fetching weight data:", error);
@@ -249,12 +249,16 @@ function App() {
           }
           console.log(error);
         });
+    } else {
+      setUserProfile(null);
+      setPreviousWeight({});
+      setWeightData([]);
+      setRoutines([]);
+      setExercises([]);
+      setExercises({});
+      setTrackedExercises({});
     }
   }, [loginStatus, setPreviousWeight]);
-
-  useEffect(() => {
-    console.log(weightData);
-  });
 
   return (
     <div className="App">

@@ -149,7 +149,7 @@ const Dashboard = (props) => {
               +
             </h1>
           </div>
-          <div>
+          <div className="graph">
             <WeightGraph weightData={weightData} />
           </div>
         </div>

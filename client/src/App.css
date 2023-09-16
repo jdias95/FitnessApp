@@ -73,6 +73,10 @@
   font-weight: bold;
 }
 
+.graph {
+  width: 99%;
+}
+
 .img {
   width: 1.5rem;
   margin: 0 0.25rem;
@@ -393,5 +397,15 @@ a {
     left: 2rem;
     transform: none;
     width: auto;
+  }
+
+  .graph {
+    width: 60%;
+  }
+}
+
+@media (max-width: 800px) {
+  .graph {
+    width: 100%;
   }
 }
