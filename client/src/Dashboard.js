@@ -166,15 +166,15 @@ const Dashboard = (props) => {
               return (
                 <div key={`${val.name}-routine`}>
                   <div className="dashboard flex list-title-card">
-                    <h3>{val.name}</h3>
-                    <h5
-                      className="caret"
+                    <div
+                      className="flex workout-list-clickable"
                       onClick={() => {
                         toggleMenu(val.id);
                       }}
                     >
-                      &diams;
-                    </h5>
+                      <h3>{val.name}</h3>
+                      <h5 className="caret">&diams;</h5>
+                    </div>
                     <div className="flex">
                       <img
                         className="img edit"
@@ -279,15 +279,15 @@ const Dashboard = (props) => {
             {Object.keys(trackedExercises).map((exerciseName) => (
               <div key={exerciseName}>
                 <div className="dashboard flex list-title-card">
-                  <h3>{exerciseName}</h3>
-                  <h5
+                  <div
+                    className="flex tracked-clickable"
                     onClick={() => {
                       toggleTrackedMenu(exerciseName);
                     }}
-                    className="caret"
                   >
-                    &diams;
-                  </h5>
+                    <h3>{exerciseName}</h3>
+                    <h5 className="caret">&diams;</h5>
+                  </div>
                 </div>
                 {openMenus[exerciseName] && (
                   <div className="tracked-dropdown dropdown-menu">

@@ -6,9 +6,9 @@ const NotesModal = (props) => {
   return (
     <div className="modal">
       <div className="modal-content">
-        <div className="modal-flex notes-flex">
-          <div className="modal-body">
-            <div className="notes-review">
+        <div className="modal-flex">
+          <div className="exercise-modal-body">
+            <div>
               <p>{selectedExercise.notes}</p>
             </div>
             <div>

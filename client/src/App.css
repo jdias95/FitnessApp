@@ -174,6 +174,24 @@ a {
   border-bottom: 2px solid rgba(27, 27, 27, 1);
 }
 
+.workout-list-clickable {
+  width: 90%;
+}
+
+.workout-list-clickable:hover .caret {
+  color: rgba(159, 225, 255, 0.87);
+  cursor: pointer;
+}
+
+.tracked-clickable {
+  width: 100%;
+}
+
+.tracked-clickable:hover .caret {
+  color: rgba(159, 225, 255, 0.87);
+  cursor: pointer;
+}
+
 .caret {
   position: absolute;
   left: 50%;
@@ -181,11 +199,6 @@ a {
   margin: 0 0 0.25rem 0;
   align-self: flex-end;
   font-size: large;
-}
-
-.caret:hover {
-  cursor: pointer;
-  color: rgba(159, 225, 255, 0.87);
 }
 
 .dropdown-menu {
@@ -227,6 +240,7 @@ a {
   flex-direction: column;
   padding: 1.5rem;
   width: 100%;
+  max-width: 92%;
 }
 
 .exercise-modal-body #name {
@@ -247,6 +261,7 @@ a {
 
 .exercise-modal-body div {
   margin: 0.3rem 0;
+  word-wrap: break-word;
 }
 
 .modal-button-container {
@@ -328,11 +343,6 @@ a {
 
 .modal-body span {
   width: 27%;
-}
-
-.modal-body .notes-review {
-  word-wrap: break-word;
-  width: 50%;
 }
 
 .modal-button {

@@ -212,7 +212,7 @@ const UpdateExerciseModal = (props) => {
                 />
               </div>
               <div className="flex">
-                <label>Rep-range: </label>
+                <label className="flex-input">Rep-range: </label>
                 <input
                   type="number"
                   id="narrow"
