@@ -133,7 +133,7 @@ function App() {
 
           const transformedData = response.data.map((item) => ({
             weight: item.weight,
-            date: formatDate(item.date),
+            date: new Date(item.date).getTime(),
           }));
 
           const startDate = new Date(response.data[0].date);
@@ -151,16 +151,19 @@ function App() {
           }
 
           const formattedDateRange = dateRange.map((date) => {
+            const year = date.getFullYear();
             const month = (date.getMonth() + 1).toString().padStart(2, "0");
             const day = date.getDate().toString().padStart(2, "0");
-            return `${month}/${day}`;
+            return `${year}-${month}-${day}`;
           });
 
-          const newData = formattedDateRange.map((date) => {
+          const newData = dateRange.map((date) => {
             const existingData = transformedData.find(
               (item) => item.date === date
             );
-            return existingData ? existingData : { weight: null, date };
+            return existingData
+              ? existingData
+              : { weight: null, date: date.getTime() };
           });
           setWeightData(transformedData);
         })
