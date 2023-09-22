@@ -102,9 +102,10 @@ function App() {
 
   function formatDate(dateString) {
     const date = new Date(dateString);
+    const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-    return `${month}/${day}`;
+    return `${year}-${month}-${day}`;
   }
 
   useEffect(() => {
@@ -133,7 +134,7 @@ function App() {
 
           const transformedData = response.data.map((item) => ({
             weight: item.weight,
-            date: new Date(item.date).getTime(),
+            date: formatDate(item.date),
           }));
 
           const startDate = new Date(response.data[0].date);
@@ -157,15 +158,13 @@ function App() {
             return `${year}-${month}-${day}`;
           });
 
-          const newData = dateRange.map((date) => {
+          const newData = formattedDateRange.map((date) => {
             const existingData = transformedData.find(
               (item) => item.date === date
             );
-            return existingData
-              ? existingData
-              : { weight: null, date: date.getTime() };
+            return existingData ? existingData : { weight: null, date };
           });
-          setWeightData(transformedData);
+          setWeightData(newData);
         })
         .catch((error) => {
           console.error("Error fetching weight data:", error);
@@ -262,6 +261,10 @@ function App() {
       setTrackedExercises({});
     }
   }, [loginStatus, setPreviousWeight]);
+
+  useEffect(() => {
+    console.log(weightData);
+  });
 
   return (
     <div className="App">

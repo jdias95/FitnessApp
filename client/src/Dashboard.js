@@ -10,6 +10,7 @@ import DeleteExerciseModal from "./DeleteExerciseModal";
 import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
 import NotesModal from "./NotesModal";
 import WeightGraph from "./WeightGraph";
+import * as d3 from "d3";
 
 const Dashboard = (props) => {
   const {
@@ -134,6 +135,113 @@ const Dashboard = (props) => {
     return Number(weight / bw).toFixed(2);
   };
 
+  if (userProfile) {
+    if (userProfile.measurement_type === "metric") {
+      for (let i = 0; i < weightData.length; i++) {
+        if (weightData[i].weight) {
+          weightData[i].weight = defaultConvertWeight(weightData[i].weight);
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    d3.select(".weightGraph svg").remove();
+
+    if (weightData.length > 0) {
+      const graphWidth = 500;
+      const graphHeight = 400;
+      const marginTop = 20;
+      const marginRight = 20;
+      const marginBottom = 30;
+      const marginLeft = 40;
+
+      const xScale = d3
+        .scaleTime()
+        .domain([
+          new Date(weightData[0].date),
+          new Date(weightData[weightData.length - 1].date),
+        ])
+        .range([marginLeft, graphWidth - marginRight]);
+
+      const yScale = d3
+        .scaleLinear()
+        .domain([
+          d3.min(
+            weightData.filter((d) => {
+              return d.weight != null;
+            }),
+            (d) => d.weight - 5
+          ),
+          d3.max(weightData, (d) => d.weight + 5),
+        ])
+        .nice()
+        .range([graphHeight - marginBottom, marginTop]);
+
+      const svg = d3
+        .select(".weightGraph")
+        .append("svg")
+        .attr("width", graphWidth)
+        .attr("height", graphHeight);
+
+      const tickValues = [];
+      const endDate = new Date(weightData[weightData.length - 1].date);
+
+      for (let i = 0; i < 5; i++) {
+        const date = new Date(endDate);
+        date.setDate(date.getDate() - 5 * i);
+        tickValues.push(date);
+      }
+
+      svg
+        .append("g")
+        .attr("transform", `translate(0,${graphHeight - marginBottom})`)
+        .call(
+          d3
+            .axisBottom(xScale)
+            .tickValues(tickValues)
+            .tickFormat((date) => {
+              // const timeFormat = d3.timeFormat("%m/%d");
+              return date.toLocaleDateString().slice(0, -5);
+            })
+        );
+
+      svg
+        .append("g")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .call(d3.axisLeft(yScale));
+
+      const line = d3
+        .line()
+        .defined((d) => {
+          return d.weight != null;
+        })
+        .x((d) => xScale(new Date(d.date)))
+        .y((d) => yScale(d.weight));
+
+      svg
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr(
+          "d",
+          line(
+            weightData.filter((d) => {
+              return d.weight != null;
+            })
+          )
+        );
+
+      svg
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", line(weightData));
+    }
+  }, [weightData]);
+
   return (
     <div className="App">
       <div className="row flex">
@@ -149,9 +257,7 @@ const Dashboard = (props) => {
               +
             </h1>
           </div>
-          <div className="graph">
-            <WeightGraph weightData={weightData} />
-          </div>
+          <div className="weightGraph"></div>
         </div>
         <div className="routine container">
           <div className="dashboard flex title">
