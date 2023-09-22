@@ -73,8 +73,9 @@
   font-weight: bold;
 }
 
-.graph {
+.weightGraph {
   width: 99%;
+  margin: 0 auto;
 }
 
 .img {

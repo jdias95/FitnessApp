@@ -152,9 +152,9 @@ const Dashboard = (props) => {
       const graphWidth = 500;
       const graphHeight = 400;
       const marginTop = 20;
-      const marginRight = 20;
+      const marginRight = 0;
       const marginBottom = 30;
-      const marginLeft = 40;
+      const marginLeft = 20;
 
       const xScale = d3
         .scaleTime()
@@ -173,7 +173,12 @@ const Dashboard = (props) => {
             }),
             (d) => d.weight - 5
           ),
-          d3.max(weightData, (d) => d.weight + 5),
+          d3.max(
+            weightData.filter((d) => {
+              return d.weight != null;
+            }),
+            (d) => d.weight + 5
+          ),
         ])
         .nice()
         .range([graphHeight - marginBottom, marginTop]);
@@ -181,8 +186,9 @@ const Dashboard = (props) => {
       const svg = d3
         .select(".weightGraph")
         .append("svg")
-        .attr("width", graphWidth)
-        .attr("height", graphHeight);
+        .attr("width", "100%")
+        .attr("height", graphHeight)
+        .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
 
       const tickValues = [];
       const endDate = new Date(weightData[weightData.length - 1].date);
@@ -206,11 +212,6 @@ const Dashboard = (props) => {
             })
         );
 
-      svg
-        .append("g")
-        .attr("transform", `translate(${marginLeft}, 0)`)
-        .call(d3.axisLeft(yScale));
-
       const line = d3
         .line()
         .defined((d) => {
@@ -221,24 +222,47 @@ const Dashboard = (props) => {
 
       svg
         .append("path")
+        .datum(
+          weightData.filter((d) => {
+            return d.weight != null;
+          })
+        )
         .attr("fill", "none")
         .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr(
-          "d",
-          line(
-            weightData.filter((d) => {
-              return d.weight != null;
-            })
-          )
-        );
+        .attr("stroke-width", 3)
+        .attr("d", line);
 
       svg
         .append("path")
+        .datum(weightData)
         .attr("fill", "none")
         .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("d", line(weightData));
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("d", line);
+
+      const yAxisGroup = svg
+        .append("g")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .call(d3.axisLeft(yScale));
+
+      yAxisGroup
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "end")
+        .text("Y-Axis Label");
+
+      yAxisGroup
+        .selectAll("g.tick")
+        .filter((d, i) => i !== 0)
+        .append("line")
+        .attr("class", "gridline")
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", graphWidth - marginRight - marginLeft)
+        .attr("y2", 0)
+        .attr("stroke", "#9ca5aecf")
+        .attr("stroke-dasharray", "4");
     }
   }, [weightData]);
 
