@@ -9,8 +9,8 @@ import UpdateExerciseModal from "./UpdateExerciseModal";
 import DeleteExerciseModal from "./DeleteExerciseModal";
 import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
 import NotesModal from "./NotesModal";
-import WeightGraph from "./WeightGraph";
 import * as d3 from "d3";
+import moment from "moment";
 
 const Dashboard = (props) => {
   const {
@@ -156,14 +156,6 @@ const Dashboard = (props) => {
       const marginBottom = 30;
       const marginLeft = 20;
 
-      const xScale = d3
-        .scaleTime()
-        .domain([
-          new Date(weightData[0].date),
-          new Date(weightData[weightData.length - 1].date),
-        ])
-        .range([marginLeft, graphWidth - marginRight]);
-
       const yScale = d3
         .scaleLinear()
         .domain([
@@ -191,13 +183,20 @@ const Dashboard = (props) => {
         .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
 
       const tickValues = [];
-      const endDate = new Date(weightData[weightData.length - 1].date);
+      const endDate = moment(
+        weightData[weightData.length - 1].date,
+        "YYYY-MM-DD"
+      );
 
       for (let i = 0; i < 5; i++) {
-        const date = new Date(endDate);
-        date.setDate(date.getDate() - 5 * i);
-        tickValues.push(date);
+        const date = moment(endDate).subtract(5 * i, "days");
+        tickValues.push(date.toDate());
       }
+
+      const xScale = d3
+        .scaleTime()
+        .domain([new Date(tickValues[4]), new Date(tickValues[0])])
+        .range([marginLeft, graphWidth - marginRight]);
 
       svg
         .append("g")

@@ -16,6 +16,7 @@ import ProfileForm from "./ProfileForm";
 import Home from "./Home";
 import "./App.css";
 import Axios from "axios";
+import moment from "moment";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState("");
@@ -134,7 +135,7 @@ function App() {
 
           const transformedData = response.data.map((item) => ({
             weight: item.weight,
-            date: formatDate(item.date),
+            date: moment(item.date).format("YYYY-MM-DD"),
           }));
 
           const startDate = new Date(response.data[0].date);
