@@ -135,15 +135,15 @@ const Dashboard = (props) => {
     return Number(weight / bw).toFixed(2);
   };
 
-  if (userProfile) {
-    if (userProfile.measurement_type === "metric") {
-      for (let i = 0; i < weightData.length; i++) {
-        if (weightData[i].weight) {
-          weightData[i].weight = defaultConvertWeight(weightData[i].weight);
-        }
-      }
-    }
-  }
+  // if (userProfile) {
+  //   if (userProfile.measurement_type === "metric") {
+  //     for (let i = 0; i < weightData.length; i++) {
+  //       if (weightData[i].weight) {
+  //         weightData[i].weight = defaultConvertWeight(weightData[i].weight);
+  //       }
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     d3.select(".weightGraph svg").remove();

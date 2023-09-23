@@ -110,16 +110,6 @@ const ProfileForm = (props) => {
       measurementType: measurementType,
     })
       .then((response) => {
-        if (
-          userProfile.measurement_type !== measurementType &&
-          measurementType === "imperial"
-        ) {
-          for (let i = 0; i < weightData.length; i++) {
-            if (weightData[i].weight) {
-              weightData[i].weight = convertWeight(weightData[i].weight);
-            }
-          }
-        }
         setUserProfileDisplay({
           weight: weightReg,
           height: heightReg,

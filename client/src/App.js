@@ -101,6 +101,11 @@ function App() {
     )
   );
 
+  const defaultConvertWeight = (lbs) => {
+    const kgs = lbs / 2.20462262185;
+    return Number(kgs.toFixed(1));
+  };
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -126,51 +131,6 @@ function App() {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.get(`http://localhost:3001/api/get/weight/${loginStatus.id}`)
-        .then((response) => {
-          const weightData = response.data;
-          const mostRecentWeight = weightData[weightData.length - 1];
-          const formattedDate = mostRecentWeight.date.slice(0, 10);
-          setPreviousWeight({ ...mostRecentWeight, date: formattedDate });
-
-          const transformedData = response.data.map((item) => ({
-            weight: item.weight,
-            date: moment(item.date).format("YYYY-MM-DD"),
-          }));
-
-          const startDate = new Date(response.data[0].date);
-          const endDate = new Date(
-            response.data[response.data.length - 1].date
-          );
-
-          const dateRange = [];
-          for (
-            let currentDate = startDate;
-            currentDate <= endDate;
-            currentDate.setDate(currentDate.getDate() + 1)
-          ) {
-            dateRange.push(new Date(currentDate));
-          }
-
-          const formattedDateRange = dateRange.map((date) => {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, "0");
-            const day = date.getDate().toString().padStart(2, "0");
-            return `${year}-${month}-${day}`;
-          });
-
-          const newData = formattedDateRange.map((date) => {
-            const existingData = transformedData.find(
-              (item) => item.date === date
-            );
-            return existingData ? existingData : { weight: null, date };
-          });
-          setWeightData(newData);
-        })
-        .catch((error) => {
-          console.error("Error fetching weight data:", error);
-        });
-
       Axios.get(`http://localhost:3001/api/get/routines/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
@@ -254,18 +214,73 @@ function App() {
         });
     } else {
       setUserProfile(null);
-      setPreviousWeight({});
-      setWeightData([]);
       setRoutines([]);
       setExercises([]);
       setExercises({});
       setTrackedExercises({});
     }
-  }, [loginStatus, setPreviousWeight]);
+  }, [loginStatus]);
 
   useEffect(() => {
-    console.log(weightData);
-  });
+    if (loginStatus) {
+      Axios.get(`http://localhost:3001/api/get/weight/${loginStatus.id}`)
+        .then((response) => {
+          const weightData = response.data;
+          const mostRecentWeight = weightData[weightData.length - 1];
+          const formattedDate = mostRecentWeight.date.slice(0, 10);
+          setPreviousWeight({ ...mostRecentWeight, date: formattedDate });
+
+          let transformedData = [];
+
+          if (userProfile && userProfile.measurement_type === "metric") {
+            transformedData = response.data.map((item) => ({
+              weight: defaultConvertWeight(item.weight),
+              date: moment(item.date).format("YYYY-MM-DD"),
+            }));
+          } else {
+            transformedData = response.data.map((item) => ({
+              weight: item.weight,
+              date: moment(item.date).format("YYYY-MM-DD"),
+            }));
+          }
+
+          const startDate = new Date(response.data[0].date);
+          const endDate = new Date(
+            response.data[response.data.length - 1].date
+          );
+
+          const dateRange = [];
+          for (
+            let currentDate = startDate;
+            currentDate <= endDate;
+            currentDate.setDate(currentDate.getDate() + 1)
+          ) {
+            dateRange.push(new Date(currentDate));
+          }
+
+          const formattedDateRange = dateRange.map((date) => {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, "0");
+            const day = date.getDate().toString().padStart(2, "0");
+            return `${year}-${month}-${day}`;
+          });
+
+          const newData = formattedDateRange.map((date) => {
+            const existingData = transformedData.find(
+              (item) => item.date === date
+            );
+            return existingData ? existingData : { weight: null, date };
+          });
+          setWeightData(newData);
+        })
+        .catch((error) => {
+          console.error("Error fetching weight data:", error);
+        });
+    } else {
+      setPreviousWeight({});
+      setWeightData([]);
+    }
+  }, [loginStatus, setPreviousWeight, userProfile]);
 
   return (
     <div className="App">
