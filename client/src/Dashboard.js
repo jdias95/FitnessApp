@@ -200,6 +200,7 @@ const Dashboard = (props) => {
 
       svg
         .append("g")
+        .attr("class", "x-axis")
         .attr("transform", `translate(0,${graphHeight - marginBottom})`)
         .call(
           d3
@@ -242,6 +243,7 @@ const Dashboard = (props) => {
 
       const yAxisGroup = svg
         .append("g")
+        .attr("class", "y-axis")
         .attr("transform", `translate(${marginLeft}, 0)`)
         .call(d3.axisLeft(yScale));
 
@@ -253,15 +255,17 @@ const Dashboard = (props) => {
 
       yAxisGroup
         .selectAll("g.tick")
-        .filter((d, i) => i !== 0)
         .append("line")
         .attr("class", "gridline")
         .attr("x1", 0)
         .attr("y1", 0)
         .attr("x2", graphWidth - marginRight - marginLeft)
         .attr("y2", 0)
-        .attr("stroke", "#9ca5aecf")
-        .attr("stroke-dasharray", "4");
+        .attr("stroke", "rgba(156, 165, 174, .4");
+
+      svg.selectAll(".domain").remove();
+      svg.selectAll(".x-axis .tick line").remove();
+      svg.selectAll(".y-axis .tick line:first-child").remove();
     }
   }, [weightData]);
 
