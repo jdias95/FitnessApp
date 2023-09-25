@@ -27,7 +27,6 @@ function App() {
   const [routines, setRoutines] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [trackedExercises, setTrackedExercises] = useState({});
-  const routineData = JSON.parse(localStorage.getItem("routines"));
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -57,7 +56,6 @@ function App() {
               previousWeight={previousWeight}
               setPreviousWeight={setPreviousWeight}
               formattedDate={formattedDate}
-              routineData={routineData}
               routines={routines}
               setRoutines={setRoutines}
               exercises={exercises}
@@ -281,6 +279,10 @@ function App() {
       setWeightData([]);
     }
   }, [loginStatus, setPreviousWeight, userProfile]);
+
+  useEffect(() => {
+    console.log(weightData);
+  });
 
   return (
     <div className="App">

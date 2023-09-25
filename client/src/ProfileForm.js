@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const ProfileForm = (props) => {
   const {
@@ -153,7 +154,7 @@ const ProfileForm = (props) => {
             ...weightData,
             {
               weight: weightReg,
-              date: formatDate(formattedDate),
+              date: formattedDate,
             },
           ]);
         })

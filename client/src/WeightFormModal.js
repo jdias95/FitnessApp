@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import moment from "moment";
 
 const WeightFormModal = (props) => {
   const {
@@ -62,7 +63,7 @@ const WeightFormModal = (props) => {
             ...weightData,
             {
               weight: weightReg,
-              date: formatDate(formattedDate),
+              date: formattedDate,
             },
           ]);
 

@@ -73,6 +73,11 @@
   font-weight: bold;
 }
 
+.time-selection-container {
+  text-align: right;
+  margin: 0.5rem 1rem 0 0;
+}
+
 .weightGraph {
   width: 99%;
   margin: 0 auto;

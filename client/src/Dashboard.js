@@ -42,6 +42,9 @@ const Dashboard = (props) => {
   const [openMenus, setOpenMenus] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
   const [selectedExercise, setSelectedExercise] = useState({});
+  const [weightTimeBtN, setWeightTimeBtN] = useState(0);
+  const [tickMultiplier, setTickMultiplier] = useState(6);
+  const [timeSelection, setTimeSelection] = useState("1 month");
   const navigate = useNavigate();
 
   const monthNames = [
@@ -135,43 +138,53 @@ const Dashboard = (props) => {
     return Number(weight / bw).toFixed(2);
   };
 
-  // if (userProfile) {
-  //   if (userProfile.measurement_type === "metric") {
-  //     for (let i = 0; i < weightData.length; i++) {
-  //       if (weightData[i].weight) {
-  //         weightData[i].weight = defaultConvertWeight(weightData[i].weight);
-  //       }
-  //     }
-  //   }
-  // }
-
   useEffect(() => {
     d3.select(".weightGraph svg").remove();
 
     if (weightData.length > 0) {
+      const weightValues = weightData
+        .filter((d) => d.weight != null)
+        .map((d) => d.weight);
+      const dateValues = weightData
+        .filter((d) => d.weight != null)
+        .map((d) => d.date);
+
+      setWeightTimeBtN(
+        new Date(dateValues[dateValues.length - 1]).getTime() -
+          new Date(dateValues[0]).getTime()
+      );
+
+      if (timeSelection === "1 month") {
+        setTickMultiplier(6);
+      } else if (timeSelection === "2 months") {
+        setTickMultiplier(12);
+      } else if (timeSelection === "3 months") {
+        setTickMultiplier(18);
+      } else if (timeSelection === "6 months") {
+        setTickMultiplier(36);
+      } else if (timeSelection === "1 year") {
+        setTickMultiplier(72);
+      } else if (timeSelection === "All") {
+        setTickMultiplier(Math.floor(weightTimeBtN / 432000000));
+      }
+
+      console.log(timeSelection, tickMultiplier);
+
       const graphWidth = 500;
       const graphHeight = 400;
       const marginTop = 20;
-      const marginRight = 0;
+      const marginRight = 10;
       const marginBottom = 30;
       const marginLeft = 20;
 
+      const minValue = d3.min(weightValues);
+      const maxValue = d3.max(weightValues);
+      const meanValue = d3.mean(weightValues);
+      const padding = meanValue * 0.025;
+
       const yScale = d3
         .scaleLinear()
-        .domain([
-          d3.min(
-            weightData.filter((d) => {
-              return d.weight != null;
-            }),
-            (d) => d.weight - 5
-          ),
-          d3.max(
-            weightData.filter((d) => {
-              return d.weight != null;
-            }),
-            (d) => d.weight + 5
-          ),
-        ])
+        .domain([minValue - padding, maxValue + padding])
         .nice()
         .range([graphHeight - marginBottom, marginTop]);
 
@@ -188,14 +201,17 @@ const Dashboard = (props) => {
         "YYYY-MM-DD"
       );
 
-      for (let i = 0; i < 5; i++) {
-        const date = moment(endDate).subtract(5 * i, "days");
+      for (let i = 0; i < 6; i++) {
+        const date = moment(endDate).subtract(tickMultiplier * i, "days");
         tickValues.push(date.toDate());
       }
 
       const xScale = d3
         .scaleTime()
-        .domain([new Date(tickValues[4]), new Date(tickValues[0])])
+        .domain([
+          new Date(tickValues[tickValues.length - 1]),
+          new Date(tickValues[0]),
+        ])
         .range([marginLeft, graphWidth - marginRight]);
 
       svg
@@ -221,6 +237,15 @@ const Dashboard = (props) => {
         .y((d) => yScale(d.weight));
 
       svg
+        .append("defs")
+        .append("clipPath")
+        .attr("id", "clip-path")
+        .append("rect")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .attr("width", graphWidth)
+        .attr("height", graphHeight);
+
+      svg
         .append("path")
         .datum(
           weightData.filter((d) => {
@@ -230,7 +255,9 @@ const Dashboard = (props) => {
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 3)
-        .attr("d", line);
+        .attr("width", graphWidth)
+        .attr("d", line)
+        .attr("clip-path", "url(#clip-path)");
 
       svg
         .append("path")
@@ -238,8 +265,10 @@ const Dashboard = (props) => {
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 3)
+        .attr("width", graphWidth)
         .attr("stroke-linecap", "round")
-        .attr("d", line);
+        .attr("d", line)
+        .attr("clip-path", "url(#clip-path)");
 
       const yAxisGroup = svg
         .append("g")
@@ -267,7 +296,11 @@ const Dashboard = (props) => {
       svg.selectAll(".x-axis .tick line").remove();
       svg.selectAll(".y-axis .tick line:first-child").remove();
     }
-  }, [weightData]);
+  }, [weightData, weightTimeBtN, tickMultiplier, timeSelection]);
+
+  useEffect(() => {
+    console.log(weightTimeBtN);
+  });
 
   return (
     <div className="App">
@@ -283,6 +316,23 @@ const Dashboard = (props) => {
             >
               +
             </h1>
+          </div>
+          <div className="time-selection-container">
+            <select
+              id="time-selection"
+              name="timeSelection"
+              value={timeSelection}
+              onChange={(e) => {
+                setTimeSelection(e.target.value);
+              }}
+            >
+              <option value="1 month">1 month</option>
+              <option value="2 months">2 months</option>
+              <option value="3 months">3 months</option>
+              <option value="6 months">6 months</option>
+              <option value="1 year">1 year</option>
+              <option value="All">All</option>
+            </select>
           </div>
           <div className="weightGraph"></div>
         </div>
