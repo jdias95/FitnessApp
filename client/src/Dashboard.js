@@ -27,6 +27,7 @@ const Dashboard = (props) => {
     weightData,
     setWeightData,
     formatDate,
+    setUserProfile,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -565,7 +566,7 @@ const Dashboard = (props) => {
           formattedDate={formattedDate}
           setWeightData={setWeightData}
           weightData={weightData}
-          formatDate={formatDate}
+          setUserProfile={setUserProfile}
         />
       )}
 

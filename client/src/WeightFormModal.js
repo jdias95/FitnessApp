@@ -12,7 +12,7 @@ const WeightFormModal = (props) => {
     formattedDate,
     setWeightData,
     weightData,
-    formatDate,
+    setUserProfile,
   } = props;
   const [weightReg, setWeightReg] = useState(
     previousWeight ? previousWeight.weight : 0
@@ -78,6 +78,10 @@ const WeightFormModal = (props) => {
       weight: weightReg,
       date: formattedDate,
     });
+    setUserProfile((prevUserProfile) => ({
+      ...prevUserProfile,
+      weight: weightReg,
+    }));
   };
 
   const safeParseFloat = (str) => {

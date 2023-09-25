@@ -64,6 +64,7 @@ function App() {
               weightData={weightData}
               setWeightData={setWeightData}
               formatDate={formatDate}
+              setUserProfile={setUserProfile}
             />
           }
         />
@@ -90,7 +91,6 @@ function App() {
               formattedDate={formattedDate}
               setWeightData={setWeightData}
               weightData={weightData}
-              formatDate={formatDate}
             />
           }
         />

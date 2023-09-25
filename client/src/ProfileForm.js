@@ -13,7 +13,6 @@ const ProfileForm = (props) => {
     formattedDate,
     setWeightData,
     weightData,
-    formatDate,
   } = props;
   const [weightReg, setWeightReg] = useState(
     userProfile && userProfile.weight ? userProfile.weight : 0
