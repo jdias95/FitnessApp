@@ -327,11 +327,31 @@ const Dashboard = (props) => {
               }}
             >
               <option value="1 month">1 month</option>
-              <option value="2 months">2 months</option>
-              <option value="3 months">3 months</option>
-              <option value="6 months">6 months</option>
-              <option value="1 year">1 year</option>
-              <option value="All">All</option>
+              {weightTimeBtN >= 5184000000 ? (
+                <option value="2 months">2 months</option>
+              ) : (
+                ""
+              )}
+              {weightTimeBtN >= 7776000000 ? (
+                <option value="3 months">3 months</option>
+              ) : (
+                ""
+              )}
+              {weightTimeBtN >= 15552000000 ? (
+                <option value="6 months">6 months</option>
+              ) : (
+                ""
+              )}
+              {weightTimeBtN >= 31104000000 ? (
+                <option value="1 year">1 year</option>
+              ) : (
+                ""
+              )}
+              {weightTimeBtN >= 2592000000 ? (
+                <option value="All">All</option>
+              ) : (
+                ""
+              )}
             </select>
           </div>
           <div className="weightGraph"></div>
