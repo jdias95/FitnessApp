@@ -318,44 +318,99 @@ const Dashboard = (props) => {
               +
             </h1>
           </div>
-          <div className="time-selection-container">
-            <select
-              id="time-selection"
-              name="timeSelection"
-              value={timeSelection}
-              onChange={(e) => {
-                setTimeSelection(e.target.value);
-              }}
-            >
-              <option value="1 month">1 month</option>
-              {weightTimeBtN >= 5184000000 ? (
-                <option value="2 months">2 months</option>
-              ) : (
-                ""
-              )}
-              {weightTimeBtN >= 7776000000 ? (
-                <option value="3 months">3 months</option>
-              ) : (
-                ""
-              )}
-              {weightTimeBtN >= 15552000000 ? (
-                <option value="6 months">6 months</option>
-              ) : (
-                ""
-              )}
-              {weightTimeBtN >= 31104000000 ? (
-                <option value="1 year">1 year</option>
-              ) : (
-                ""
-              )}
-              {weightTimeBtN >= 2592000000 ? (
-                <option value="All">All</option>
-              ) : (
-                ""
-              )}
-            </select>
-          </div>
-          <div className="weightGraph"></div>
+          {weightData.length > 1 ? (
+            <div>
+              <div className="time-selection-container">
+                <select
+                  id="time-selection"
+                  name="timeSelection"
+                  value={timeSelection}
+                  onChange={(e) => {
+                    setTimeSelection(e.target.value);
+                  }}
+                >
+                  <option value="1 month">1 month</option>
+                  {weightTimeBtN >= 5184000000 ? (
+                    <option value="2 months">2 months</option>
+                  ) : (
+                    ""
+                  )}
+                  {weightTimeBtN >= 7776000000 ? (
+                    <option value="3 months">3 months</option>
+                  ) : (
+                    ""
+                  )}
+                  {weightTimeBtN >= 15552000000 ? (
+                    <option value="6 months">6 months</option>
+                  ) : (
+                    ""
+                  )}
+                  {weightTimeBtN >= 31104000000 ? (
+                    <option value="1 year">1 year</option>
+                  ) : (
+                    ""
+                  )}
+                  {weightTimeBtN >= 2592000000 ? (
+                    <option value="All">All</option>
+                  ) : (
+                    ""
+                  )}
+                </select>
+              </div>
+
+              <div className="weight-change-container">
+                <div className="weight-change dashboard flex">
+                  <div>
+                    <p>{weightData[0].weight} lbs</p>
+                    <p>Start</p>
+                  </div>
+                  <div>
+                    <p>{weightData[weightData.length - 1].weight} lbs</p>
+                    <p>Now</p>
+                  </div>
+                  <div>
+                    <p>
+                      {(
+                        weightData[weightData.length - 1].weight -
+                        weightData[0].weight
+                      ).toFixed(1)}{" "}
+                      lbs
+                    </p>
+                    <p>Change</p>
+                  </div>
+                </div>
+              </div>
+              <div className="weightGraph"></div>
+              <div className="weight-list">
+                <ul>
+                  {weightData
+                    .slice()
+                    .reverse()
+                    .map((val) => {
+                      if (val.weight) {
+                        return (
+                          <div className="dashboard flex">
+                            {userProfile &&
+                            userProfile.measurement_type !== "metric" ? (
+                              <li>{val.weight} lbs</li>
+                            ) : (
+                              <li>{val.weight} kgs</li>
+                            )}
+                            <li id="dates">
+                              {parseInt(val.date.slice(5, 7))}/
+                              {parseInt(val.date.slice(8, 10))}/
+                              {val.date.slice(2, 4)}
+                            </li>
+                          </div>
+                        );
+                      }
+                    })}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         <div className="routine container">
           <div className="dashboard flex title">
