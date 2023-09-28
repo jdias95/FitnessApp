@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Axios from "axios";
-import moment from "moment";
 
 const WeightFormModal = (props) => {
   const {
@@ -143,6 +142,7 @@ const WeightFormModal = (props) => {
                     }}
                   />
                   <label>kgs</label>
+                  {console.log(weightReg)}
                 </div>
               )}
               <span className="modal-button-container">

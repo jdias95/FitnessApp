@@ -254,7 +254,7 @@ const Dashboard = (props) => {
           })
         )
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", "#ACEDFF")
         .attr("stroke-width", 3)
         .attr("width", graphWidth)
         .attr("d", line)
@@ -264,7 +264,7 @@ const Dashboard = (props) => {
         .append("path")
         .datum(weightData)
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", "#ACEDFF")
         .attr("stroke-width", 3)
         .attr("width", graphWidth)
         .attr("stroke-linecap", "round")
@@ -361,22 +361,48 @@ const Dashboard = (props) => {
               <div className="weight-change-container">
                 <div className="weight-change dashboard flex">
                   <div>
-                    <p>{weightData[0].weight} lbs</p>
-                    <p>Start</p>
-                  </div>
-                  <div>
-                    <p>{weightData[weightData.length - 1].weight} lbs</p>
-                    <p>Now</p>
+                    <p>
+                      {weightData[0].weight}{" "}
+                      {userProfile && userProfile.measurement_type !== "metric"
+                        ? "lbs"
+                        : "kgs"}
+                    </p>
+                    <p id="weight-change">Start</p>
                   </div>
                   <div>
                     <p>
-                      {(
-                        weightData[weightData.length - 1].weight -
-                        weightData[0].weight
-                      ).toFixed(1)}{" "}
-                      lbs
+                      {weightData[weightData.length - 1].weight}{" "}
+                      {userProfile && userProfile.measurement_type !== "metric"
+                        ? "lbs"
+                        : "kgs"}
                     </p>
-                    <p>Change</p>
+                    <p id="weight-change">Now</p>
+                  </div>
+                  <div>
+                    <div className="flex">
+                      {weightData[weightData.length - 1].weight -
+                        weightData[0].weight >
+                      0 ? (
+                        <p id="positive">&#8657;</p>
+                      ) : weightData[weightData.length - 1].weight -
+                          weightData[0].weight <
+                        0 ? (
+                        <p id="negative">&#8659;</p>
+                      ) : (
+                        ""
+                      )}
+                      <p>
+                        {Math.abs(
+                          weightData[weightData.length - 1].weight -
+                            weightData[0].weight
+                        ).toFixed(1)}{" "}
+                        {userProfile &&
+                        userProfile.measurement_type !== "metric"
+                          ? "lbs"
+                          : "kgs"}
+                      </p>
+                    </div>
+                    <p id="weight-change">Change</p>
                   </div>
                 </div>
               </div>
