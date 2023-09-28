@@ -39,10 +39,17 @@ const WeightFormModal = (props) => {
         .then((response) => {
           const updatedWeightData = [...weightData];
 
-          updatedWeightData[updatedWeightData.length - 1] = {
-            weight: weightReg,
-            date: updatedWeightData[updatedWeightData.length - 1].date,
-          };
+          if (userProfile && userProfile.measurement_type !== "metric") {
+            updatedWeightData[updatedWeightData.length - 1] = {
+              weight: weightReg,
+              date: updatedWeightData[updatedWeightData.length - 1].date,
+            };
+          } else {
+            updatedWeightData[updatedWeightData.length - 1] = {
+              weight: defaultConvertWeight(weightReg),
+              date: updatedWeightData[updatedWeightData.length - 1].date,
+            };
+          }
 
           setWeightData(updatedWeightData);
 
@@ -58,13 +65,23 @@ const WeightFormModal = (props) => {
         date: formattedDate,
       })
         .then((response) => {
-          setWeightData([
-            ...weightData,
-            {
-              weight: weightReg,
-              date: formattedDate,
-            },
-          ]);
+          if (userProfile && userProfile.measurement_type !== "metric") {
+            setWeightData([
+              ...weightData,
+              {
+                weight: weightReg,
+                date: formattedDate,
+              },
+            ]);
+          } else {
+            setWeightData([
+              ...weightData,
+              {
+                weight: defaultConvertWeight(weightReg),
+                date: formattedDate,
+              },
+            ]);
+          }
 
           onClose();
         })
@@ -142,7 +159,6 @@ const WeightFormModal = (props) => {
                     }}
                   />
                   <label>kgs</label>
-                  {console.log(weightReg)}
                 </div>
               )}
               <span className="modal-button-container">
