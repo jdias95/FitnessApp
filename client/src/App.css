@@ -54,7 +54,7 @@
 }
 
 .nav a:hover {
-  color: rgba(173, 217, 244, 0.82);
+  color: rgba(156, 246, 246, 0.82);
 }
 
 .div-container {
@@ -238,7 +238,7 @@ a {
 }
 
 .workout-list-clickable:hover .caret {
-  color: rgba(173, 217, 244, 0.82);
+  color: rgba(156, 246, 246, 0.82);
   cursor: pointer;
 }
 
@@ -247,7 +247,7 @@ a {
 }
 
 .tracked-clickable:hover .caret {
-  color: rgba(173, 217, 244, 0.82);
+  color: rgba(156, 246, 246, 0.82);
   cursor: pointer;
 }
 

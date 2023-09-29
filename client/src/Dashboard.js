@@ -312,7 +312,7 @@ const Dashboard = (props) => {
               +
             </h1>
           </div>
-          {weightData.length > 1 ? (
+          {weightData.length > 0 ? (
             <div>
               <div className="time-selection-container">
                 <select
