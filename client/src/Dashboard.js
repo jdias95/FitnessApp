@@ -169,8 +169,6 @@ const Dashboard = (props) => {
         setTickMultiplier(Math.floor(weightTimeBtN / 432000000));
       }
 
-      console.log(timeSelection, tickMultiplier);
-
       const graphWidth = 500;
       const graphHeight = 400;
       const marginTop = 20;
@@ -299,10 +297,6 @@ const Dashboard = (props) => {
     }
   }, [weightData, weightTimeBtN, tickMultiplier, timeSelection]);
 
-  useEffect(() => {
-    console.log(weightTimeBtN);
-  });
-
   return (
     <div className="App">
       <div className="row flex">
@@ -415,7 +409,10 @@ const Dashboard = (props) => {
                     .map((val) => {
                       if (val.weight) {
                         return (
-                          <div className="dashboard flex">
+                          <div
+                            className="dashboard flex"
+                            key={`${val.weight} | ${val.date}`}
+                          >
                             {userProfile &&
                             userProfile.measurement_type !== "metric" ? (
                               <li>{val.weight} lbs</li>

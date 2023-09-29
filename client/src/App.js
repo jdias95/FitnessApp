@@ -280,10 +280,6 @@ function App() {
     }
   }, [loginStatus, setPreviousWeight, userProfile]);
 
-  useEffect(() => {
-    console.log(weightData);
-  });
-
   return (
     <div className="App">
       <RouterProvider router={router}>

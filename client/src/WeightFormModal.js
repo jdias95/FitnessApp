@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Axios from "axios";
 
 const WeightFormModal = (props) => {
@@ -53,6 +53,16 @@ const WeightFormModal = (props) => {
 
           setWeightData(updatedWeightData);
 
+          setPreviousWeight({
+            ...previousWeight,
+            weight: weightReg,
+            date: formattedDate,
+          });
+          setUserProfile((prevUserProfile) => ({
+            ...prevUserProfile,
+            weight: weightReg,
+          }));
+
           onClose();
         })
         .catch((error) => {
@@ -83,21 +93,22 @@ const WeightFormModal = (props) => {
             ]);
           }
 
+          setPreviousWeight({
+            ...previousWeight,
+            weight: weightReg,
+            date: formattedDate,
+          });
+          setUserProfile((prevUserProfile) => ({
+            ...prevUserProfile,
+            weight: weightReg,
+          }));
+
           onClose();
         })
         .catch((error) => {
           console.error("Error setting weight:", error);
         });
     }
-    setPreviousWeight({
-      ...previousWeight,
-      weight: weightReg,
-      date: formattedDate,
-    });
-    setUserProfile((prevUserProfile) => ({
-      ...prevUserProfile,
-      weight: weightReg,
-    }));
   };
 
   const safeParseFloat = (str) => {
@@ -144,6 +155,7 @@ const WeightFormModal = (props) => {
                     }}
                   />
                   <label>lbs</label>
+                  {/* {console.log(previousWeight)} */}
                 </div>
               ) : (
                 <div>
