@@ -14,7 +14,16 @@ export default function Home(props) {
 
   return (
     <div className="App">
-      <h1> Home </h1>
+      <div className="home container">
+        <h1 id="goals">Set Goals</h1>
+        <img
+          className="img"
+          id="dumbbell"
+          src={process.env.PUBLIC_URL + "/dumbbell.png"}
+          alt="dumbbell"
+        />
+        <h1 id="progress">Track Progress</h1>
+      </div>
     </div>
   );
 }

@@ -294,6 +294,7 @@ const Dashboard = (props) => {
       svg.selectAll(".domain").remove();
       svg.selectAll(".x-axis .tick line").remove();
       svg.selectAll(".y-axis .tick line:first-child").remove();
+      svg.selectAll("text").style("font-size", "12px");
     }
   }, [weightData, weightTimeBtN, tickMultiplier, timeSelection]);
 
