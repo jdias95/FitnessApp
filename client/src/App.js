@@ -282,6 +282,7 @@ function App() {
 
   return (
     <div className="App">
+      <head></head>
       <RouterProvider router={router}>
         {localStorage.getItem("authToken") ? (
           <NavbarLoggedIn />

@@ -15,14 +15,11 @@ export default function Home(props) {
   return (
     <div className="App">
       <div className="home container">
-        <h1 id="goals">Set Goals</h1>
-        <img
-          className="img"
-          id="dumbbell"
-          src={process.env.PUBLIC_URL + "/dumbbell.png"}
-          alt="dumbbell"
-        />
-        <h1 id="progress">Track Progress</h1>
+        <h1 id="goals">
+          "It is a shame for a man to grow old without seeing the beauty and
+          strength of which his body is capable."
+        </h1>
+        <h1 id="socrates">- Socrates</h1>
       </div>
     </div>
   );
