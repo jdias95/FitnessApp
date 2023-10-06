@@ -143,12 +143,24 @@ app.post("/api/insert/profile", (req, res) => {
   const activityLevel = req.body.activityLevel;
   const gender = req.body.gender;
   const measurementType = req.body.measurementType;
+  const weightGoal = req.body.weight_goal;
+  const targetWeight = req.body.targetWeight;
 
   const sqlInsert =
-    "INSERT INTO user_profiles (user_id, weight, height, age, activity_level, gender, measurement_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO user_profiles (user_id, weight, height, age, activity_level, gender, measurement_type, weight_goal, target_weight) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlInsert,
-    [userId, weight, height, age, activityLevel, gender, measurementType],
+    [
+      userId,
+      weight,
+      height,
+      age,
+      activityLevel,
+      gender,
+      measurementType,
+      weightGoal,
+      targetWeight,
+    ],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });

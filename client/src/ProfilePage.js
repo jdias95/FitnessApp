@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProfilePage = (props) => {
-  const {
-    loginStatus,
-    userProfileDisplay,
-    setUserProfile,
-    setUserProfileDisplay,
-  } = props;
+  const { loginStatus, userProfile } = props;
   const [infoBool, setInfoBool] = useState(false);
+  const weightGoalList = {
+    imperial: {
+      "-2": "Lose 0.5 pounds per week",
+      "-4": "Lose 1 pound per week",
+      "-6": "Lose 1.5 pounds per week",
+      "-8": "Lose 2 pounds per week",
+      0: "Maintain Weight",
+      2: "Gain 0.5 pounds per week",
+      4: "Gain 1 pound per week",
+    },
+    metric: {
+      "-2": "Lose 0.25 kilograms per week",
+      "-4": "Lose 0.5 kilogram per week",
+      "-6": "Lose 0.75 kilograms per week",
+      "-8": "Lose 1 kilograms per week",
+      0: "Maintain Weight",
+      2: "Gain 0.25 kilograms per week",
+      4: "Gain 0.5 kilogram per week",
+    },
+  };
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,43 +41,20 @@ const ProfilePage = (props) => {
   };
 
   useEffect(() => {
-    if (loginStatus) {
-      Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
-        .then((response) => {
-          const userProfileWithNA = Object.keys(response.data).reduce(
-            (acc, key) => {
-              acc[key] =
-                response.data[key] === 0 ||
-                response.data[key] === "" ||
-                response.data[key] === null
-                  ? "N/A"
-                  : response.data[key];
-              return acc;
-            },
-            {}
-          );
-          setUserProfile(response.data);
-          setUserProfileDisplay(userProfileWithNA);
-        })
-        .catch((error) => {
-          console.error("Error fetching profile data:", error);
-        });
-    }
-  }, [loginStatus, setUserProfile, setUserProfileDisplay]);
-
-  useEffect(() => {
-    if (userProfileDisplay) {
-      const allValuesAreProper = Object.values(userProfileDisplay).every(
-        (value) => value !== "N/A"
-      );
-
-      if (allValuesAreProper) {
+    if (userProfile) {
+      if (
+        userProfile.weight &&
+        userProfile.height &&
+        userProfile.age &&
+        userProfile.activity_level &&
+        userProfile.gender
+      ) {
         setInfoBool(true);
       } else {
         setInfoBool(false);
       }
     }
-  }, [userProfileDisplay]);
+  }, [userProfile]);
 
   const defaultConvertWeight = (lbs) => {
     const kgs = lbs / 2.20462262185;
@@ -90,114 +81,126 @@ const ProfilePage = (props) => {
   return (
     <div className="App">
       <div className="profile container">
-        {userProfileDisplay && (
+        {userProfile && (
           <div>
             <h2>Profile</h2>
-            {userProfileDisplay.measurement_type !== "metric" ? (
+            {userProfile.measurement_type !== "metric" ? (
               <div>
-                {userProfileDisplay.weight === "N/A" ? (
-                  <div className="flex spec">
-                    <label>Weight: </label>
-                    <p className="item">N/A</p>
+                <div className="flex spec">
+                  <label>Weight: </label>
+                  <p className="item">
+                    {userProfile.weight ? userProfile.weight : ""} lbs
+                  </p>
+                </div>
+                <div className="flex spec">
+                  <label>Height: </label>
+                  <div className="flex">
+                    <p className="item">
+                      {userProfile.height
+                        ? Math.floor(userProfile.height / 12)
+                        : ""}{" "}
+                      ft
+                    </p>
+                    <p className="item">
+                      {userProfile.height ? userProfile.height % 12 : ""} in
+                    </p>
                   </div>
-                ) : (
-                  <div className="flex spec">
-                    <label>Weight: </label>
-                    <p className="item">{userProfileDisplay.weight} lbs</p>
-                  </div>
-                )}
-                {userProfileDisplay.height === "N/A" ? (
-                  <div className="flex spec">
-                    <label>Height: </label>
-                    <p className="item">N/A</p>
-                  </div>
-                ) : (
-                  <div className="flex spec">
-                    <label>Height: </label>
-                    <div className="flex">
-                      <p className="item">
-                        {Math.floor(userProfileDisplay.height / 12)} ft
-                      </p>
-                      <p className="item">
-                        {userProfileDisplay.height % 12} in
-                      </p>
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
             ) : (
               <div>
-                {userProfileDisplay.weight === "N/A" ? (
-                  <div className="flex spec">
-                    <label>Weight: </label>
-                    <p className="item">N/A</p>
-                  </div>
-                ) : (
-                  <div className="flex spec">
-                    <label>Weight: </label>
-                    <p className="item">
-                      {defaultConvertWeight(userProfileDisplay.weight)} kg
-                    </p>
-                  </div>
-                )}
-                {userProfileDisplay.height === "N/A" ? (
-                  <div className="flex spec">
-                    <label>Height: </label>
-                    <p className="item">N/A</p>
-                  </div>
-                ) : (
-                  <div className="flex spec">
-                    <label>Height: </label>
-                    <p className="item">
-                      {defaultConvertHeightMetric(userProfileDisplay.height)} cm
-                    </p>
-                  </div>
-                )}
+                <div className="flex spec">
+                  <label>Weight: </label>
+                  <p className="item">
+                    {userProfile.weight
+                      ? defaultConvertWeight(userProfile.weight)
+                      : ""}{" "}
+                    kg
+                  </p>
+                </div>
+                <div className="flex spec">
+                  <label>Height: </label>
+                  <p className="item">
+                    {userProfile.height
+                      ? defaultConvertHeightMetric(userProfile.height)
+                      : ""}{" "}
+                    cm
+                  </p>
+                </div>
               </div>
             )}
             <div className="flex spec">
               <label>Age: </label>
-              <p className="item">{userProfileDisplay.age}</p>
+              <p className="item">{userProfile.age ? userProfile.age : ""}</p>
             </div>
             <div className="flex spec">
               <label>Activity Level: </label>
-              <p className="item">{userProfileDisplay.activity_level}</p>
+              <p className="item">
+                {userProfile.activity_level ? userProfile.activity_level : ""}
+              </p>
             </div>
             <div className="flex spec">
               <label>Gender: </label>
-              <p className="item">{userProfileDisplay.gender}</p>
+              <p className="item">
+                {userProfile.gender ? userProfile.gender : ""}
+              </p>
             </div>
-            {infoBool && userProfileDisplay.gender === "Male" ? (
+            {infoBool && userProfile.gender === "Male" ? (
               <div className="flex spec">
                 <label>Estimated Daily Calories Burned:</label>
                 <p className="item">
                   {Math.floor(
                     caloriesBurnedMen(
-                      userProfileDisplay.weight,
-                      userProfileDisplay.height,
-                      userProfileDisplay.age,
-                      activityLevelPoints[userProfileDisplay.activity_level]
+                      userProfile.weight,
+                      userProfile.height,
+                      userProfile.age,
+                      activityLevelPoints[userProfile.activity_level]
                     )
                   )}
                 </p>
               </div>
-            ) : infoBool && userProfileDisplay.gender === "Female" ? (
+            ) : infoBool && userProfile.gender === "Female" ? (
               <div className="flex spec">
                 <label>Estimated Daily Calories Burned: </label>
                 <p className="item">
                   {Math.floor(
                     caloriesBurnedWomen(
-                      userProfileDisplay.weight,
-                      userProfileDisplay.height,
-                      userProfileDisplay.age,
-                      activityLevelPoints[userProfileDisplay.activity_level]
+                      userProfile.weight,
+                      userProfile.height,
+                      userProfile.age,
+                      activityLevelPoints[userProfile.activity_level]
                     )
                   )}
                 </p>
               </div>
-            ) : (
-              <div></div>
-            )}
+            ) : null}
+            <div className="flex spec">
+              <label>Weekly Goal: </label>
+              <p className="item">
+                {userProfile.weight_goal !== null
+                  ? weightGoalList[userProfile.measurement_type][
+                      userProfile.weight_goal
+                    ]
+                  : ""}
+              </p>
+            </div>
+            <div className="flex spec">
+              <label>Target Weight: </label>
+              {userProfile && userProfile.measurement_type !== "metric" ? (
+                <p className="item">
+                  {userProfile.target_weight ? userProfile.target_weight : ""}{" "}
+                  lbs
+                </p>
+              ) : (
+                <p className="item">
+                  {userProfile.target_weight
+                    ? defaultConvertWeight(userProfile.target_weight)
+                    : ""}{" "}
+                  kgs
+                </p>
+              )}
+            </div>
+            {console.log(userProfile)}
           </div>
         )}
 

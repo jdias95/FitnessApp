@@ -26,7 +26,6 @@ const Dashboard = (props) => {
     setTrackedExercises,
     weightData,
     setWeightData,
-    formatDate,
     setUserProfile,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
@@ -428,6 +427,7 @@ const Dashboard = (props) => {
                           </div>
                         );
                       }
+                      return null;
                     })}
                 </ul>
               </div>

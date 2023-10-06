@@ -21,7 +21,6 @@ import moment from "moment";
 function App() {
   const [loginStatus, setLoginStatus] = useState("");
   const [userProfile, setUserProfile] = useState(null);
-  const [userProfileDisplay, setUserProfileDisplay] = useState(null);
   const [previousWeight, setPreviousWeight] = useState({});
   const [weightData, setWeightData] = useState([]);
   const [routines, setRoutines] = useState([]);
@@ -63,7 +62,6 @@ function App() {
               setTrackedExercises={setTrackedExercises}
               weightData={weightData}
               setWeightData={setWeightData}
-              formatDate={formatDate}
               setUserProfile={setUserProfile}
             />
           }
@@ -73,9 +71,8 @@ function App() {
           element={
             <ProfilePage
               loginStatus={loginStatus}
-              userProfileDisplay={userProfileDisplay}
               setUserProfile={setUserProfile}
-              setUserProfileDisplay={setUserProfileDisplay}
+              userProfile={userProfile}
             />
           }
         />
@@ -85,7 +82,7 @@ function App() {
             <ProfileForm
               loginStatus={loginStatus}
               userProfile={userProfile}
-              setUserProfileDisplay={setUserProfileDisplay}
+              setUserProfile={setUserProfile}
               previousWeight={previousWeight}
               setPreviousWeight={setPreviousWeight}
               formattedDate={formattedDate}
@@ -103,14 +100,6 @@ function App() {
     const kgs = lbs / 2.20462262185;
     return Number(kgs.toFixed(1));
   };
-
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
 
   useEffect(() => {
     Axios.get("http://localhost:3001/api/login")
@@ -186,6 +175,8 @@ function App() {
               activityLevel: "",
               gender: "",
               measurementType: "imperial",
+              weightGoal: 0,
+              targetWeight: 0,
             };
 
             Axios.post("http://localhost:3001/api/insert/profile", {

@@ -14,12 +14,23 @@ export default function Home(props) {
 
   return (
     <div className="App">
-      <div className="home container">
-        <h1 id="goals">
-          "It is a shame for a man to grow old without seeing the beauty and
-          strength of which his body is capable."
-        </h1>
-        <h1 id="socrates">- Socrates</h1>
+      <div className="flex home-flex">
+        <div className="home-container">
+          <div className="home container">
+            <h1 id="quote">
+              "It is a shame for a man to grow old without seeing the beauty and
+              strength of which his body is capable."
+            </h1>
+            <h1 id="socrates">- Socrates</h1>
+          </div>
+        </div>
+        <div className="img-container">
+          <img
+            alt="weight lifter"
+            className="silhouette"
+            src={process.env.PUBLIC_URL + "/silhouette.png"}
+          />
+        </div>
       </div>
     </div>
   );
