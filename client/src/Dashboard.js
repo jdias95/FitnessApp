@@ -269,15 +269,27 @@ const Dashboard = (props) => {
         .attr("clip-path", "url(#clip-path)");
 
       if (userProfile.target_weight) {
-        svg
-          .append("line")
-          .attr("class", "target-line")
-          .attr("x1", marginLeft)
-          .attr("y1", yScale(userProfile.target_weight))
-          .attr("x2", graphWidth - marginRight)
-          .attr("y2", yScale(userProfile.target_weight))
-          .attr("stroke", "rgb(138, 201, 38)")
-          .attr("stroke-width", 2);
+        if (userProfile.measurement_type !== "metric") {
+          svg
+            .append("line")
+            .attr("class", "target-line")
+            .attr("x1", marginLeft)
+            .attr("y1", yScale(userProfile.target_weight))
+            .attr("x2", graphWidth - marginRight)
+            .attr("y2", yScale(userProfile.target_weight))
+            .attr("stroke", "rgb(138, 201, 38)")
+            .attr("stroke-width", 2);
+        } else {
+          svg
+            .append("line")
+            .attr("class", "target-line")
+            .attr("x1", marginLeft)
+            .attr("y1", yScale(defaultConvertWeight(userProfile.target_weight)))
+            .attr("x2", graphWidth - marginRight)
+            .attr("y2", yScale(defaultConvertWeight(userProfile.target_weight)))
+            .attr("stroke", "rgb(138, 201, 38)")
+            .attr("stroke-width", 2);
+        }
       }
 
       const yAxisGroup = svg
