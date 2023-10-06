@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProfilePage = (props) => {
   const { loginStatus, userProfile } = props;
   const [infoBool, setInfoBool] = useState(false);
+  const [calorieBudget, setCalorieBudget] = useState(0);
   const weightGoalList = {
     imperial: {
       "-2": "Lose 0.5 pounds per week",
@@ -33,12 +34,15 @@ const ProfilePage = (props) => {
     }
   }, [loginStatus, navigate]);
 
-  const activityLevelPoints = {
-    Sedentary: 1.2,
-    "Lightly Active": 1.37,
-    Active: 1.55,
-    "Very Active": 1.725,
-  };
+  const activityLevelPoints = useMemo(() => {
+    return {
+      Sedentary: 1.2,
+      "Lightly Active": 1.37,
+      Active: 1.55,
+      "Very Active": 1.725,
+      "Extremely Active": 1.9,
+    };
+  }, []);
 
   useEffect(() => {
     if (userProfile) {
@@ -55,6 +59,74 @@ const ProfilePage = (props) => {
       }
     }
   }, [userProfile]);
+
+  useEffect(() => {
+    const calorieBudgetCalculator = (weightGoal, gender) => {
+      let weeklyCaloriesBurned;
+      switch (gender) {
+        case "Male":
+          weeklyCaloriesBurned =
+            caloriesBurnedMen(
+              userProfile.weight,
+              userProfile.height,
+              userProfile.age,
+              activityLevelPoints[userProfile.activity_level]
+            ) * 7;
+          break;
+        case "Female":
+          weeklyCaloriesBurned =
+            caloriesBurnedWomen(
+              userProfile.weight,
+              userProfile.height,
+              userProfile.age,
+              activityLevelPoints[userProfile.activity_level]
+            ) * 7;
+          break;
+        default:
+          break;
+      }
+
+      let weeklyCalorieChange;
+      switch (weightGoal) {
+        case -2:
+        case 2:
+          weeklyCalorieChange = 0.5 * 3500;
+          break;
+        case -4:
+        case 4:
+          weeklyCalorieChange = 1 * 3500;
+          break;
+        case -6:
+          weeklyCalorieChange = 1.5 * 3500;
+          break;
+        case -8:
+          weeklyCalorieChange = 2 * 3500;
+          break;
+        case 0:
+          weeklyCalorieChange = 0;
+          break;
+        default:
+          break;
+      }
+
+      if (weightGoal >= 0) {
+        return Math.floor((weeklyCaloriesBurned + weeklyCalorieChange) / 7);
+      }
+      if (weightGoal < 0) {
+        return Math.floor((weeklyCaloriesBurned - weeklyCalorieChange) / 7);
+      }
+    };
+
+    if (
+      infoBool &&
+      userProfile.weight_goal !== null &&
+      userProfile.target_weight
+    ) {
+      setCalorieBudget(
+        calorieBudgetCalculator(userProfile.weight_goal, userProfile.gender)
+      );
+    }
+  }, [infoBool, userProfile, calorieBudget, activityLevelPoints]);
 
   const defaultConvertWeight = (lbs) => {
     const kgs = lbs / 2.20462262185;
@@ -145,35 +217,6 @@ const ProfilePage = (props) => {
                 {userProfile.gender ? userProfile.gender : ""}
               </p>
             </div>
-            {infoBool && userProfile.gender === "Male" ? (
-              <div className="flex spec">
-                <label>Estimated Daily Calories Burned:</label>
-                <p className="item">
-                  {Math.floor(
-                    caloriesBurnedMen(
-                      userProfile.weight,
-                      userProfile.height,
-                      userProfile.age,
-                      activityLevelPoints[userProfile.activity_level]
-                    )
-                  )}
-                </p>
-              </div>
-            ) : infoBool && userProfile.gender === "Female" ? (
-              <div className="flex spec">
-                <label>Estimated Daily Calories Burned: </label>
-                <p className="item">
-                  {Math.floor(
-                    caloriesBurnedWomen(
-                      userProfile.weight,
-                      userProfile.height,
-                      userProfile.age,
-                      activityLevelPoints[userProfile.activity_level]
-                    )
-                  )}
-                </p>
-              </div>
-            ) : null}
             <div className="flex spec">
               <label>Weekly Goal: </label>
               <p className="item">
@@ -200,7 +243,41 @@ const ProfilePage = (props) => {
                 </p>
               )}
             </div>
-            {console.log(userProfile)}
+            {infoBool && userProfile.gender === "Male" ? (
+              <div className="flex spec">
+                <label>Daily Calories Burned:</label>
+                <p className="item">
+                  {Math.floor(
+                    caloriesBurnedMen(
+                      userProfile.weight,
+                      userProfile.height,
+                      userProfile.age,
+                      activityLevelPoints[userProfile.activity_level]
+                    )
+                  )}
+                </p>
+              </div>
+            ) : infoBool && userProfile.gender === "Female" ? (
+              <div className="flex spec">
+                <label>Daily Calories Burned: </label>
+                <p className="item">
+                  {Math.floor(
+                    caloriesBurnedWomen(
+                      userProfile.weight,
+                      userProfile.height,
+                      userProfile.age,
+                      activityLevelPoints[userProfile.activity_level]
+                    )
+                  )}
+                </p>
+              </div>
+            ) : null}
+            {calorieBudget && userProfile.weight_goal !== 0 ? (
+              <div className="flex spec">
+                <label>Calorie Budget: </label>
+                <p className="item">{calorieBudget}</p>
+              </div>
+            ) : null}
           </div>
         )}
 

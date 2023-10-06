@@ -143,7 +143,7 @@ app.post("/api/insert/profile", (req, res) => {
   const activityLevel = req.body.activityLevel;
   const gender = req.body.gender;
   const measurementType = req.body.measurementType;
-  const weightGoal = req.body.weight_goal;
+  const weightGoal = req.body.weightGoal;
   const targetWeight = req.body.targetWeight;
 
   const sqlInsert =
@@ -180,16 +180,28 @@ app.put("/api/update/profile/:userId", (req, res) => {
   const activityLevel = req.body.activityLevel;
   const gender = req.body.gender;
   const measurementType = req.body.measurementType;
+  const weightGoal = req.body.weightGoal;
+  const targetWeight = req.body.targetWeight;
 
   const sqlUpdate = `
     UPDATE user_profiles 
-    SET weight = ?, height = ?, age = ?, activity_level = ?, gender = ?, measurement_type = ?
+    SET weight = ?, height = ?, age = ?, activity_level = ?, gender = ?, measurement_type = ?, weight_goal = ?, target_weight = ?
     WHERE user_id = ?
   `;
 
   db.query(
     sqlUpdate,
-    [weight, height, age, activityLevel, gender, measurementType, userId],
+    [
+      weight,
+      height,
+      age,
+      activityLevel,
+      gender,
+      measurementType,
+      weightGoal,
+      targetWeight,
+      userId,
+    ],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });

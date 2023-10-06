@@ -268,6 +268,18 @@ const Dashboard = (props) => {
         .attr("d", line)
         .attr("clip-path", "url(#clip-path)");
 
+      if (userProfile.target_weight) {
+        svg
+          .append("line")
+          .attr("class", "target-line")
+          .attr("x1", marginLeft)
+          .attr("y1", yScale(userProfile.target_weight))
+          .attr("x2", graphWidth - marginRight)
+          .attr("y2", yScale(userProfile.target_weight))
+          .attr("stroke", "rgb(138, 201, 38)")
+          .attr("stroke-width", 2);
+      }
+
       const yAxisGroup = svg
         .append("g")
         .attr("class", "y-axis")
@@ -295,7 +307,13 @@ const Dashboard = (props) => {
       svg.selectAll(".y-axis .tick line:first-child").remove();
       svg.selectAll("text").style("font-size", "12px");
     }
-  }, [weightData, weightTimeBtN, tickMultiplier, timeSelection]);
+  }, [
+    weightData,
+    weightTimeBtN,
+    tickMultiplier,
+    timeSelection,
+    userProfile.target_weight,
+  ]);
 
   return (
     <div className="App">

@@ -48,11 +48,7 @@ const ProfileForm = (props) => {
     userProfile && userProfile.weight_goal ? userProfile.weight_goal : 0
   );
   const [targetWeightReg, setTargetWeightReg] = useState(
-    userProfile && userProfile.target_weight
-      ? userProfile.target_weight
-      : userProfile && userProfile.weight
-      ? userProfile.weight
-      : 0
+    userProfile && userProfile.target_weight ? userProfile.target_weight : 0
   );
   const navigate = useNavigate();
 
@@ -371,7 +367,6 @@ const ProfileForm = (props) => {
                   <div className="flex">
                     <select
                       name="activityLevel"
-                      id="input"
                       value={activityLevelReg}
                       onChange={(e) => {
                         setActivityLevelReg(e.target.value);
@@ -382,6 +377,7 @@ const ProfileForm = (props) => {
                       <option value="Lightly Active">Lightly Active</option>
                       <option value="Active">Active</option>
                       <option value="Very Active">Very Active</option>
+                      <option value="Extremely Active">Extremely Active</option>
                     </select>
                   </div>
                 </div>
@@ -391,7 +387,6 @@ const ProfileForm = (props) => {
                 <div className="flex">
                   <select
                     name="gender"
-                    id="input"
                     value={genderReg}
                     onChange={(e) => {
                       setGenderReg(e.target.value);
@@ -407,15 +402,14 @@ const ProfileForm = (props) => {
                 <label>Weekly Goal: </label>
                 {measurementType !== "metric" ? (
                   <div className="flex">
-                    {console.log(weightGoalReg)}
                     <select
                       value={weightGoalReg}
                       onChange={(e) => {
                         setWeightGoalReg(parseInt(e.target.value));
                       }}
                     >
-                      <option value={-8}>Lose 2 kiliograms per week</option>
-                      <option value={-6}>Lose 1.5 kiliograms per week</option>
+                      <option value={-8}>Lose 2 pounds per week</option>
+                      <option value={-6}>Lose 1.5 pounds per week</option>
                       <option value={-4}>Lose 1 pound per week</option>
                       <option value={-2}>Lose 0.5 pounds per week</option>
                       <option value={0}>Maintain Weight</option>
@@ -425,20 +419,19 @@ const ProfileForm = (props) => {
                   </div>
                 ) : (
                   <div className="flex">
-                    {console.log(weightGoalReg)}
                     <select
                       value={weightGoalReg}
                       onChange={(e) => {
                         setWeightGoalReg(parseInt(e.target.value));
                       }}
                     >
-                      <option value={-8}>Lose 1 kiliograms per week</option>
+                      <option value={-8}>Lose 1 kiliogram per week</option>
                       <option value={-6}>Lose 0.75 kiliograms per week</option>
-                      <option value={-4}>Lose 0.5 kilogram per week</option>
+                      <option value={-4}>Lose 0.5 kilograms per week</option>
                       <option value={-2}>Lose 0.25 kiliograms per week</option>
                       <option value={0}>Maintain Weight</option>
                       <option value={2}>Gain 0.25 kiliograms per week</option>
-                      <option value={4}>Gain 0.5 kilogram per week</option>
+                      <option value={4}>Gain 0.5 kilograms per week</option>
                     </select>
                   </div>
                 )}

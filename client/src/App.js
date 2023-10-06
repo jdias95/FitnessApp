@@ -187,6 +187,7 @@ function App() {
                 `http://localhost:3001/api/get/profile/${loginStatus.id}`
               )
                 .then((response) => {
+                  console.log(response.data);
                   setUserProfile(response.data);
                 })
                 .catch((error) => {
@@ -273,7 +274,6 @@ function App() {
 
   return (
     <div className="App">
-      <head></head>
       <RouterProvider router={router}>
         {localStorage.getItem("authToken") ? (
           <NavbarLoggedIn />
