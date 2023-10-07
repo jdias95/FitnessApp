@@ -319,13 +319,7 @@ const Dashboard = (props) => {
       svg.selectAll(".y-axis .tick line:first-child").remove();
       svg.selectAll("text").style("font-size", "12px");
     }
-  }, [
-    weightData,
-    weightTimeBtN,
-    tickMultiplier,
-    timeSelection,
-    userProfile.target_weight,
-  ]);
+  }, [weightData, weightTimeBtN, tickMultiplier, timeSelection, userProfile]);
 
   return (
     <div className="App">

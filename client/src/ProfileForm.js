@@ -437,7 +437,7 @@ const ProfileForm = (props) => {
                 )}
               </div>
               <div className="flex spec">
-                <label>Target Weight: </label>
+                <label>Goal Weight: </label>
                 {measurementType !== "metric" ? (
                   <div className="flex">
                     <input

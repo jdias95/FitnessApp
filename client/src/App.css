@@ -89,47 +89,40 @@
   transform: translate(-50%, -75%);
 }
 
-.home-flex {
+.background-container {
+  width: 100vw;
   max-width: 100vw;
-  max-height: calc(100vh - 4rem);
   height: calc(100vh - 4rem);
-}
-
-.home-container {
-  width: 50%;
+  max-height: calc(100vh - 4rem);
+  background-image: url("../public/background.jpg");
+  background-size: cover;
+  background-position: center center;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .home {
-  width: 50%;
+  width: 40%;
   height: auto;
-  text-align: center;
-  font-size: 1.5rem;
   padding: 1rem 2rem;
-  font-size: 1rem;
+  font-size: min(0.8vw, 1.8vh);
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  background-color: rgba(37, 37, 37, 0.8);
+  border-bottom-right-radius: 1rem;
 }
 
 #quote {
-  text-align: right;
   font-family: "Krona One", sans-serif;
   font-weight: 1.5vw;
   font-style: italic;
 }
 
 #socrates {
-  text-align: left;
-}
-
-.img-container {
-  text-align: center;
-  width: 50%;
-  height: 70%;
-}
-
-.silhouette {
-  height: 100%;
-  width: auto;
+  position: relative;
 }
 
 .weight-change-container {
@@ -511,10 +504,6 @@ button {
 
   .container {
     width: 95%;
-  }
-
-  .home {
-    font-size: 1.5vw;
   }
 
   .nav .name {
