@@ -228,7 +228,7 @@ const ProfilePage = (props) => {
               </p>
             </div>
             <div className="flex spec">
-              <label>Goal Weight: </label>
+              <label>Target Weight: </label>
               {userProfile && userProfile.measurement_type !== "metric" ? (
                 <p className="item">
                   {userProfile.target_weight ? userProfile.target_weight : ""}{" "}
@@ -274,7 +274,7 @@ const ProfilePage = (props) => {
             ) : null}
             {calorieBudget && userProfile.weight_goal !== 0 ? (
               <div className="flex spec">
-                <label>Calorie Budget: </label>
+                <label>Daily Calorie Budget: </label>
                 <p className="item">{calorieBudget}</p>
               </div>
             ) : null}

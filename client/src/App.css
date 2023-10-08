@@ -54,7 +54,7 @@
 }
 
 .nav a:hover {
-  color: rgba(156, 246, 246, 0.82);
+  color: #acedff;
 }
 
 .div-container {
@@ -104,20 +104,21 @@
 }
 
 .home {
-  width: 40%;
+  width: 50%;
   height: auto;
   padding: 1rem 2rem;
-  font-size: min(0.8vw, 1.8vh);
+  font-size: min(1vw, 2vh);
   z-index: 1;
   position: absolute;
-  top: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: rgba(37, 37, 37, 0.8);
-  border-bottom-right-radius: 1rem;
+  border-radius: 1rem;
 }
 
 #quote {
   font-family: "Krona One", sans-serif;
-  font-weight: 1.5vw;
   font-style: italic;
 }
 
@@ -300,7 +301,7 @@ button {
 }
 
 .workout-list-clickable:hover .caret {
-  color: rgba(156, 246, 246, 0.82);
+  color: #acedff;
   cursor: pointer;
 }
 
@@ -309,7 +310,7 @@ button {
 }
 
 .tracked-clickable:hover .caret {
-  color: rgba(156, 246, 246, 0.82);
+  color: #acedff;
   cursor: pointer;
 }
 
@@ -400,6 +401,11 @@ button {
 .dropdown-menu li {
   list-style: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dropdown-menu li .exercise-container {
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .weight,
@@ -524,5 +530,28 @@ button {
 
   .home-flex {
     flex-direction: column;
+  }
+
+  .profile .spec {
+    width: 100%;
+  }
+
+  .nav .name {
+    font-size: 1.5rem;
+  }
+
+  .nav a {
+    font-size: 0.8rem;
+  }
+
+  .dropdown-menu li .exercise-container,
+  .weight-list {
+    font-size: 0.75rem;
+  }
+
+  .home {
+    width: calc(100vw - 4rem);
+    font-size: 0.5rem;
+    border-radius: 0;
   }
 }

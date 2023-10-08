@@ -515,7 +515,7 @@ const Dashboard = (props) => {
                       <ul>
                         {exerciseList.map((exercise) => (
                           <li key={exercise.id} className="dashboard flex">
-                            <div>
+                            <div className="exercise-container">
                               {exercise.name} | {exercise.sets} x{" "}
                               {exercise.reps_low}
                               {exercise.reps_high
@@ -611,32 +611,30 @@ const Dashboard = (props) => {
                         .reverse()
                         .map((exercise) => (
                           <li key={exercise.id} className="dashboard flex">
-                            {`${
-                              monthNames[
-                                parseInt(exercise.date.slice(5, 7) - 1)
-                              ]
-                            } ${exercise.date.slice(8)} ${exercise.date.slice(
-                              0,
-                              4
-                            )}`}
-                            :{" "}
-                            {exercise.weight &&
-                            userProfile.measurement_type === "imperial"
-                              ? `${exercise.weight} lbs | `
-                              : exercise.weight &&
-                                userProfile.measurement_type === "metric"
-                              ? `${defaultConvertWeight(
-                                  exercise.weight
-                                )} kgs | `
-                              : " "}
-                            {exercise.bw
-                              ? `(${compareBW(
-                                  userProfile.weight,
-                                  exercise.weight
-                                )}xBW) | `
-                              : " "}
-                            {exercise.sets} x {exercise.reps_low}
-                            {exercise.reps_high ? `-${exercise.reps_high}` : ""}
+                            <div className="exercise-container">
+                              {`${new Date(exercise.date).toLocaleDateString()}
+                                `}
+                              :{" "}
+                              {exercise.weight &&
+                              userProfile.measurement_type === "imperial"
+                                ? `${exercise.weight} lbs | `
+                                : exercise.weight &&
+                                  userProfile.measurement_type === "metric"
+                                ? `${defaultConvertWeight(
+                                    exercise.weight
+                                  )} kgs | `
+                                : " "}
+                              {exercise.bw
+                                ? `(${compareBW(
+                                    userProfile.weight,
+                                    exercise.weight
+                                  )}xBW) | `
+                                : " "}
+                              {exercise.sets} x {exercise.reps_low}
+                              {exercise.reps_high
+                                ? `-${exercise.reps_high}`
+                                : ""}
+                            </div>
                             <img
                               className="img x"
                               src={process.env.PUBLIC_URL + "/x.png"}
