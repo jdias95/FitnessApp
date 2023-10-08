@@ -62,29 +62,14 @@ const ProfilePage = (props) => {
 
   useEffect(() => {
     const calorieBudgetCalculator = (weightGoal, gender) => {
-      let weeklyCaloriesBurned;
-      switch (gender) {
-        case "Male":
-          weeklyCaloriesBurned =
-            caloriesBurnedMen(
-              userProfile.weight,
-              userProfile.height,
-              userProfile.age,
-              activityLevelPoints[userProfile.activity_level]
-            ) * 7;
-          break;
-        case "Female":
-          weeklyCaloriesBurned =
-            caloriesBurnedWomen(
-              userProfile.weight,
-              userProfile.height,
-              userProfile.age,
-              activityLevelPoints[userProfile.activity_level]
-            ) * 7;
-          break;
-        default:
-          break;
-      }
+      const weeklyCaloriesBurned =
+        caloriesBurned(
+          userProfile.weight,
+          userProfile.height,
+          userProfile.age,
+          activityLevelPoints[userProfile.activity_level],
+          gender
+        ) * 7;
 
       let weeklyCalorieChange;
       switch (weightGoal) {
@@ -138,14 +123,14 @@ const ProfilePage = (props) => {
     return Number(cm.toFixed(0));
   };
 
-  const caloriesBurnedMen = (weight, height, age, activityLevel) => {
-    const bmr = 66 + 6.2 * weight + 12.7 * height - 6.76 * age;
-    const total = bmr * activityLevel;
-    return total;
-  };
-
-  const caloriesBurnedWomen = (weight, height, age, activityLevel) => {
-    const bmr = 655.1 + 4.35 * weight + 4.7 * height - 4.7 * age;
+  const caloriesBurned = (weight, height, age, activityLevel, gender) => {
+    let bmr = 4.536 * weight + 15.88 * height - 5 * age;
+    if (gender === "Male") {
+      bmr += 5;
+    }
+    if (gender === "Female") {
+      bmr -= 161;
+    }
     const total = bmr * activityLevel;
     return total;
   };
@@ -239,30 +224,17 @@ const ProfilePage = (props) => {
                 )}
               </div>
             ) : null}
-            {infoBool && userProfile.gender === "Male" ? (
+            {infoBool ? (
               <div className="flex spec">
                 <label>Daily Calories Burned:</label>
                 <p className="item">
                   {Math.floor(
-                    caloriesBurnedMen(
+                    caloriesBurned(
                       userProfile.weight,
                       userProfile.height,
                       userProfile.age,
-                      activityLevelPoints[userProfile.activity_level]
-                    )
-                  )}
-                </p>
-              </div>
-            ) : infoBool && userProfile.gender === "Female" ? (
-              <div className="flex spec">
-                <label>Daily Calories Burned: </label>
-                <p className="item">
-                  {Math.floor(
-                    caloriesBurnedWomen(
-                      userProfile.weight,
-                      userProfile.height,
-                      userProfile.age,
-                      activityLevelPoints[userProfile.activity_level]
+                      activityLevelPoints[userProfile.activity_level],
+                      userProfile.gender
                     )
                   )}
                 </p>
