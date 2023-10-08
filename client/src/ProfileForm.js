@@ -178,6 +178,12 @@ const ProfileForm = (props) => {
     navigate("/profile");
   };
 
+  useEffect(() => {
+    if (!weightGoalReg) {
+      setTargetWeightReg(0);
+    }
+  }, [weightGoalReg]);
+
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
     return Number(lbs.toFixed(1));
@@ -439,32 +445,50 @@ const ProfileForm = (props) => {
               <div className="flex spec">
                 <label>Target Weight: </label>
                 {measurementType !== "metric" ? (
-                  <div className="flex">
-                    <input
-                      type="number"
-                      step="0.1"
-                      id="wide"
-                      value={targetWeightReg}
-                      onChange={(e) => {
-                        setTargetWeightReg(safeParseFloat(e.target.value));
-                      }}
-                    />
-                    <p>lbs</p>
+                  <div>
+                    {weightGoalReg ? (
+                      <div className="flex">
+                        <input
+                          type="number"
+                          step="0.1"
+                          id="wide"
+                          value={targetWeightReg}
+                          onChange={(e) => {
+                            setTargetWeightReg(safeParseFloat(e.target.value));
+                          }}
+                        />
+                        <p>lbs</p>
+                      </div>
+                    ) : (
+                      <div className="flex">
+                        <input type="number" value="" id="wide" disabled />
+                        <p>lbs</p>
+                      </div>
+                    )}
                   </div>
                 ) : (
-                  <div className="flex">
-                    <input
-                      type="number"
-                      step="0.1"
-                      id="wide"
-                      value={defaultConvertWeight(targetWeightReg)}
-                      onChange={(e) => {
-                        setTargetWeightReg(
-                          convertWeight(safeParseFloat(e.target.value))
-                        );
-                      }}
-                    />
-                    <p>kgs</p>
+                  <div>
+                    {weightGoalReg ? (
+                      <div className="flex">
+                        <input
+                          type="number"
+                          step="0.1"
+                          id="wide"
+                          value={defaultConvertWeight(targetWeightReg)}
+                          onChange={(e) => {
+                            setTargetWeightReg(
+                              convertWeight(safeParseFloat(e.target.value))
+                            );
+                          }}
+                        />
+                        <p>kgs</p>
+                      </div>
+                    ) : (
+                      <div className="flex">
+                        <input type="number" value="" id="wide" disabled />
+                        <p>kgs</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

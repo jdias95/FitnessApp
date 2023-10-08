@@ -227,22 +227,18 @@ const ProfilePage = (props) => {
                   : ""}
               </p>
             </div>
-            <div className="flex spec">
-              <label>Target Weight: </label>
-              {userProfile && userProfile.measurement_type !== "metric" ? (
-                <p className="item">
-                  {userProfile.target_weight ? userProfile.target_weight : ""}{" "}
-                  lbs
-                </p>
-              ) : (
-                <p className="item">
-                  {userProfile.target_weight
-                    ? defaultConvertWeight(userProfile.target_weight)
-                    : ""}{" "}
-                  kgs
-                </p>
-              )}
-            </div>
+            {userProfile.target_weight ? (
+              <div className="flex spec">
+                <label>Target Weight: </label>
+                {userProfile && userProfile.measurement_type !== "metric" ? (
+                  <p className="item">{userProfile.target_weight} lbs</p>
+                ) : (
+                  <p className="item">
+                    {defaultConvertWeight(userProfile.target_weight)} kgs
+                  </p>
+                )}
+              </div>
+            ) : null}
             {infoBool && userProfile.gender === "Male" ? (
               <div className="flex spec">
                 <label>Daily Calories Burned:</label>

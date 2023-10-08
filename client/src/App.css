@@ -558,10 +558,3 @@ button {
     border-radius: 0;
   }
 }
-
-@media (max-height: 400px) {
-  .login {
-    height: 70%;
-    overflow: hidden;
-  }
-}
