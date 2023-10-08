@@ -13,9 +13,7 @@ export default function Home(props) {
   }, [setLoginStatus]);
 
   return (
-    <div className="App">
-      {/* <div className="flex home-flex"> */}
-      {/* <div className="home-container"> */}
+    <div className="App home-container">
       <div className="background-container">
         <div className="home">
           <h1 id="quote">

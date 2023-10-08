@@ -29,7 +29,7 @@ const Register = (props) => {
     });
   };
   return (
-    <div className="App">
+    <div className="App home-container">
       <div className="register container">
         <div className="form">
           <h1>Registration</h1>

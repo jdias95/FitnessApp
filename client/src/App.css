@@ -85,8 +85,8 @@
   height: auto;
   position: absolute;
   left: 50%;
-  top: calc(50% - 4rem);
-  transform: translate(-50%, -75%);
+  top: calc(50% - 4vh);
+  transform: translate(-50%, -50%);
 }
 
 .background-container {
@@ -512,6 +512,13 @@ button {
     width: 95%;
   }
 
+  .login,
+  .register {
+    left: calc(50% - 0.5rem);
+    top: calc(50% - 2rem);
+    width: 80%;
+  }
+
   .nav .name {
     left: 2rem;
     transform: none;
@@ -524,10 +531,6 @@ button {
 }
 
 @media (max-width: 800px) {
-  .graph {
-    width: 100%;
-  }
-
   .home-flex {
     flex-direction: column;
   }
@@ -553,5 +556,12 @@ button {
     width: calc(100vw - 4rem);
     font-size: 0.5rem;
     border-radius: 0;
+  }
+}
+
+@media (max-height: 400px) {
+  .login {
+    height: 70%;
+    overflow: hidden;
   }
 }

@@ -171,9 +171,9 @@ const Dashboard = (props) => {
       const graphWidth = 500;
       const graphHeight = 400;
       const marginTop = 20;
-      const marginRight = 10;
-      const marginBottom = 30;
-      const marginLeft = 20;
+      const marginRight = 20;
+      const marginBottom = 20;
+      const marginLeft = 30;
 
       const minValue = d3.min(weightValues);
       const maxValue = d3.max(weightValues);

@@ -42,7 +42,7 @@ const Login = (props) => {
   };
 
   return (
-    <div className="App">
+    <div className="App home-container">
       <div className="login container">
         <div className="form">
           <h1>Login</h1>
