@@ -270,6 +270,11 @@ button {
   margin: 0.5rem 0.1rem;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
 .dashboard {
   justify-content: space-between;
   position: relative;
@@ -448,7 +453,9 @@ button {
 }
 
 .modal-content {
+  overflow: auto;
   background-color: #1d2a35;
+  max-height: 100vh;
   max-width: 40rem;
   min-width: 400px;
   width: 100%;
@@ -504,6 +511,10 @@ button {
 }
 
 @media (max-width: 1200px) {
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
   .row {
     flex-direction: column;
   }
@@ -531,6 +542,14 @@ button {
 }
 
 @media (max-width: 800px) {
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  .App {
+    font-size: 0.75rem;
+  }
+
   .home-flex {
     flex-direction: column;
   }
@@ -547,14 +566,19 @@ button {
     font-size: 0.8rem;
   }
 
-  .dropdown-menu li .exercise-container,
-  .weight-list {
-    font-size: 0.75rem;
-  }
-
   .home {
     width: calc(100vw - 4rem);
     font-size: 0.5rem;
     border-radius: 0;
+  }
+
+  .modal-content {
+    font-size: 0.6rem;
+  }
+
+  .modal-button {
+    width: 3rem;
+    padding: 0.1rem;
+    margin: auto 0;
   }
 }

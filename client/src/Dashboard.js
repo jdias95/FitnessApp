@@ -47,21 +47,6 @@ const Dashboard = (props) => {
   const [timeSelection, setTimeSelection] = useState("1 month");
   const navigate = useNavigate();
 
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "June",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
   useEffect(() => {
     if (loginStatus === false) {
       localStorage.clear();
@@ -368,7 +353,7 @@ const Dashboard = (props) => {
                   ) : (
                     ""
                   )}
-                  {weightTimeBtN >= 2592000000 ? (
+                  {weightTimeBtN >= 3110400000 ? (
                     <option value="All">All</option>
                   ) : (
                     ""
@@ -757,7 +742,6 @@ const Dashboard = (props) => {
           }}
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
-          monthNames={monthNames}
         />
       )}
 

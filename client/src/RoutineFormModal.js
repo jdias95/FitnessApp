@@ -43,7 +43,7 @@ const RoutineFormModal = (props) => {
                 setNameReg(e.target.value);
               }}
             />
-            <span>
+            <span className="modal-button-container">
               <button className="modal-button" onClick={createRoutine}>
                 Confirm
               </button>
