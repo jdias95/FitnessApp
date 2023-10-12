@@ -11,6 +11,7 @@ import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
 import NotesModal from "./NotesModal";
 import * as d3 from "d3";
 import moment from "moment";
+import InstructionsModal from "./InstructionsModal";
 
 const Dashboard = (props) => {
   const {
@@ -38,6 +39,7 @@ const Dashboard = (props) => {
   const [showDeleteTrackedExerciseModal, setShowDeleteTrackedExerciseModal] =
     useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
@@ -82,6 +84,9 @@ const Dashboard = (props) => {
         break;
       case "deleteTrackedExercise":
         setShowDeleteTrackedExerciseModal(isOpen);
+        break;
+      case "instructions":
+        setShowInstructionsModal(isOpen);
         break;
       default:
         break;
@@ -150,7 +155,7 @@ const Dashboard = (props) => {
       } else if (timeSelection === "1 year") {
         setTickMultiplier(72);
       } else if (timeSelection === "All") {
-        setTickMultiplier(Math.floor(weightTimeBtN / 432000000));
+        setTickMultiplier(Math.ceil(weightTimeBtN / 432000000));
       }
 
       const graphWidth = 500;
@@ -573,6 +578,14 @@ const Dashboard = (props) => {
         <div className="tracked container">
           <div className="dashboard flex title">
             <h2>Track Progress</h2>
+            <img
+              className="question-mark"
+              src={process.env.PUBLIC_URL + "/question-mark.png"}
+              onClick={() => {
+                toggleModal("instructions", true);
+              }}
+              alt="instuctions"
+            />
           </div>
           <div>
             {Object.keys(trackedExercises).map((exerciseName) => (
@@ -751,6 +764,14 @@ const Dashboard = (props) => {
             toggleModal("notes", false);
           }}
           selectedExercise={selectedExercise}
+        />
+      )}
+
+      {showInstructionsModal && (
+        <InstructionsModal
+          onClose={() => {
+            toggleModal("instructions", false);
+          }}
         />
       )}
     </div>
