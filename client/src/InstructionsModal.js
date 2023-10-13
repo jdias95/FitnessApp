@@ -14,12 +14,12 @@ const InstructionsModal = (props) => {
                 <span className="bold">+</span>
                 {")"} or update {"("}
                 <img
-                  className="edit"
+                  id="edit"
                   alt="edit"
                   src={process.env.PUBLIC_URL + "/edit.png"}
                 />
-                {")"} an exercise in 'Workout Routines' and select 'Track
-                Progress,' it will be added to a 'Track Progress' list of the{" "}
+                {")"} an exercise in 'Workout Routines' with 'Track Progress?'
+                selected, it will be added to a 'Track Progress' list of the{" "}
                 <span className="bold">same name</span>.
               </p>
             </div>

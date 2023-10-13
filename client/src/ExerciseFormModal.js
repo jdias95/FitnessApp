@@ -290,7 +290,7 @@ const ExerciseFormModal = (props) => {
                   }}
                 />
               </div>
-              <div>
+              <div className="flex-end">
                 <span className="modal-button-container">
                   <button className="modal-button" onClick={createExercise}>
                     Confirm
