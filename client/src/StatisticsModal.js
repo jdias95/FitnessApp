@@ -11,7 +11,7 @@ const StatisticsModal = (props) => {
 
   const calcVolume = (weight, sets, reps) => {
     const volume = weight * sets * reps;
-    return volume;
+    return Number(volume.toFixed(1));
   };
 
   const workingWeightDifference = firstExercise

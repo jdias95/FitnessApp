@@ -143,7 +143,7 @@ const ExerciseFormModal = (props) => {
       }
 
       const parsedValue = parseInt(str);
-      if (!isNaN(parsedValue) && parsedValue >= 1) {
+      if (!isNaN(parsedValue) && parsedValue > repsLowReg) {
         return parsedValue;
       } else {
         throw new Error("Value is not a valid number.");
@@ -199,7 +199,7 @@ const ExerciseFormModal = (props) => {
                 <input
                   type="number"
                   id="narrow"
-                  value={repsHighReg === null ? "" : repsHighReg}
+                  value={repsHighReg === null ? repsLowReg + 1 : repsHighReg}
                   onChange={(e) => {
                     setRepsHighReg(safeParseInt3(e.target.value));
                   }}
@@ -211,6 +211,7 @@ const ExerciseFormModal = (props) => {
                   <input
                     type="number"
                     id="wide"
+                    step="0.1"
                     value={weightReg}
                     onChange={(e) => {
                       setWeightReg(safeParseFloat(e.target.value));
@@ -224,6 +225,7 @@ const ExerciseFormModal = (props) => {
                   <input
                     type="number"
                     id="wide"
+                    step="0.1"
                     value={defaultConvertWeight(weightReg)}
                     onChange={(e) => {
                       setWeightReg(
