@@ -648,7 +648,9 @@ const Dashboard = (props) => {
                                   onClick={() => {
                                     setSelectedExercise(exercise);
                                     setFirstExercise(
-                                      trackedExercises[exerciseName][0]
+                                      trackedExercises[exerciseName].find(
+                                        (entry) => entry.weight > 0
+                                      )
                                     );
                                     toggleModal("exerciseStatistics", true);
                                   }}
