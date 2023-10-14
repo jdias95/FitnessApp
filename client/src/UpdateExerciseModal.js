@@ -22,7 +22,9 @@ const UpdateExerciseModal = (props) => {
   const [weightReg, setWeightReg] = useState(selectedExercise.weight);
   const [trackReg, setTrackReg] = useState(selectedExercise.tracked);
   const [bwReg, setBwReg] = useState(selectedExercise.bw);
-  const [notesReg, setNotesReg] = useState(selectedExercise.notes);
+  const [notesReg, setNotesReg] = useState(
+    selectedExercise.notes ? selectedExercise.notes : ""
+  );
 
   const updateExercise = (id) => {
     Axios.put(`http://localhost:3001/api/update/exercise/${id}`, {

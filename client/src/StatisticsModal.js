@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 const StatisticsModal = (props) => {
   const {
@@ -66,10 +66,6 @@ const StatisticsModal = (props) => {
       : 0;
 
   const volumeDifference = volume - firstVolume;
-
-  useEffect(() => {
-    console.log(selectedExercise, firstExercise);
-  });
 
   return (
     <div className="modal">
