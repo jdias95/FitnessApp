@@ -2,7 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProfilePage = (props) => {
-  const { loginStatus, userProfile } = props;
+  const {
+    loginStatus,
+    userProfile,
+    defaultConvertWeight,
+    defaultConvertHeightMetric,
+  } = props;
   const [infoBool, setInfoBool] = useState(false);
   const [calorieBudget, setCalorieBudget] = useState(0);
   const weightGoalList = {
@@ -43,6 +48,18 @@ const ProfilePage = (props) => {
       "Extremely Active": 1.9,
     };
   }, []);
+
+  const caloriesBurned = (weight, height, age, activityLevel, gender) => {
+    let bmr = 4.536 * weight + 15.88 * height - 5 * age;
+    if (gender === "Male") {
+      bmr += 5;
+    }
+    if (gender === "Female") {
+      bmr -= 161;
+    }
+    const total = bmr * activityLevel;
+    return total;
+  };
 
   useEffect(() => {
     if (userProfile) {
@@ -112,28 +129,6 @@ const ProfilePage = (props) => {
       );
     }
   }, [infoBool, userProfile, calorieBudget, activityLevelPoints]);
-
-  const defaultConvertWeight = (lbs) => {
-    const kgs = lbs / 2.20462262185;
-    return Number(kgs.toFixed(1));
-  };
-
-  const defaultConvertHeightMetric = (inches) => {
-    const cm = inches / 0.3937008;
-    return Number(cm.toFixed(0));
-  };
-
-  const caloriesBurned = (weight, height, age, activityLevel, gender) => {
-    let bmr = 4.536 * weight + 15.88 * height - 5 * age;
-    if (gender === "Male") {
-      bmr += 5;
-    }
-    if (gender === "Female") {
-      bmr -= 161;
-    }
-    const total = bmr * activityLevel;
-    return total;
-  };
 
   return (
     <div className="App">

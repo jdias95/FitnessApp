@@ -32,6 +32,34 @@ function App() {
   const day = String(currentDate.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
 
+  const convertWeight = (kgs) => {
+    const lbs = kgs * 2.20462262185;
+    return Number(lbs.toFixed(1));
+  };
+
+  const defaultConvertWeight = (lbs) => {
+    const kgs = lbs / 2.20462262185;
+    return Number(kgs.toFixed(1));
+  };
+
+  const defaultConvertHeightMetric = (inches) => {
+    const cm = inches / 0.3937008;
+    return Number(cm.toFixed(0));
+  };
+
+  const safeParseFloat = (str) => {
+    try {
+      const parsedValue = parseFloat(str);
+      if (!isNaN(parsedValue) && parsedValue >= 0) {
+        return parsedValue;
+      } else {
+        throw new Error("Value is not a valid number.");
+      }
+    } catch (error) {
+      return 0;
+    }
+  };
+
   Axios.defaults.withCredentials = true;
 
   const router = createBrowserRouter(
@@ -63,6 +91,9 @@ function App() {
               weightData={weightData}
               setWeightData={setWeightData}
               setUserProfile={setUserProfile}
+              convertWeight={convertWeight}
+              defaultConvertWeight={defaultConvertWeight}
+              safeParseFloat={safeParseFloat}
             />
           }
         />
@@ -73,6 +104,8 @@ function App() {
               loginStatus={loginStatus}
               setUserProfile={setUserProfile}
               userProfile={userProfile}
+              defaultConvertWeight={defaultConvertWeight}
+              defaultConvertHeightMetric={defaultConvertHeightMetric}
             />
           }
         />
@@ -88,6 +121,10 @@ function App() {
               formattedDate={formattedDate}
               setWeightData={setWeightData}
               weightData={weightData}
+              convertWeight={convertWeight}
+              defaultConvertWeight={defaultConvertWeight}
+              safeParseFloat={safeParseFloat}
+              defaultConvertHeightMetric={defaultConvertHeightMetric}
             />
           }
         />
@@ -95,11 +132,6 @@ function App() {
       </Route>
     )
   );
-
-  const defaultConvertWeight = (lbs) => {
-    const kgs = lbs / 2.20462262185;
-    return Number(kgs.toFixed(1));
-  };
 
   useEffect(() => {
     Axios.get("http://localhost:3001/api/login")

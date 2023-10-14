@@ -29,6 +29,9 @@ const Dashboard = (props) => {
     weightData,
     setWeightData,
     setUserProfile,
+    convertWeight,
+    defaultConvertWeight,
+    safeParseFloat,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -123,11 +126,6 @@ const Dashboard = (props) => {
       ...prevState,
       [exerciseName]: !prevState[exerciseName],
     }));
-  };
-
-  const defaultConvertWeight = (lbs) => {
-    const kgs = lbs / 2.20462262185;
-    return Number(kgs.toFixed(1));
   };
 
   const compareBW = (bw, weight) => {
@@ -690,6 +688,8 @@ const Dashboard = (props) => {
           setWeightData={setWeightData}
           weightData={weightData}
           setUserProfile={setUserProfile}
+          convertWeight={convertWeight}
+          defaultConvertWeight={defaultConvertWeight}
         />
       )}
 
@@ -741,6 +741,9 @@ const Dashboard = (props) => {
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
+          convertWeight={convertWeight}
+          defaultConvertWeight={defaultConvertWeight}
+          safeParseFloat={safeParseFloat}
         />
       )}
 
@@ -757,6 +760,9 @@ const Dashboard = (props) => {
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
+          convertWeight={convertWeight}
+          defaultConvertWeight={defaultConvertWeight}
+          safeParseFloat={safeParseFloat}
         />
       )}
 

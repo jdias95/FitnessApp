@@ -12,6 +12,8 @@ const WeightFormModal = (props) => {
     setWeightData,
     weightData,
     setUserProfile,
+    convertWeight,
+    defaultConvertWeight,
   } = props;
   const [weightReg, setWeightReg] = useState(
     previousWeight ? previousWeight.weight : 0
@@ -122,16 +124,6 @@ const WeightFormModal = (props) => {
     } catch (error) {
       return 0;
     }
-  };
-
-  const convertWeight = (kgs) => {
-    const lbs = kgs * 2.20462262185;
-    return Number(lbs.toFixed(1));
-  };
-
-  const defaultConvertWeight = (lbs) => {
-    const kgs = lbs / 2.20462262185;
-    return Number(kgs.toFixed(1));
   };
 
   return (

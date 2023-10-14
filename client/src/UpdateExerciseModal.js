@@ -11,6 +11,9 @@ const UpdateExerciseModal = (props) => {
     setRoutineExercises,
     formattedDate,
     setTrackedExercises,
+    convertWeight,
+    defaultConvertWeight,
+    safeParseFloat,
   } = props;
   const [nameReg, setNameReg] = useState(selectedExercise.name);
   const [repsLowReg, setRepsLowReg] = useState(selectedExercise.reps_low);
@@ -154,29 +157,6 @@ const UpdateExerciseModal = (props) => {
     } catch (error) {
       return null;
     }
-  };
-
-  const safeParseFloat = (str) => {
-    try {
-      const parsedValue = parseFloat(str);
-      if (!isNaN(parsedValue) && parsedValue >= 0) {
-        return parsedValue;
-      } else {
-        throw new Error("Value is not a valid number.");
-      }
-    } catch (error) {
-      return 0;
-    }
-  };
-
-  const convertWeight = (kgs) => {
-    const lbs = kgs * 2.20462262185;
-    return Number(lbs.toFixed(1));
-  };
-
-  const defaultConvertWeight = (lbs) => {
-    const kgs = lbs / 2.20462262185;
-    return Number(kgs.toFixed(1));
   };
 
   return (

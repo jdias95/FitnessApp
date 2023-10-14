@@ -8,6 +8,7 @@ const StatisticsModal = (props) => {
     userProfile,
     defaultConvertWeight,
   } = props;
+
   const calcVolume = (weight, sets, reps) => {
     const volume = weight * sets * reps;
     return volume;
