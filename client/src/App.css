@@ -539,6 +539,12 @@ button {
   transition: content 0.3s;
 }
 
+.stats:hover {
+  cursor: pointer;
+  content: url("../public/statistics-hover.png");
+  transition: content 0.3s;
+}
+
 @media (max-width: 1200px) {
   ::-webkit-scrollbar {
     width: 5px;

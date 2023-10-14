@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const StatisticsModal = (props) => {
   const { onClose, selectedExercise, firstExercise } = props;
-  const [volume1] = useState(
-    calcVolume(
-      selectedExercise.weight,
-      selectedExercise.sets,
-      selectedExercise.repsLow
-    )
+  const calcVolume = (weight, sets, reps) => {
+    const volume = weight * sets * reps;
+    return volume;
+  };
+
+  const volume1 = calcVolume(
+    selectedExercise.weight,
+    selectedExercise.sets,
+    selectedExercise.reps_low
   );
   const [volume2] = useState(
-    selectedExercise.repsHigh
+    selectedExercise.reps_high
       ? calcVolume(
           selectedExercise.weight,
           selectedExercise.sets,
-          selectedExercise.repsHigh
+          selectedExercise.reps_high
         )
       : 0
   );
@@ -26,16 +29,16 @@ const StatisticsModal = (props) => {
       ? calcVolume(
           firstExercise.weight,
           firstExercise.sets,
-          firstExercise.repsLow
+          firstExercise.reps_low
         )
       : 0
   );
   const [compareVolume2] = useState(
-    firstExercise && firstExercise.repsHigh
+    firstExercise && firstExercise.reps_high
       ? calcVolume(
           firstExercise.weight,
           firstExercise.sets,
-          firstExercise.repsHigh
+          firstExercise.reps_high
         )
       : 0
   );
@@ -54,10 +57,9 @@ const StatisticsModal = (props) => {
       : 0
   );
 
-  const calcVolume = (weight, sets, reps) => {
-    const volume = weight * sets * reps;
-    return volume;
-  };
+  useEffect(() => {
+    console.log(selectedExercise, firstExercise);
+  });
 
   return (
     <div className="modal">
@@ -65,91 +67,103 @@ const StatisticsModal = (props) => {
         <div className="modal-flex">
           <div className="exercise-modal-body">
             <div className="flex">
-              <p>
-                Working Weight: {selectedExercise.weight}{" "}
-                {workingWeightComparison > 0 ? (
-                  <div className="flex">
-                    <p id="positive">{"("}&#8657;</p>{" "}
-                    <p>
-                      {Number(
-                        (
-                          (workingWeightComparison / firstExercise.weight) *
-                          100
-                        ).toFixed(1)
-                      )}
-                      {")"}
-                    </p>
-                  </div>
-                ) : workingWeightComparison < 0 ? (
-                  <div className="flex">
-                    <p id="negative">{"("}&#8659; </p>{" "}
-                    <p>
-                      {Number(
-                        (
-                          (Math.abs(workingWeightComparison) /
-                            firstExercise.weight) *
-                          100
-                        ).toFixed(1)
-                      )}
-                      {")"}
-                    </p>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </p>
+              Working Weight: {selectedExercise.weight}
+              {" lbs "}
+              {workingWeightComparison > 0 ? (
+                <div className="flex">
+                  <p>&nbsp;(</p>
+                  <p id="positive">&#8657;</p>{" "}
+                  <p>
+                    {Number(
+                      (
+                        (workingWeightComparison / firstExercise.weight) *
+                        100
+                      ).toFixed(1)
+                    )}
+                    %)
+                  </p>
+                </div>
+              ) : workingWeightComparison < 0 ? (
+                <div className="flex">
+                  <p>&nbsp;(</p>
+                  <p id="negative">&#8659;</p>{" "}
+                  <p>
+                    {Number(
+                      (
+                        (Math.abs(workingWeightComparison) /
+                          firstExercise.weight) *
+                        100
+                      ).toFixed(1)
+                    )}
+                    %)
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="flex">
-              <p>
-                Volume: {volume1}
-                {volume2 ? `-${volume2}` : ""}{" "}
-                {volume1Comparison > 0 && avgVolumeComparison === 0 ? (
-                  <div className="flex">
-                    <p id="positive">{"("}&#8657;</p>{" "}
-                    <p>
-                      {Number(((volume1Comparison / volume1) * 100).toFixed(1))}
-                      {")"}
-                    </p>
-                  </div>
-                ) : volume1Comparison < 0 && avgVolumeComparison === 0 ? (
-                  <div className="flex">
-                    <p id="negative">{"("}&#8659; </p>{" "}
-                    <p>
-                      {Number(
-                        ((Math.abs(volume1Comparison) / volume1) * 100).toFixed(
-                          1
-                        )
-                      )}
-                      {")"}
-                    </p>
-                  </div>
-                ) : avgVolumeComparison > 0 ? (
-                  <div className="flex">
-                    <p id="positive">{"("}&#8657;</p>{" "}
-                    <p>
-                      {Number(
-                        ((avgVolumeComparison / avgVolume) * 100).toFixed(1)
-                      )}
-                      {")"}
-                    </p>
-                  </div>
-                ) : avgVolumeComparison < 0 ? (
-                  <div className="flex">
-                    <p id="negative">{"("}&#8659; </p>{" "}
-                    <p>
-                      {Number(
-                        (
-                          (Math.abs(avgVolumeComparison) / avgVolume) *
-                          100
-                        ).toFixed(1)
-                      )}
-                      {")"}
-                    </p>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </p>
+              Volume: {volume1}
+              {volume2 ? `-${volume2}` : ""}
+              {" lbs "}
+              {volume1Comparison > 0 && avgVolumeComparison === 0 ? (
+                <div className="flex">
+                  <p>&nbsp;(</p>
+                  <p id="positive">&#8657;</p>{" "}
+                  <p>
+                    {Number(
+                      ((volume1Comparison / compareVolume1) * 100).toFixed(1)
+                    )}
+                    %)
+                  </p>
+                </div>
+              ) : volume1Comparison < 0 && avgVolumeComparison === 0 ? (
+                <div className="flex">
+                  <p>&nbsp;(</p>
+                  <p id="negative">&#8659;</p>{" "}
+                  <p>
+                    {Number(
+                      (
+                        (Math.abs(volume1Comparison) / compareVolume1) *
+                        100
+                      ).toFixed(1)
+                    )}
+                    %)
+                  </p>
+                </div>
+              ) : avgVolumeComparison > 0 ? (
+                <div className="flex">
+                  <p>&nbsp;(</p>
+                  <p id="positive">&#8657;</p>{" "}
+                  <p>
+                    {Number(
+                      (
+                        (avgVolumeComparison /
+                          ((compareVolume1 + compareVolume2) / 2)) *
+                        100
+                      ).toFixed(1)
+                    )}
+                    %)
+                  </p>
+                </div>
+              ) : avgVolumeComparison < 0 ? (
+                <div className="flex">
+                  <p>&nbsp;(</p>
+                  <p id="negative">&#8659;</p>{" "}
+                  <p>
+                    {Number(
+                      (
+                        (Math.abs(avgVolumeComparison) /
+                          ((compareVolume1 + compareVolume2) / 2)) *
+                        100
+                      ).toFixed(1)
+                    )}
+                    %)
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div>
               <span className="modal-button-container">

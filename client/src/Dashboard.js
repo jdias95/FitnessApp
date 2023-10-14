@@ -12,6 +12,7 @@ import NotesModal from "./NotesModal";
 import * as d3 from "d3";
 import moment from "moment";
 import InstructionsModal from "./InstructionsModal";
+import StatisticsModal from "./StatisticsModal";
 
 const Dashboard = (props) => {
   const {
@@ -40,10 +41,12 @@ const Dashboard = (props) => {
     useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
+  const [showStatisticsModal, setShowStatisticsModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
   const [selectedExercise, setSelectedExercise] = useState({});
+  const [firstExercise, setFirstExercise] = useState({});
   const [weightTimeBtN, setWeightTimeBtN] = useState(0);
   const [tickMultiplier, setTickMultiplier] = useState(6);
   const [timeSelection, setTimeSelection] = useState("1 month");
@@ -87,6 +90,9 @@ const Dashboard = (props) => {
         break;
       case "instructions":
         setShowInstructionsModal(isOpen);
+        break;
+      case "exerciseStatistics":
+        setShowStatisticsModal(isOpen);
         break;
       default:
         break;
@@ -632,6 +638,22 @@ const Dashboard = (props) => {
                               {exercise.reps_high
                                 ? `-${exercise.reps_high}`
                                 : ""}
+                              {exercise.weight ? (
+                                <img
+                                  alt="exercise statistics"
+                                  className="img stats"
+                                  src={
+                                    process.env.PUBLIC_URL + "/statistics.png"
+                                  }
+                                  onClick={() => {
+                                    setSelectedExercise(exercise);
+                                    setFirstExercise(
+                                      trackedExercises[exerciseName][0]
+                                    );
+                                    toggleModal("exerciseStatistics", true);
+                                  }}
+                                />
+                              ) : null}
                             </div>
                             <img
                               className="img x"
@@ -772,6 +794,16 @@ const Dashboard = (props) => {
           onClose={() => {
             toggleModal("instructions", false);
           }}
+        />
+      )}
+
+      {showStatisticsModal && (
+        <StatisticsModal
+          onClose={() => {
+            toggleModal("exerciseStatistics", false);
+          }}
+          selectedExercise={selectedExercise}
+          firstExercise={firstExercise}
         />
       )}
     </div>
