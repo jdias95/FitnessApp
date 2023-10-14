@@ -806,6 +806,8 @@ const Dashboard = (props) => {
           }}
           selectedExercise={selectedExercise}
           firstExercise={firstExercise}
+          userProfile={userProfile}
+          defaultConvertWeight={defaultConvertWeight}
         />
       )}
     </div>

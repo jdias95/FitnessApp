@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 
 const StatisticsModal = (props) => {
-  const { onClose, selectedExercise, firstExercise } = props;
+  const {
+    onClose,
+    selectedExercise,
+    firstExercise,
+    userProfile,
+    defaultConvertWeight,
+  } = props;
   const calcVolume = (weight, sets, reps) => {
     const volume = weight * sets * reps;
     return volume;
@@ -70,12 +76,16 @@ const StatisticsModal = (props) => {
         <div className="modal-flex">
           <div className="exercise-modal-body">
             <div className="flex">
-              Working Weight: {selectedExercise.weight}
-              {" lbs "}
+              <p>Working Weight:&nbsp;</p>
+              {userProfile.measurement_type !== "metric" ? (
+                <p>{selectedExercise.weight} lbs</p>
+              ) : (
+                <p>{defaultConvertWeight(selectedExercise.weight)} kgs</p>
+              )}
               {workingWeightDifference > 0 ? (
                 <div className="flex">
                   <p>&nbsp;(</p>
-                  <p id="positive">&#8657;</p>{" "}
+                  <p id="positive">&#8657;</p>
                   <p>
                     {Number(
                       (
@@ -89,7 +99,7 @@ const StatisticsModal = (props) => {
               ) : workingWeightDifference < 0 ? (
                 <div className="flex">
                   <p>&nbsp;(</p>
-                  <p id="negative">&#8659;</p>{" "}
+                  <p id="negative">&#8659;</p>
                   <p>
                     {Number(
                       (
@@ -106,24 +116,48 @@ const StatisticsModal = (props) => {
               )}
             </div>
             <div className="flex">
-              Volume:{" "}
-              {calcVolume(
-                selectedExercise.weight,
-                selectedExercise.sets,
-                selectedExercise.reps_low
-              )}
-              {selectedExercise.reps_high
-                ? `-${calcVolume(
+              <p>Volume:&nbsp;</p>
+              {userProfile.measurement_type !== "metric" ? (
+                <p>
+                  {calcVolume(
                     selectedExercise.weight,
                     selectedExercise.sets,
-                    selectedExercise.reps_high
-                  )}`
-                : ""}
-              {" lbs "}
+                    selectedExercise.reps_low
+                  )}
+                  {selectedExercise.reps_high
+                    ? `-${calcVolume(
+                        selectedExercise.weight,
+                        selectedExercise.sets,
+                        selectedExercise.reps_high
+                      )}`
+                    : ""}
+                  {" lbs "}
+                </p>
+              ) : (
+                <p>
+                  {defaultConvertWeight(
+                    calcVolume(
+                      selectedExercise.weight,
+                      selectedExercise.sets,
+                      selectedExercise.reps_low
+                    )
+                  )}
+                  {selectedExercise.reps_high
+                    ? `-${defaultConvertWeight(
+                        calcVolume(
+                          selectedExercise.weight,
+                          selectedExercise.sets,
+                          selectedExercise.reps_high
+                        )
+                      )}`
+                    : ""}
+                  {" kgs "}
+                </p>
+              )}
               {volumeDifference > 0 && firstVolume ? (
                 <div className="flex">
                   <p>&nbsp;(</p>
-                  <p id="positive">&#8657;</p>{" "}
+                  <p id="positive">&#8657;</p>
                   <p>
                     {Number(
                       ((volumeDifference / firstVolume) * 100).toFixed(1)
@@ -134,7 +168,7 @@ const StatisticsModal = (props) => {
               ) : volumeDifference < 0 && firstVolume ? (
                 <div className="flex">
                   <p>&nbsp;(</p>
-                  <p id="negative">&#8659;</p>{" "}
+                  <p id="negative">&#8659;</p>
                   <p>
                     {Number(
                       (
