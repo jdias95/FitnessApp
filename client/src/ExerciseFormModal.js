@@ -16,7 +16,7 @@ const ExerciseFormModal = (props) => {
     safeParseFloat,
   } = props;
   const [nameReg, setNameReg] = useState("");
-  const [repsHighReg, setRepsHighReg] = useState();
+  const [repsHighReg, setRepsHighReg] = useState(0);
   const [repsLowReg, setRepsLowReg] = useState(1);
   const [setsReg, setSetsReg] = useState(1);
   const [weightReg, setWeightReg] = useState(0);
@@ -193,17 +193,22 @@ const ExerciseFormModal = (props) => {
                   value={repsLowReg}
                   onChange={(e) => {
                     setRepsLowReg(safeParseInt2(e.target.value));
+                    if (repsLowReg >= repsHighReg) {
+                      setRepsHighReg(0);
+                    }
                   }}
                 />
                 <p>-</p>
                 <input
                   type="number"
                   id="narrow"
-                  value={repsHighReg === null ? repsLowReg + 1 : repsHighReg}
+                  min={repsLowReg + 1}
+                  value={!repsHighReg ? "" : repsHighReg}
                   onChange={(e) => {
                     setRepsHighReg(safeParseInt3(e.target.value));
                   }}
                 />
+                {console.log(repsLowReg, repsHighReg)}
               </div>
               {userProfile.measurement_type !== "metric" ? (
                 <div>

@@ -201,13 +201,17 @@ const UpdateExerciseModal = (props) => {
                   value={repsLowReg}
                   onChange={(e) => {
                     setRepsLowReg(safeParseInt2(e.target.value));
+                    if (repsLowReg >= repsHighReg) {
+                      setRepsHighReg(0);
+                    }
                   }}
                 />
                 <p>-</p>
                 <input
                   type="number"
                   id="narrow"
-                  value={repsHighReg === null ? repsLowReg + 1 : repsHighReg}
+                  min={repsLowReg + 1}
+                  value={!repsHighReg ? "" : repsHighReg}
                   onChange={(e) => {
                     setRepsHighReg(safeParseInt3(e.target.value));
                   }}
