@@ -85,7 +85,7 @@
   height: auto;
   position: absolute;
   left: 50%;
-  top: calc(50% - 4vh);
+  top: calc(50% - 4rem);
   transform: translate(-50%, -50%);
 }
 
@@ -234,11 +234,6 @@ button:hover {
 }
 
 button {
-  padding: 0.3rem;
-}
-
-.form button {
-  width: 5rem;
   margin: 0.5rem 0;
   padding: 0.3rem;
 }
@@ -574,6 +569,10 @@ button {
   .graph {
     width: 60%;
   }
+
+  .button-container {
+    margin: 0.5rem 0;
+  }
 }
 
 @media (max-width: 800px) {
@@ -628,6 +627,7 @@ button {
 
   .App {
     top: 1rem;
+    min-height: calc(100vh - 2rem);
   }
 
   .background-container {
@@ -635,5 +635,15 @@ button {
     height: calc(100vh - 2.5rem);
     top: 0.5rem;
     position: relative;
+  }
+
+  .exercise-modal-body,
+  .modal-body {
+    padding: 0.5rem;
+  }
+
+  .login,
+  .register {
+    top: calc(50% - 1rem);
   }
 }

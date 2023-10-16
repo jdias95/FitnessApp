@@ -142,7 +142,7 @@ const ProfilePage = (props) => {
                   <div className="flex spec">
                     <label>Weight: </label>
                     <p className="item">
-                      {userProfile.weight ? userProfile.weight : ""} lbs
+                      {userProfile.weight ? `${userProfile.weight} lbs` : ""}
                     </p>
                   </div>
                   <div className="flex spec">
@@ -150,12 +150,13 @@ const ProfilePage = (props) => {
                     <div className="flex">
                       <p className="item">
                         {userProfile.height
-                          ? Math.floor(userProfile.height / 12)
-                          : ""}{" "}
-                        ft
+                          ? `${Math.floor(userProfile.height / 12)} ft`
+                          : ""}
                       </p>
                       <p className="item">
-                        {userProfile.height ? userProfile.height % 12 : ""} in
+                        {userProfile.height
+                          ? `${userProfile.height % 12} in`
+                          : ""}
                       </p>
                     </div>
                   </div>
@@ -166,18 +167,16 @@ const ProfilePage = (props) => {
                     <label>Weight: </label>
                     <p className="item">
                       {userProfile.weight
-                        ? defaultConvertWeight(userProfile.weight)
-                        : ""}{" "}
-                      kg
+                        ? `${defaultConvertWeight(userProfile.weight)} kg`
+                        : ""}
                     </p>
                   </div>
                   <div className="flex spec">
                     <label>Height: </label>
                     <p className="item">
                       {userProfile.height
-                        ? defaultConvertHeightMetric(userProfile.height)
-                        : ""}{" "}
-                      cm
+                        ? `${defaultConvertHeightMetric(userProfile.height)} cm`
+                        : ""}
                     </p>
                   </div>
                 </div>
@@ -236,7 +235,7 @@ const ProfilePage = (props) => {
                   </p>
                 </div>
               ) : null}
-              {calorieBudget && userProfile.weight_goal !== 0 ? (
+              {calorieBudget && userProfile.weight_goal ? (
                 <div className="flex spec">
                   <label>Daily Calorie Budget: </label>
                   <p className="item">{calorieBudget}</p>

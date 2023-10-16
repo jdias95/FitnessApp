@@ -138,10 +138,6 @@ const ExerciseFormModal = (props) => {
 
   const safeParseInt3 = (str) => {
     try {
-      if (str === null) {
-        return null;
-      }
-
       const parsedValue = parseInt(str);
       if (!isNaN(parsedValue) && parsedValue > repsLowReg) {
         return parsedValue;
@@ -179,9 +175,14 @@ const ExerciseFormModal = (props) => {
                 <input
                   type="number"
                   id="narrow"
-                  value={setsReg}
+                  placeholder="1"
+                  value={setsReg === 1 || !setsReg ? "" : setsReg}
                   onChange={(e) => {
-                    setSetsReg(safeParseInt2(e.target.value));
+                    if (parseInt(e.target.value) === 1) {
+                      setSetsReg(2);
+                    } else {
+                      setSetsReg(safeParseInt2(e.target.value));
+                    }
                   }}
                 />
               </div>
@@ -190,10 +191,16 @@ const ExerciseFormModal = (props) => {
                 <input
                   type="number"
                   id="narrow"
-                  value={repsLowReg}
+                  placeholder="1"
+                  value={repsLowReg === 1 || !repsLowReg ? "" : repsLowReg}
                   onChange={(e) => {
-                    setRepsLowReg(safeParseInt2(e.target.value));
-                    if (repsLowReg >= repsHighReg) {
+                    console.log(e.target.value);
+                    if (parseInt(e.target.value) === 1) {
+                      setRepsLowReg(2);
+                    } else {
+                      setRepsLowReg(safeParseInt2(e.target.value));
+                    }
+                    if (repsLowReg >= repsHighReg - 1) {
                       setRepsHighReg(0);
                     }
                   }}
@@ -208,7 +215,6 @@ const ExerciseFormModal = (props) => {
                     setRepsHighReg(safeParseInt3(e.target.value));
                   }}
                 />
-                {console.log(repsLowReg, repsHighReg)}
               </div>
               {userProfile.measurement_type !== "metric" ? (
                 <div>
@@ -216,8 +222,9 @@ const ExerciseFormModal = (props) => {
                   <input
                     type="number"
                     id="wide"
+                    placeholder="0"
                     step="0.1"
-                    value={weightReg}
+                    value={!weightReg ? "" : weightReg}
                     onChange={(e) => {
                       setWeightReg(safeParseFloat(e.target.value));
                     }}
@@ -231,7 +238,8 @@ const ExerciseFormModal = (props) => {
                     type="number"
                     id="wide"
                     step="0.1"
-                    value={defaultConvertWeight(weightReg)}
+                    placeholder="0"
+                    value={!weightReg ? "" : defaultConvertWeight(weightReg)}
                     onChange={(e) => {
                       setWeightReg(
                         convertWeight(safeParseFloat(e.target.value))

@@ -146,10 +146,6 @@ const UpdateExerciseModal = (props) => {
 
   const safeParseInt3 = (str) => {
     try {
-      if (str === null) {
-        return null;
-      }
-
       const parsedValue = parseInt(str);
       if (!isNaN(parsedValue) && parsedValue > repsLowReg) {
         return parsedValue;
@@ -187,9 +183,14 @@ const UpdateExerciseModal = (props) => {
                 <input
                   type="number"
                   id="narrow"
-                  value={setsReg}
+                  placeholder="1"
+                  value={setsReg === 1 || !setsReg ? "" : setsReg}
                   onChange={(e) => {
-                    setSetsReg(safeParseInt2(e.target.value));
+                    if (parseInt(e.target.value) === 1) {
+                      setSetsReg(2);
+                    } else {
+                      setSetsReg(safeParseInt2(e.target.value));
+                    }
                   }}
                 />
               </div>
@@ -198,10 +199,15 @@ const UpdateExerciseModal = (props) => {
                 <input
                   type="number"
                   id="narrow"
-                  value={repsLowReg}
+                  placeholder="1"
+                  value={repsLowReg === 1 || !repsLowReg ? "" : repsLowReg}
                   onChange={(e) => {
-                    setRepsLowReg(safeParseInt2(e.target.value));
-                    if (repsLowReg >= repsHighReg) {
+                    if (parseInt(e.target.value) === 1) {
+                      setRepsLowReg(2);
+                    } else {
+                      setRepsLowReg(safeParseInt2(e.target.value));
+                    }
+                    if (repsLowReg >= repsHighReg - 1) {
                       setRepsHighReg(0);
                     }
                   }}
@@ -224,7 +230,8 @@ const UpdateExerciseModal = (props) => {
                     type="number"
                     id="wide"
                     step="0.1"
-                    value={weightReg}
+                    placeholder="0"
+                    value={!weightReg ? "" : weightReg}
                     onChange={(e) => {
                       setWeightReg(safeParseFloat(e.target.value));
                     }}
@@ -238,7 +245,8 @@ const UpdateExerciseModal = (props) => {
                     type="number"
                     id="wide"
                     step="0.1"
-                    value={defaultConvertWeight(weightReg)}
+                    placeholder="0"
+                    value={!weightReg ? "" : defaultConvertWeight(weightReg)}
                     onChange={(e) => {
                       setWeightReg(
                         convertWeight(safeParseFloat(e.target.value))
