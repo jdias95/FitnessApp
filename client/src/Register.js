@@ -7,6 +7,9 @@ const Register = (props) => {
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [firstNameReg, setFirstNameReg] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,42 +21,106 @@ const Register = (props) => {
     });
   }, [setLoginStatus]);
 
+  const isEmailValid = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
+
   const register = () => {
+    setEmailError("");
+    setPasswordError("");
+    setFirstNameError("");
+
+    if (!emailReg) {
+      setEmailError("Must enter email");
+      return;
+    } else if (!isEmailValid(emailReg)) {
+      setEmailError("Invalid email format");
+      return;
+    } else if (!passwordReg) {
+      setPasswordError("Must enter password");
+      return;
+    } else if (!firstNameReg) {
+      setFirstNameError("Must enter name");
+      return;
+    }
+
+    setEmailError("");
+    setPasswordError("");
+    setFirstNameError("");
+
     Axios.post("http://localhost:3001/api/register", {
       email: emailReg,
       password: passwordReg,
       firstName: firstNameReg,
-    }).then((response) => {
-      console.log("Server respons:", response.data);
-      navigate("/login");
-    });
+    })
+      .then((response) => {
+        console.log("Server response:", response.data);
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("Error registering", error);
+      });
   };
+
   return (
     <div className="App home-container">
       <div className="register container">
         <div className="form">
           <h1>Registration</h1>
           <label>Email:</label>
-          <input
-            type="text"
-            onChange={(e) => {
-              setEmailReg(e.target.value);
-            }}
-          />
+          <div className="flex">
+            <input
+              type="text"
+              value={emailReg}
+              onChange={(e) => {
+                if (e.target.value.length >= 100) {
+                  setEmailReg(
+                    e.target.value.slice(0, e.target.value.length - 1)
+                  );
+                } else {
+                  setEmailReg(e.target.value);
+                }
+              }}
+            />
+            {emailError && <p className="error-message">{emailError}</p>}
+          </div>
           <label>Password:</label>
-          <input
-            type="password"
-            onChange={(e) => {
-              setPasswordReg(e.target.value);
-            }}
-          />
+          <div className="flex">
+            <input
+              type="password"
+              value={passwordReg}
+              onChange={(e) => {
+                if (e.target.value.length >= 100) {
+                  setPasswordReg(
+                    e.target.value.slice(0, e.target.value.length - 1)
+                  );
+                } else {
+                  setPasswordReg(e.target.value);
+                }
+              }}
+            />
+            {passwordError && <p className="error-message">{passwordError}</p>}
+          </div>
           <label>First Name:</label>
-          <input
-            type="text"
-            onChange={(e) => {
-              setFirstNameReg(e.target.value);
-            }}
-          />
+          <div className="flex">
+            <input
+              type="text"
+              value={firstNameReg}
+              onChange={(e) => {
+                if (e.target.value.length >= 50) {
+                  setFirstNameReg(
+                    e.target.value.slice(0, e.target.value.length - 1)
+                  );
+                } else {
+                  setFirstNameReg(e.target.value);
+                }
+              }}
+            />
+            {firstNameError && (
+              <p className="error-message">{firstNameError}</p>
+            )}
+          </div>
           <div className="button-container">
             <button onClick={register}> Register </button>
           </div>

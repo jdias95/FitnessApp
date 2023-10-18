@@ -6,6 +6,7 @@ const Login = (props) => {
   const { setLoginStatus } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,13 +19,21 @@ const Login = (props) => {
   }, [setLoginStatus]);
 
   const login = () => {
+    setLoginError("");
+
+    if (!email || !password) {
+      setLoginError("Must enter login information");
+      return;
+    }
+
     Axios.post("http://localhost:3001/api/login", {
       email: email,
       password: password,
     })
       .then((response) => {
         if (response.data.message) {
-          setLoginStatus(response.data.message);
+          setLoginError(response.data.message);
+          return;
         } else {
           localStorage.setItem(
             "authToken",
@@ -49,17 +58,28 @@ const Login = (props) => {
           <label>Email: </label>
           <input
             type="text"
+            value={email}
             onChange={(e) => {
-              setEmail(e.target.value);
+              if (e.target.value.length >= 100) {
+                setEmail(e.target.value.slice(0, e.target.value.length - 1));
+              } else {
+                setEmail(e.target.value);
+              }
             }}
           />
           <label>Password: </label>
           <input
             type="password"
+            value={password}
             onChange={(e) => {
-              setPassword(e.target.value);
+              if (e.target.value.length >= 100) {
+                setPassword(e.target.value.slice(0, e.target.value.length - 1));
+              } else {
+                setPassword(e.target.value);
+              }
             }}
           />
+          {loginError && <p className="error-message2">{loginError}</p>}
           <div className="button-container">
             <button onClick={login}> Login </button>
           </div>

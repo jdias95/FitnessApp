@@ -92,7 +92,7 @@ app.post("/api/login", (req, res) => {
           console.log(req.session.user);
           res.send(result);
         } else {
-          res.send({ message: "Wrong email/password combination!" });
+          res.send({ message: "Wrong email/password combination" });
         }
       });
     } else {

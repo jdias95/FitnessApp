@@ -126,6 +126,16 @@
   position: relative;
 }
 
+.error-message {
+  color: #f03a47;
+  margin: 0 0 0 1em;
+}
+
+.error-message2 {
+  color: #f03a47;
+  margin: 1em 0 0 0;
+}
+
 .weight-change-container {
   text-align: center;
 }
@@ -301,7 +311,7 @@ button {
 }
 
 .workout-list-clickable:hover .caret {
-  color: #6dd3ce;
+  color: #acedffc7;
   cursor: pointer;
 }
 
@@ -310,7 +320,7 @@ button {
 }
 
 .tracked-clickable:hover .caret {
-  color: #6dd3ce;
+  color: #acedffc7;
   cursor: pointer;
 }
 
