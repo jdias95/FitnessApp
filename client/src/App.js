@@ -30,7 +30,12 @@ function App() {
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
   const day = String(currentDate.getDate()).padStart(2, "0");
-  const formattedDate = `${year}-${month}-${day}`;
+  const time = String(
+    `${String(currentDate.getHours()).padStart(2, "0")}:${String(
+      currentDate.getMinutes()
+    ).padStart(2, "0")}:${String(currentDate.getSeconds()).padStart(2, "0")}`
+  );
+  const formattedDate = `${year}-${month}-${day}T${time}`;
 
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
@@ -50,13 +55,17 @@ function App() {
   const safeParseFloat = (str) => {
     try {
       const parsedValue = parseFloat(str);
+      const hasMultipleDigitsAfterDecimal = /(\.\d*)\d{2,}/.test(str);
       if (!isNaN(parsedValue) && parsedValue >= 0) {
+        if (str.length >= 6 || hasMultipleDigitsAfterDecimal) {
+          return parseFloat(str.slice(0, str.length - 1));
+        }
         return parsedValue;
       } else {
         throw new Error("Value is not a valid number.");
       }
     } catch (error) {
-      return 0;
+      return "";
     }
   };
 

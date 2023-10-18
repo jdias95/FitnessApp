@@ -301,7 +301,7 @@ button {
 }
 
 .workout-list-clickable:hover .caret {
-  color: #acedff;
+  color: #6dd3ce;
   cursor: pointer;
 }
 
@@ -310,7 +310,7 @@ button {
 }
 
 .tracked-clickable:hover .caret {
-  color: #acedff;
+  color: #6dd3ce;
   cursor: pointer;
 }
 
@@ -397,7 +397,7 @@ button {
 }
 
 #narrow {
-  width: 2rem;
+  width: 2.5rem;
 }
 
 .exercise-modal-body p {

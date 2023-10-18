@@ -29,10 +29,11 @@ const UpdateExerciseModal = (props) => {
   const updateExercise = (id) => {
     Axios.put(`http://localhost:3001/api/update/exercise/${id}`, {
       name: nameReg,
-      repsLow: repsLowReg,
-      repsHigh: repsHighReg,
-      sets: setsReg,
-      weight: weightReg,
+      repsLow: repsLowReg === "" ? 1 : repsLowReg,
+      repsHigh:
+        repsHighReg === "" || repsHighReg <= repsLowReg ? null : repsHighReg,
+      sets: setsReg === "" ? 1 : setsReg,
+      weight: weightReg === "" ? 0 : weightReg,
       tracked: trackReg,
       bw: bwReg,
       notes: notesReg,
@@ -51,10 +52,13 @@ const UpdateExerciseModal = (props) => {
             updatedRoutineExercises[indexToUpdate] = {
               id: id,
               name: nameReg,
-              reps_low: repsLowReg,
-              reps_high: repsHighReg,
-              sets: setsReg,
-              weight: weightReg,
+              reps_low: repsLowReg === "" ? 1 : repsLowReg,
+              reps_high:
+                repsHighReg === "" || repsHighReg <= repsLowReg
+                  ? null
+                  : repsHighReg,
+              sets: setsReg === "" ? 1 : setsReg,
+              weight: weightReg === "" ? 0 : weightReg,
               tracked: trackReg,
               bw: bwReg,
               notes: notesReg,
@@ -66,10 +70,13 @@ const UpdateExerciseModal = (props) => {
               userId: loginStatus.id,
               exerciseId: id,
               name: nameReg,
-              repsHigh: repsHighReg,
-              repsLow: repsLowReg,
-              sets: setsReg,
-              weight: weightReg,
+              repsHigh:
+                repsHighReg === "" || repsHighReg <= repsLowReg
+                  ? null
+                  : repsHighReg,
+              repsLow: repsLowReg === "" ? 1 : repsLowReg,
+              sets: setsReg === "" ? 1 : setsReg,
+              weight: weightReg === "" ? 0 : weightReg,
               bw: bwReg,
               date: formattedDate,
             })
@@ -84,10 +91,13 @@ const UpdateExerciseModal = (props) => {
                           id: response2.data.insertId,
                           exercise_id: id,
                           name: nameReg,
-                          sets: setsReg,
-                          reps_high: repsHighReg,
-                          reps_low: repsLowReg,
-                          weight: weightReg,
+                          sets: setsReg === "" ? 1 : setsReg,
+                          reps_high:
+                            repsHighReg === "" || repsHighReg <= repsLowReg
+                              ? null
+                              : repsHighReg,
+                          reps_low: repsLowReg === "" ? 1 : repsLowReg,
+                          weight: weightReg === "" ? 0 : weightReg,
                           bw: bwReg,
                           date: formattedDate,
                         },
@@ -101,10 +111,13 @@ const UpdateExerciseModal = (props) => {
                           id: response2.data.insertId,
                           exercise_id: id,
                           name: nameReg,
-                          sets: setsReg,
-                          reps_high: repsHighReg,
-                          reps_low: repsLowReg,
-                          weight: weightReg,
+                          sets: setsReg === "" ? 1 : setsReg,
+                          reps_high:
+                            repsHighReg === "" || repsHighReg <= repsLowReg
+                              ? null
+                              : repsHighReg,
+                          reps_low: repsLowReg === "" ? 1 : repsLowReg,
+                          weight: weightReg === "" ? 0 : weightReg,
                           bw: bwReg,
                           date: formattedDate,
                         },
@@ -127,33 +140,23 @@ const UpdateExerciseModal = (props) => {
         onClose();
       })
       .catch((error) => {
-        console.error("Error updating routine:", error);
+        console.error("Error updating exercise:", error);
       });
   };
 
-  const safeParseInt2 = (str) => {
+  const safeParseInt = (str) => {
     try {
       const parsedValue = parseInt(str);
       if (!isNaN(parsedValue) && parsedValue >= 1) {
+        if (str.length >= 3) {
+          return parseInt(str.slice(0, 2));
+        }
         return parsedValue;
       } else {
         throw new Error("Value is not a valid number.");
       }
     } catch (error) {
-      return 1;
-    }
-  };
-
-  const safeParseInt3 = (str) => {
-    try {
-      const parsedValue = parseInt(str);
-      if (!isNaN(parsedValue) && parsedValue > repsLowReg) {
-        return parsedValue;
-      } else {
-        throw new Error("Value is not a valid number.");
-      }
-    } catch (error) {
-      return null;
+      return "";
     }
   };
 
@@ -174,7 +177,13 @@ const UpdateExerciseModal = (props) => {
                   placeholder="Ex: Bench Press"
                   value={nameReg}
                   onChange={(e) => {
-                    setNameReg(e.target.value);
+                    if (e.target.value.length >= 45) {
+                      setNameReg(
+                        e.target.value.slice(0, e.target.value.length - 1)
+                      );
+                    } else {
+                      setNameReg(e.target.value);
+                    }
                   }}
                 />
               </div>
@@ -184,13 +193,11 @@ const UpdateExerciseModal = (props) => {
                   type="number"
                   id="narrow"
                   placeholder="1"
-                  value={setsReg === 1 || !setsReg ? "" : setsReg}
+                  min="1"
+                  max="99"
+                  value={!setsReg ? "" : setsReg}
                   onChange={(e) => {
-                    if (parseInt(e.target.value) === 1) {
-                      setSetsReg(2);
-                    } else {
-                      setSetsReg(safeParseInt2(e.target.value));
-                    }
+                    setSetsReg(safeParseInt(e.target.value));
                   }}
                 />
               </div>
@@ -200,26 +207,22 @@ const UpdateExerciseModal = (props) => {
                   type="number"
                   id="narrow"
                   placeholder="1"
-                  value={repsLowReg === 1 || !repsLowReg ? "" : repsLowReg}
+                  min="1"
+                  max="99"
+                  value={!repsLowReg ? "" : repsLowReg}
                   onChange={(e) => {
-                    if (parseInt(e.target.value) === 1) {
-                      setRepsLowReg(2);
-                    } else {
-                      setRepsLowReg(safeParseInt2(e.target.value));
-                    }
-                    if (repsLowReg >= repsHighReg - 1) {
-                      setRepsHighReg(0);
-                    }
+                    setRepsLowReg(safeParseInt(e.target.value));
                   }}
                 />
                 <p>-</p>
                 <input
                   type="number"
                   id="narrow"
-                  min={repsLowReg + 1}
+                  min="0"
+                  max="99"
                   value={!repsHighReg ? "" : repsHighReg}
                   onChange={(e) => {
-                    setRepsHighReg(safeParseInt3(e.target.value));
+                    setRepsHighReg(safeParseInt(e.target.value));
                   }}
                 />
               </div>
@@ -231,6 +234,8 @@ const UpdateExerciseModal = (props) => {
                     id="wide"
                     step="0.1"
                     placeholder="0"
+                    min="0"
+                    max="1500"
                     value={!weightReg ? "" : weightReg}
                     onChange={(e) => {
                       setWeightReg(safeParseFloat(e.target.value));
@@ -265,7 +270,13 @@ const UpdateExerciseModal = (props) => {
                   cols="30"
                   value={notesReg}
                   onChange={(e) => {
-                    setNotesReg(e.target.value);
+                    if (e.target.value.length >= 300) {
+                      setNotesReg(
+                        e.target.value.slice(0, e.target.value.length - 1)
+                      );
+                    } else {
+                      setNotesReg(e.target.value);
+                    }
                   }}
                 />
               </div>

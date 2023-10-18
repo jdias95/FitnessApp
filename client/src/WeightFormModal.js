@@ -14,6 +14,7 @@ const WeightFormModal = (props) => {
     setUserProfile,
     convertWeight,
     defaultConvertWeight,
+    safeParseFloat,
   } = props;
   const [weightReg, setWeightReg] = useState(
     previousWeight ? previousWeight.weight : 0
@@ -32,11 +33,11 @@ const WeightFormModal = (props) => {
       console.error("Error updating weight:", error);
     });
 
-    if (previousWeight.date === formattedDate) {
+    if (previousWeight.date.slice(0, 10) === formattedDate.slice(0, 10)) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
         weight: weightReg,
-        date: formattedDate,
+        date: formattedDate.slice(0, 10),
       })
         .then((response) => {
           const updatedWeightData = [...weightData];
@@ -113,19 +114,6 @@ const WeightFormModal = (props) => {
     }
   };
 
-  const safeParseFloat = (str) => {
-    try {
-      const parsedValue = parseFloat(str);
-      if (!isNaN(parsedValue) && parsedValue >= 0) {
-        return parsedValue;
-      } else {
-        throw new Error("Value is not a valid number.");
-      }
-    } catch (error) {
-      return 0;
-    }
-  };
-
   return (
     <div className="modal">
       {userProfile && (
@@ -147,7 +135,6 @@ const WeightFormModal = (props) => {
                     }}
                   />
                   <label>lbs</label>
-                  {/* {console.log(previousWeight)} */}
                 </div>
               ) : (
                 <div>

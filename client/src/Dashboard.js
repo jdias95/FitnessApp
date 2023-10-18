@@ -697,6 +697,7 @@ const Dashboard = (props) => {
           setUserProfile={setUserProfile}
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
+          safeParseFloat={safeParseFloat}
         />
       )}
 
