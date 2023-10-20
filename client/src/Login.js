@@ -26,6 +26,8 @@ const Login = (props) => {
       return;
     }
 
+    setLoginError("");
+
     Axios.post("http://localhost:3001/api/login", {
       email: email,
       password: password,
@@ -55,33 +57,41 @@ const Login = (props) => {
       <div className="login container">
         <div className="form">
           <h1>Login</h1>
-          <label>Email: </label>
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => {
-              if (e.target.value.length >= 100) {
-                setEmail(e.target.value.slice(0, e.target.value.length - 1));
-              } else {
-                setEmail(e.target.value);
-              }
-            }}
-          />
-          <label>Password: </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => {
-              if (e.target.value.length >= 100) {
-                setPassword(e.target.value.slice(0, e.target.value.length - 1));
-              } else {
-                setPassword(e.target.value);
-              }
-            }}
-          />
-          {loginError && <p className="error-message2">{loginError}</p>}
+          <div className="flex-column auth-flex-end">
+            <input
+              type="text"
+              value={email}
+              placeholder="Email"
+              onChange={(e) => {
+                if (e.target.value.length >= 100) {
+                  setEmail(e.target.value.slice(0, e.target.value.length - 1));
+                } else {
+                  setEmail(e.target.value);
+                }
+              }}
+            />
+            <input
+              type="password"
+              value={password}
+              placeholder="Password"
+              onChange={(e) => {
+                if (e.target.value.length >= 100) {
+                  setPassword(
+                    e.target.value.slice(0, e.target.value.length - 1)
+                  );
+                } else {
+                  setPassword(e.target.value);
+                }
+              }}
+            />
+            <a className="forgot-password">Forgot Password?</a>
+            {loginError && <p className="error-message2">{loginError}</p>}
+          </div>
           <div className="button-container">
-            <button onClick={login}> Login </button>
+            <button className="auth-button" onClick={login}>
+              {" "}
+              Log In{" "}
+            </button>
           </div>
         </div>
       </div>

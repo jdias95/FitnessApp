@@ -67,12 +67,12 @@ const Register = (props) => {
     <div className="App home-container">
       <div className="register container">
         <div className="form">
-          <h1>Registration</h1>
-          <label>Email:</label>
+          <h1>Register</h1>
           <div className="flex">
             <input
               type="text"
               value={emailReg}
+              placeholder="Email"
               onChange={(e) => {
                 if (e.target.value.length >= 100) {
                   setEmailReg(
@@ -85,11 +85,11 @@ const Register = (props) => {
             />
             {emailError && <p className="error-message">{emailError}</p>}
           </div>
-          <label>Password:</label>
           <div className="flex">
             <input
               type="password"
               value={passwordReg}
+              placeholder="Password"
               onChange={(e) => {
                 if (e.target.value.length >= 100) {
                   setPasswordReg(
@@ -102,11 +102,11 @@ const Register = (props) => {
             />
             {passwordError && <p className="error-message">{passwordError}</p>}
           </div>
-          <label>First Name:</label>
           <div className="flex">
             <input
               type="text"
               value={firstNameReg}
+              placeholder="First Name"
               onChange={(e) => {
                 if (e.target.value.length >= 50) {
                   setFirstNameReg(
@@ -122,7 +122,10 @@ const Register = (props) => {
             )}
           </div>
           <div className="button-container">
-            <button onClick={register}> Register </button>
+            <button className="auth-button" onClick={register}>
+              {" "}
+              Register{" "}
+            </button>
           </div>
         </div>
       </div>

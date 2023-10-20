@@ -188,11 +188,11 @@ const ProfileForm = (props) => {
     navigate("/profile");
   };
 
-  useEffect(() => {
-    if (weightGoalReg === 0) {
-      setTargetWeightReg(0);
-    }
-  }, [weightGoalReg]);
+  // useEffect(() => {
+  //   if (weightGoalReg === 0) {
+  //     setTargetWeightReg(0);
+  //   }
+  // }, [weightGoalReg]);
 
   const convertHeightMetric = (cm) => {
     const inches = cm * 0.3937008;

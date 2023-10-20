@@ -74,6 +74,13 @@
   font-weight: bold;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+}
+
 .register h1,
 .login h1 {
   text-align: center;
@@ -87,6 +94,39 @@
   left: 50%;
   top: calc(50% - 4rem);
   transform: translate(-50%, -50%);
+  height: 20em;
+  max-height: 70%;
+  display: flex;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: flex-start;
+}
+
+.button-container {
+  display: flex;
+  justify-content: right;
+  margin-top: auto;
+}
+
+.auth-button {
+  width: 6em;
+}
+
+.forgot-password {
+  font-size: 12px;
+}
+
+.forgot-password:hover {
+  cursor: pointer;
+  color: #acedff;
+}
+
+.auth-flex-end {
+  align-items: flex-end;
 }
 
 .background-container {
@@ -214,11 +254,6 @@
   transition: content 0.3s;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-}
-
 .form input {
   margin: 0.5rem 0;
   width: 12rem;
@@ -227,11 +262,6 @@
 .form #input {
   margin: 1rem 0;
   width: 8rem;
-}
-
-.button-container {
-  display: flex;
-  justify-content: right;
 }
 
 a {
@@ -582,6 +612,11 @@ button {
 
   .button-container {
     margin: 0.5rem 0;
+  }
+
+  .login .button-container,
+  .register .button-container {
+    margin-top: auto;
   }
 }
 
