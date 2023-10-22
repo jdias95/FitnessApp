@@ -5,6 +5,7 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 const app = express();
 require("dotenv").config();
 
@@ -42,6 +43,84 @@ const db = mysql.createPool({
   database: "fitnessapp",
 });
 
+const sendEmail = ({ OTP, recipient_email }) => {
+  return new Promise((resolve, reject) => {
+    const transporter = nodemailer.createTransport({
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      auth: {
+        user: "dias.joshua7@gmail.com",
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    const mail_configs = {
+      from: "wegojim315@gmail.com",
+      to: recipient_email,
+      subject: "Reset Password",
+      html: `<!DOCTYPE html>
+              <html>
+                <body>
+                  <div>
+                    <p>Use the temporary password below to reset your password:</p>
+                    <h2>${OTP}</h2>
+                  </div>
+                </body>
+              </html>`,
+    };
+
+    transporter.sendMail(mail_configs, (error, info) => {
+      if (error) {
+        console.error(error);
+        return reject({ message: "An error has occured" });
+      }
+      return resolve({ message: "Email sent successfully" });
+    });
+  });
+};
+
+app.post("/api/send-recovery-email", (req, res) => {
+  const sqlSelect = `SELECT * FROM users WHERE email = ?`;
+
+  db.query(sqlSelect, [req.body.recipient_email], (err, result) => {
+    if (err) {
+      console.log("Error executing SELECT query:", err);
+    }
+
+    if (result.length > 0) {
+      sendEmail(req.body)
+        .then((response) => res.send(response.message))
+        .catch((error) => res.status(500).send(error.message));
+    } else {
+      res.send({ message: "User doesn't exist" });
+    }
+  });
+});
+
+app.put("/api/reset-password", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const sqlUpdate = `UPDATE users SET password = ? WHERE email = ?`;
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log("Error hashing password:", err);
+      return res.status(500).json({ message: "Error during password reset" });
+    }
+
+    db.query(sqlUpdate, [hash, email], (err, result) => {
+      if (err) {
+        console.log("Error executing SQL query:", err);
+        return res.status(500).json({ message: "Error during password reset" });
+      } else {
+        console.log("Password reset successful:", result);
+        res.status(200).json({ message: "Password reset successful" });
+      }
+    });
+  });
+});
+
 app.post("/api/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -62,7 +141,7 @@ app.post("/api/register", (req, res) => {
         return res.status(500).json({ message: "Error during registration" });
       }
       console.log("Registration successful:", result);
-      res.status(200).json({ messagea: "Registration successful" });
+      res.status(200).json({ message: "Registration successful" });
     });
   });
 });

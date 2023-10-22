@@ -17,8 +17,12 @@ import Home from "./Home";
 import "./App.css";
 import Axios from "axios";
 import moment from "moment";
+import OTPClass from "./OTP";
+import ResetPassword from "./ResetPassword";
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [OTP, setOTP] = useState(0);
   const [loginStatus, setLoginStatus] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [previousWeight, setPreviousWeight] = useState({});
@@ -74,14 +78,37 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Root setLoginStatus={setLoginStatus} />}>
-        <Route index element={<Home setLoginStatus={setLoginStatus} />} />
+        <Route
+          index
+          element={
+            <Home loginStatus={loginStatus} setLoginStatus={setLoginStatus} />
+          }
+        />
         <Route
           path="register"
-          element={<Register setLoginStatus={setLoginStatus} />}
+          element={
+            <Register
+              loginStatus={loginStatus}
+              setLoginStatus={setLoginStatus}
+            />
+          }
         />
         <Route
           path="login"
-          element={<Login setLoginStatus={setLoginStatus} />}
+          element={
+            <Login
+              loginStatus={loginStatus}
+              setLoginStatus={setLoginStatus}
+              setOTP={setOTP}
+              email={email}
+              setEmail={setEmail}
+            />
+          }
+        />
+        <Route path="otp" element={<OTPClass OTP={OTP} email={email} />} />
+        <Route
+          path="password-reset"
+          element={<ResetPassword email={email} />}
         />
         <Route
           path="dashboard"
@@ -228,7 +255,6 @@ function App() {
                 `http://localhost:3001/api/get/profile/${loginStatus.id}`
               )
                 .then((response) => {
-                  console.log(response.data);
                   setUserProfile(response.data);
                 })
                 .catch((error) => {

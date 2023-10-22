@@ -54,7 +54,7 @@
 }
 
 .nav a:hover {
-  color: #acedff;
+  color: rgba(172, 237, 255, 0.87);
 }
 
 .div-container {
@@ -89,7 +89,6 @@
 .register,
 .login {
   width: 30%;
-  height: auto;
   position: absolute;
   left: 50%;
   top: calc(50% - 4rem);
@@ -117,16 +116,70 @@
 }
 
 .forgot-password {
+  background: none;
+  border: none;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.87);
   font-size: 12px;
 }
 
 .forgot-password:hover {
   cursor: pointer;
-  color: #acedff;
+  color: rgba(172, 237, 255, 0.87);
 }
 
 .auth-flex-end {
   align-items: flex-end;
+}
+
+#otp {
+  width: 3em;
+  height: 3em;
+  margin: 1em;
+  padding: auto;
+  text-align: center;
+}
+
+#v-p {
+  text-align: center;
+}
+
+.otp-container {
+  justify-content: center;
+}
+
+.verification {
+  top: calc(50% - 2rem);
+  height: 25em;
+}
+
+.verification .message {
+  margin: 0 0 1em 0;
+  text-align: center;
+  color: rgba(199, 255, 171, 0.87);
+}
+
+.verification .error-message3 {
+  margin: 0 0 1em 0;
+  text-align: center;
+  color: rgba(240, 58, 71, 0.87);
+}
+
+.verification .button-container {
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.verification .button-container p {
+  margin: 0;
+}
+
+.verification .button-container button {
+  height: 2em;
+}
+
+.message {
+  color: rgba(199, 255, 171, 0.87);
 }
 
 .background-container {
@@ -167,12 +220,12 @@
 }
 
 .error-message {
-  color: #f03a47;
+  color: rgba(240, 58, 71, 0.87);
   margin: 0 0 0 1em;
 }
 
 .error-message2 {
-  color: #f03a47;
+  color: rgba(240, 58, 71, 0.87);
   margin: 1em 0 0 0;
 }
 
@@ -256,7 +309,7 @@
 
 .form input {
   margin: 0.5rem 0;
-  width: 12rem;
+  width: 16rem;
 }
 
 .form #input {
@@ -266,11 +319,6 @@
 
 a {
   text-decoration: none;
-}
-
-button:hover {
-  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
-    0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 button {
@@ -666,6 +714,10 @@ button {
 }
 
 @media (max-height: 500px) {
+  .App {
+    font-size: 0.75rem;
+  }
+
   .nav {
     height: 2.5rem;
   }

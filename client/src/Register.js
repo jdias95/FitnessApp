@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = (props) => {
-  const { setLoginStatus } = props;
+  const { loginStatus, setLoginStatus } = props;
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [firstNameReg, setFirstNameReg] = useState("");
@@ -13,12 +13,14 @@ const Register = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.delete("http://localhost:3001/api/logout").then((response) => {
-      if (response.status === 200) {
-        setLoginStatus("");
-        localStorage.clear();
-      }
-    });
+    if (loginStatus) {
+      Axios.delete("http://localhost:3001/api/logout").then((response) => {
+        if (response.status === 200) {
+          setLoginStatus("");
+          localStorage.clear();
+        }
+      });
+    }
   }, [setLoginStatus]);
 
   const isEmailValid = (email) => {

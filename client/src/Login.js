@@ -1,32 +1,43 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = (props) => {
-  const { setLoginStatus } = props;
-  const [email, setEmail] = useState("");
+  const { loginStatus, setLoginStatus, setOTP, email, setEmail } = props;
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [nav, setNav] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.delete("http://localhost:3001/api/logout").then((response) => {
-      if (response.status === 200) {
-        setLoginStatus("");
-        localStorage.clear();
-      }
-    });
+    if (loginStatus) {
+      Axios.delete("http://localhost:3001/api/logout").then((response) => {
+        if (response.status === 200) {
+          setLoginStatus("");
+          localStorage.clear();
+        }
+      });
+    }
   }, [setLoginStatus]);
+
+  useEffect(() => {
+    if (nav) {
+      navigate("/otp");
+    }
+  }, [nav]);
+
+  const isEmailValid = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
 
   const login = () => {
     setLoginError("");
 
     if (!email || !password) {
-      setLoginError("Must enter login information");
+      setLoginError("Please enter login information");
       return;
     }
-
-    setLoginError("");
 
     Axios.post("http://localhost:3001/api/login", {
       email: email,
@@ -50,6 +61,38 @@ const Login = (props) => {
       .catch((error) => {
         console.error("Error during login:", error);
       });
+  };
+
+  const navigateToOTP = () => {
+    setLoginError("");
+
+    if (!email) {
+      setLoginError("Please enter email");
+      return;
+    }
+    if (!isEmailValid(email)) {
+      setLoginError("Invalid email format");
+      return;
+    }
+    if (email) {
+      const OTP = Math.floor(Math.random() * 9000 + 1000);
+      setOTP(OTP);
+
+      Axios.post("http://localhost:3001/api/send-recovery-email", {
+        OTP: OTP,
+        recipient_email: email,
+      })
+        .then((response) => {
+          if (response.data.message) {
+            setLoginError(response.data.message);
+            return;
+          } else {
+            setNav(true);
+          }
+        })
+        .catch((error) => console.error(error));
+      return;
+    }
   };
 
   return (
@@ -84,9 +127,11 @@ const Login = (props) => {
                 }
               }}
             />
-            <a className="forgot-password">Forgot Password?</a>
-            {loginError && <p className="error-message2">{loginError}</p>}
+            <button className="forgot-password" onClick={navigateToOTP}>
+              Forgot Password?
+            </button>
           </div>
+          {loginError && <p className="error-message2">{loginError}</p>}
           <div className="button-container">
             <button className="auth-button" onClick={login}>
               {" "}
