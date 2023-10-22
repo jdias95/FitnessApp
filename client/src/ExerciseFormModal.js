@@ -167,15 +167,10 @@ const ExerciseFormModal = (props) => {
                   type="text"
                   id="name"
                   placeholder="Ex: Bench Press"
+                  maxLength="45"
                   value={nameReg}
                   onChange={(e) => {
-                    if (e.target.value.length >= 45) {
-                      setNameReg(
-                        e.target.value.slice(0, e.target.value.length - 1)
-                      );
-                    } else {
-                      setNameReg(e.target.value);
-                    }
+                    setNameReg(e.target.value);
                   }}
                 />
               </div>
@@ -243,6 +238,8 @@ const ExerciseFormModal = (props) => {
                     id="wide"
                     step="0.1"
                     placeholder="0"
+                    min="0"
+                    max="750"
                     value={!weightReg ? "" : defaultConvertWeight(weightReg)}
                     onChange={(e) => {
                       setWeightReg(
@@ -260,15 +257,10 @@ const ExerciseFormModal = (props) => {
                 <textarea
                   rows="4"
                   cols="30"
+                  maxLength="300"
                   value={notesReg}
                   onChange={(e) => {
-                    if (e.target.value.length >= 300) {
-                      setNotesReg(
-                        e.target.value.slice(0, e.target.value.length - 1)
-                      );
-                    } else {
-                      setNotesReg(e.target.value);
-                    }
+                    setNotesReg(e.target.value);
                   }}
                 />
               </div>

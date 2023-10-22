@@ -129,6 +129,7 @@ const WeightFormModal = (props) => {
                     type="number"
                     step="0.1"
                     id="wide"
+                    maxLength="5"
                     value={weightReg}
                     onChange={(e) => {
                       setWeightReg(safeParseFloat(e.target.value));
@@ -142,6 +143,7 @@ const WeightFormModal = (props) => {
                     type="number"
                     step="0.1"
                     id="wide"
+                    maxLength="5"
                     value={defaultConvertWeight(weightReg)}
                     onChange={(e) => {
                       setWeightReg(

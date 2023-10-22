@@ -188,11 +188,11 @@ const ProfileForm = (props) => {
     navigate("/profile");
   };
 
-  // useEffect(() => {
-  //   if (weightGoalReg === 0) {
-  //     setTargetWeightReg(0);
-  //   }
-  // }, [weightGoalReg]);
+  useEffect(() => {
+    if (weightGoalReg === 0) {
+      setTargetWeightReg(0);
+    }
+  }, [weightGoalReg]);
 
   const convertHeightMetric = (cm) => {
     const inches = cm * 0.3937008;
@@ -249,6 +249,7 @@ const ProfileForm = (props) => {
                         type="number"
                         step="0.1"
                         id="wide"
+                        maxLength="5"
                         value={!weightReg ? "" : weightReg}
                         onChange={(e) => {
                           setWeightReg(safeParseFloat(e.target.value));
@@ -263,6 +264,7 @@ const ProfileForm = (props) => {
                       <input
                         type="number"
                         id="wide"
+                        maxLength="1"
                         value={!feet ? "" : feet}
                         onChange={(e) => {
                           const newFeet = safeParseInt(e.target.value);
@@ -281,6 +283,8 @@ const ProfileForm = (props) => {
                       <input
                         type="number"
                         id="wide"
+                        maxLength="2"
+                        max="12"
                         value={!inches ? "" : inches}
                         onChange={(e) => {
                           const newInches = safeParseInt(e.target.value);
@@ -308,6 +312,7 @@ const ProfileForm = (props) => {
                         type="number"
                         step="0.1"
                         id="wide"
+                        maxLength="5"
                         value={
                           !weightReg ? "" : defaultConvertWeight(weightReg)
                         }
@@ -317,7 +322,7 @@ const ProfileForm = (props) => {
                           );
                         }}
                       />
-                      <label>kg</label>
+                      <label>kgs</label>
                     </div>
                   </div>
                   <div className="flex spec">
@@ -326,6 +331,7 @@ const ProfileForm = (props) => {
                       <input
                         type="number"
                         id="wide"
+                        maxLength="3"
                         value={!cm ? "" : cm}
                         onChange={(e) => {
                           const newCm = safeParseInt(e.target.value);
@@ -348,6 +354,7 @@ const ProfileForm = (props) => {
                     <input
                       type="number"
                       id="wide"
+                      maxLength="3"
                       value={!ageReg ? "" : ageReg}
                       onChange={(e) => {
                         setAgeReg(safeParseInt(e.target.value));
@@ -446,6 +453,7 @@ const ProfileForm = (props) => {
                             type="number"
                             step="0.1"
                             id="wide"
+                            maxLength="5"
                             value={!targetWeightReg ? "" : targetWeightReg}
                             onChange={(e) => {
                               setTargetWeightReg(
@@ -470,7 +478,7 @@ const ProfileForm = (props) => {
                             type="number"
                             step="0.1"
                             id="wide"
-                            placeholder=""
+                            maxLength="5"
                             value={
                               !targetWeightReg
                                 ? ""

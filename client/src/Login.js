@@ -106,26 +106,18 @@ const Login = (props) => {
               type="text"
               value={email}
               placeholder="Email"
+              maxLength="100"
               onChange={(e) => {
-                if (e.target.value.length >= 100) {
-                  setEmail(e.target.value.slice(0, e.target.value.length - 1));
-                } else {
-                  setEmail(e.target.value);
-                }
+                setEmail(e.target.value);
               }}
             />
             <input
               type="password"
               value={password}
               placeholder="Password"
+              maxLength="100"
               onChange={(e) => {
-                if (e.target.value.length >= 100) {
-                  setPassword(
-                    e.target.value.slice(0, e.target.value.length - 1)
-                  );
-                } else {
-                  setPassword(e.target.value);
-                }
+                setPassword(e.target.value);
               }}
             />
             <button className="forgot-password" onClick={navigateToOTP}>

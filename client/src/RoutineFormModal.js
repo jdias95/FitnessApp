@@ -38,15 +38,10 @@ const RoutineFormModal = (props) => {
               type="text"
               id="input"
               placeholder="Name"
+              maxLength="45"
               value={nameReg}
               onChange={(e) => {
-                if (e.target.value.length >= 45) {
-                  setNameReg(
-                    e.target.value.slice(0, e.target.value.length - 1)
-                  );
-                } else {
-                  setNameReg(e.target.value);
-                }
+                setNameReg(e.target.value);
               }}
             />
             <span className="modal-button-container">

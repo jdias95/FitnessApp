@@ -75,14 +75,9 @@ const Register = (props) => {
               type="text"
               value={emailReg}
               placeholder="Email"
+              maxLength="100"
               onChange={(e) => {
-                if (e.target.value.length >= 100) {
-                  setEmailReg(
-                    e.target.value.slice(0, e.target.value.length - 1)
-                  );
-                } else {
-                  setEmailReg(e.target.value);
-                }
+                setEmailReg(e.target.value);
               }}
             />
             {emailError && <p className="error-message">{emailError}</p>}
@@ -92,14 +87,9 @@ const Register = (props) => {
               type="password"
               value={passwordReg}
               placeholder="Password"
+              maxLength="100"
               onChange={(e) => {
-                if (e.target.value.length >= 100) {
-                  setPasswordReg(
-                    e.target.value.slice(0, e.target.value.length - 1)
-                  );
-                } else {
-                  setPasswordReg(e.target.value);
-                }
+                setPasswordReg(e.target.value);
               }}
             />
             {passwordError && <p className="error-message">{passwordError}</p>}
@@ -109,14 +99,9 @@ const Register = (props) => {
               type="text"
               value={firstNameReg}
               placeholder="First Name"
+              maxLength="50"
               onChange={(e) => {
-                if (e.target.value.length >= 50) {
-                  setFirstNameReg(
-                    e.target.value.slice(0, e.target.value.length - 1)
-                  );
-                } else {
-                  setFirstNameReg(e.target.value);
-                }
+                setFirstNameReg(e.target.value);
               }}
             />
             {firstNameError && (
