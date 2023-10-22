@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
-import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Home(props) {
-  const { loginStatus, setLoginStatus } = props;
+  const { loginStatus } = props;
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (loginStatus) {
-      Axios.delete("http://localhost:3001/api/logout").then((response) => {
-        if (response.status === 200) {
-          setLoginStatus("");
-          localStorage.clear();
-        }
-      });
+      navigate("/dashboard");
     }
-  }, [setLoginStatus, loginStatus]);
+  }, [navigate, loginStatus]);
 
   return (
     <div className="App home-container">

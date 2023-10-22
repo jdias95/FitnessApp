@@ -78,12 +78,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Root setLoginStatus={setLoginStatus} />}>
-        <Route
-          index
-          element={
-            <Home loginStatus={loginStatus} setLoginStatus={setLoginStatus} />
-          }
-        />
+        <Route index element={<Home loginStatus={loginStatus} />} />
         <Route
           path="register"
           element={
