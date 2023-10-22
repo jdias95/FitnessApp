@@ -12,7 +12,7 @@ export default function Home(props) {
         }
       });
     }
-  }, [setLoginStatus]);
+  }, [setLoginStatus, loginStatus]);
 
   return (
     <div className="App home-container">

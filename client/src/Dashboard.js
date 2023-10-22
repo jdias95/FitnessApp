@@ -56,7 +56,7 @@ const Dashboard = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loginStatus === false) {
+    if (!loginStatus) {
       localStorage.clear();
       navigate("/login");
     }

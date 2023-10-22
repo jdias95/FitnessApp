@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { color } from "d3";
 
 const OTPClass = (props) => {
   const { OTP, email } = props;

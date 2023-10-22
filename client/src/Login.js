@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
   const { loginStatus, setLoginStatus, setOTP, email, setEmail } = props;
@@ -18,13 +18,13 @@ const Login = (props) => {
         }
       });
     }
-  }, [setLoginStatus]);
+  }, [setLoginStatus, loginStatus]);
 
   useEffect(() => {
     if (nav) {
       navigate("/otp");
     }
-  }, [nav]);
+  }, [nav, navigate]);
 
   const isEmailValid = (email) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -55,6 +55,7 @@ const Login = (props) => {
             })
           );
           setLoginStatus(response.data[0]);
+          setEmail("");
           navigate("/dashboard");
         }
       })
