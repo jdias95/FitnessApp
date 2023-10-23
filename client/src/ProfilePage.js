@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ProfilePage = (props) => {
-  const {
-    loginStatus,
-    userProfile,
-    defaultConvertWeight,
-    defaultConvertHeightMetric,
-  } = props;
+  const { userProfile, defaultConvertWeight, defaultConvertHeightMetric } =
+    props;
   const [infoBool, setInfoBool] = useState(false);
   const [calorieBudget, setCalorieBudget] = useState(0);
   const weightGoalList = {
@@ -30,14 +26,6 @@ const ProfilePage = (props) => {
       4: "Gain 0.5 kilogram per week",
     },
   };
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!loginStatus) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  }, [loginStatus, navigate]);
 
   const activityLevelPoints = useMemo(() => {
     return {

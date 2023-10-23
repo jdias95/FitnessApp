@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -75,10 +76,43 @@ function App() {
 
   Axios.defaults.withCredentials = true;
 
+  const ProtectedRoute = ({ children }) => {
+    if (!localStorage.getItem("authToken")) {
+      localStorage.clear();
+      return <Navigate to="/" replace />;
+    }
+
+    return children;
+  };
+
+  const RerouteOTP = ({ children }) => {
+    if (!email) {
+      localStorage.clear();
+      return <Navigate to="/login" replace />;
+    }
+
+    return children;
+  };
+
+  const RerouteHome = ({ children }) => {
+    if (localStorage.getItem("authToken")) {
+      return <Navigate to="/dashboard" replace />;
+    }
+
+    return children;
+  };
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Root setLoginStatus={setLoginStatus} />}>
-        <Route index element={<Home loginStatus={loginStatus} />} />
+        <Route
+          index
+          element={
+            <RerouteHome>
+              <Home />
+            </RerouteHome>
+          }
+        />
         <Route
           path="register"
           element={
@@ -100,63 +134,79 @@ function App() {
             />
           }
         />
-        <Route path="otp" element={<OTPClass OTP={OTP} email={email} />} />
+        <Route
+          path="otp"
+          element={
+            <RerouteOTP>
+              <OTPClass OTP={OTP} email={email} />
+            </RerouteOTP>
+          }
+        />
         <Route
           path="password-reset"
-          element={<ResetPassword email={email} />}
+          element={
+            <RerouteOTP>
+              <ResetPassword email={email} />
+            </RerouteOTP>
+          }
         />
         <Route
           path="dashboard"
           element={
-            <Dashboard
-              loginStatus={loginStatus}
-              userProfile={userProfile}
-              previousWeight={previousWeight}
-              setPreviousWeight={setPreviousWeight}
-              formattedDate={formattedDate}
-              routines={routines}
-              setRoutines={setRoutines}
-              exercises={exercises}
-              trackedExercises={trackedExercises}
-              setTrackedExercises={setTrackedExercises}
-              weightData={weightData}
-              setWeightData={setWeightData}
-              setUserProfile={setUserProfile}
-              convertWeight={convertWeight}
-              defaultConvertWeight={defaultConvertWeight}
-              safeParseFloat={safeParseFloat}
-            />
+            <ProtectedRoute>
+              <Dashboard
+                loginStatus={loginStatus}
+                userProfile={userProfile}
+                previousWeight={previousWeight}
+                setPreviousWeight={setPreviousWeight}
+                formattedDate={formattedDate}
+                routines={routines}
+                setRoutines={setRoutines}
+                exercises={exercises}
+                trackedExercises={trackedExercises}
+                setTrackedExercises={setTrackedExercises}
+                weightData={weightData}
+                setWeightData={setWeightData}
+                setUserProfile={setUserProfile}
+                convertWeight={convertWeight}
+                defaultConvertWeight={defaultConvertWeight}
+                safeParseFloat={safeParseFloat}
+              />
+            </ProtectedRoute>
           }
         />
         <Route
           path="profile"
           element={
-            <ProfilePage
-              loginStatus={loginStatus}
-              setUserProfile={setUserProfile}
-              userProfile={userProfile}
-              defaultConvertWeight={defaultConvertWeight}
-              defaultConvertHeightMetric={defaultConvertHeightMetric}
-            />
+            <ProtectedRoute>
+              <ProfilePage
+                setUserProfile={setUserProfile}
+                userProfile={userProfile}
+                defaultConvertWeight={defaultConvertWeight}
+                defaultConvertHeightMetric={defaultConvertHeightMetric}
+              />
+            </ProtectedRoute>
           }
         />
         <Route
           path="profile-form"
           element={
-            <ProfileForm
-              loginStatus={loginStatus}
-              userProfile={userProfile}
-              setUserProfile={setUserProfile}
-              previousWeight={previousWeight}
-              setPreviousWeight={setPreviousWeight}
-              formattedDate={formattedDate}
-              setWeightData={setWeightData}
-              weightData={weightData}
-              convertWeight={convertWeight}
-              defaultConvertWeight={defaultConvertWeight}
-              safeParseFloat={safeParseFloat}
-              defaultConvertHeightMetric={defaultConvertHeightMetric}
-            />
+            <ProtectedRoute>
+              <ProfileForm
+                loginStatus={loginStatus}
+                userProfile={userProfile}
+                setUserProfile={setUserProfile}
+                previousWeight={previousWeight}
+                setPreviousWeight={setPreviousWeight}
+                formattedDate={formattedDate}
+                setWeightData={setWeightData}
+                weightData={weightData}
+                convertWeight={convertWeight}
+                defaultConvertWeight={defaultConvertWeight}
+                safeParseFloat={safeParseFloat}
+                defaultConvertHeightMetric={defaultConvertHeightMetric}
+              />
+            </ProtectedRoute>
           }
         />
         <Route path="logout" />
@@ -171,7 +221,7 @@ function App() {
           setLoginStatus(response.data.user);
         } else {
           localStorage.clear();
-          setLoginStatus(false);
+          setLoginStatus("");
         }
       })
       .catch((error) => {

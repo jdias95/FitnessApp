@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RoutineFormModal from "./RoutineFormModal";
 import WeightFormModal from "./WeightFormModal";
-import { useNavigate } from "react-router-dom";
 import DeleteRoutineModal from "./DeleteRoutineModal";
 import UpdateRoutineModal from "./UpdateRoutineModal";
 import ExerciseFormModal from "./ExerciseFormModal";
@@ -53,14 +52,6 @@ const Dashboard = (props) => {
   const [weightTimeBtN, setWeightTimeBtN] = useState(0);
   const [tickMultiplier, setTickMultiplier] = useState(6);
   const [timeSelection, setTimeSelection] = useState("1 month");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!loginStatus) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  }, [loginStatus, navigate]);
 
   const toggleModal = (modalName, isOpen) => {
     switch (modalName) {

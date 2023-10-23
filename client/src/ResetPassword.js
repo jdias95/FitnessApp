@@ -1,20 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const ResetPassword = (props) => {
   const { email } = props;
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!email) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  }, [email, navigate]);
 
   const resetPassword = () => {
     setMessage("");

@@ -57,13 +57,6 @@ const ProfileForm = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loginStatus) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  }, [loginStatus, navigate]);
-
-  useEffect(() => {
     const savedFormData = JSON.parse(localStorage.getItem("profileFormData"));
 
     if (savedFormData) {
@@ -142,7 +135,10 @@ const ProfileForm = (props) => {
         console.error("Error updating profile:", error);
       });
 
-    if (previousWeight.date.slice(0, 10) === formattedDate.slice(0, 10)) {
+    if (
+      previousWeight.date &&
+      previousWeight.date.slice(0, 10) === formattedDate.slice(0, 10)
+    ) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
         weight: weightReg,

@@ -11,13 +11,6 @@ const OTPClass = (props) => {
   const inputRefs = [useRef(), useRef(), useRef(), useRef()];
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!email) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  }, [email, navigate]);
-
   const resendOTP = () => {
     setMessage("");
 

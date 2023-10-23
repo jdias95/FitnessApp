@@ -29,11 +29,16 @@ const WeightFormModal = (props) => {
       activityLevel: userProfile.activity_level,
       gender: userProfile.gender,
       measurementType: userProfile.measurement_type,
+      weightGoal: userProfile.weight_goal,
+      targetWeight: userProfile.target_weight,
     }).catch((error) => {
       console.error("Error updating weight:", error);
     });
 
-    if (previousWeight.date.slice(0, 10) === formattedDate.slice(0, 10)) {
+    if (
+      previousWeight.date &&
+      previousWeight.date.slice(0, 10) === formattedDate.slice(0, 10)
+    ) {
       Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
         weight: weightReg,

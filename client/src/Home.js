@@ -1,16 +1,6 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
-export default function Home(props) {
-  const { loginStatus } = props;
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (loginStatus) {
-      navigate("/dashboard");
-    }
-  }, [navigate, loginStatus]);
-
+const Home = () => {
   return (
     <div className="App home-container">
       <div className="background-container">
@@ -24,4 +14,6 @@ export default function Home(props) {
       </div>
     </div>
   );
-}
+};
+
+export default Home;
