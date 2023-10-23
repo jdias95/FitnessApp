@@ -44,7 +44,7 @@ const WeightFormModal = (props) => {
         weight: weightReg,
         date: formattedDate.slice(0, 10),
       })
-        .then((response) => {
+        .then(() => {
           const updatedWeightData = [...weightData];
 
           if (userProfile && userProfile.measurement_type !== "metric") {
@@ -82,7 +82,7 @@ const WeightFormModal = (props) => {
         weight: weightReg,
         date: formattedDate,
       })
-        .then((response) => {
+        .then(() => {
           if (userProfile && userProfile.measurement_type !== "metric") {
             setWeightData([
               ...weightData,

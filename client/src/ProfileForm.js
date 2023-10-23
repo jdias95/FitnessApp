@@ -144,7 +144,7 @@ const ProfileForm = (props) => {
         weight: weightReg,
         date: formattedDate.slice(0, 10),
       })
-        .then((response) => {
+        .then(() => {
           const updatedWeightData = [...weightData];
 
           updatedWeightData[updatedWeightData.length - 1] = {
@@ -163,15 +163,15 @@ const ProfileForm = (props) => {
         weight: weightReg,
         date: formattedDate,
       })
-        .then((response) => {
+        .then(
           setWeightData([
             ...weightData,
             {
               weight: weightReg,
               date: formattedDate,
             },
-          ]);
-        })
+          ])
+        )
         .catch((error) => {
           console.error("Error setting weight:", error);
         });

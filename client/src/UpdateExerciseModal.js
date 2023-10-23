@@ -38,7 +38,7 @@ const UpdateExerciseModal = (props) => {
       bw: bwReg,
       notes: notesReg,
     })
-      .then((response) => {
+      .then(() => {
         setRoutineExercises((prevRoutineExercises) => {
           const updatedRoutineExercises = [
             ...prevRoutineExercises[selectedRoutine.id],
@@ -80,7 +80,7 @@ const UpdateExerciseModal = (props) => {
               bw: bwReg,
               date: formattedDate,
             })
-              .then((response2) => {
+              .then((response) => {
                 setTrackedExercises((prevTrackedExercises) => {
                   if (prevTrackedExercises.hasOwnProperty(nameReg)) {
                     return {
@@ -88,7 +88,7 @@ const UpdateExerciseModal = (props) => {
                       [nameReg]: [
                         ...prevTrackedExercises[nameReg],
                         {
-                          id: response2.data.insertId,
+                          id: response.data.insertId,
                           exercise_id: id,
                           name: nameReg,
                           sets: setsReg === "" ? 1 : setsReg,
@@ -108,7 +108,7 @@ const UpdateExerciseModal = (props) => {
                       ...prevTrackedExercises,
                       [nameReg]: [
                         {
-                          id: response2.data.insertId,
+                          id: response.data.insertId,
                           exercise_id: id,
                           name: nameReg,
                           sets: setsReg === "" ? 1 : setsReg,

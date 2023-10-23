@@ -9,7 +9,7 @@ const UpdateRoutineModal = (props) => {
     Axios.put(`http://localhost:3001/api/update/routine/${id}`, {
       name: nameReg,
     })
-      .then((response) => {
+      .then(() => {
         const updatedRoutines = routines.map((routine) => {
           if (routine.id === id) {
             return { ...routine, name: nameReg };

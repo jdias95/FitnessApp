@@ -19,13 +19,13 @@ const OTPClass = (props) => {
       OTP: OTP,
       recipient_email: email,
     })
-      .then(() => setDisable(true))
-      .then(() =>
+      .then(setDisable(true))
+      .then(
         setMessage(
           "A new one time password has successfully been sent to your email."
         )
       )
-      .then(() => setTimerCount(60))
+      .then(setTimerCount(60))
       .catch((error) => console.error(error));
   };
 

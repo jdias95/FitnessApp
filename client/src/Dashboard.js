@@ -94,7 +94,11 @@ const Dashboard = (props) => {
   };
 
   const getExercisesForRoutine = (routineId) => {
-    return exercises.filter((exercise) => exercise.routine_id === routineId);
+    if (exercises.length > 0) {
+      return exercises.filter((exercise) => exercise.routine_id === routineId);
+    } else {
+      return;
+    }
   };
 
   const toggleMenu = (routineId) => {
