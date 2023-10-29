@@ -57,6 +57,11 @@
   color: rgba(172, 237, 255, 0.87);
 }
 
+button:hover {
+  background-color: #868686;
+  cursor: pointer;
+}
+
 .div-container {
   display: flex;
 }

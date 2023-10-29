@@ -245,7 +245,10 @@ const ProfileForm = (props) => {
                         type="number"
                         step="0.1"
                         id="wide"
-                        maxLength="5"
+                        placeholder="0"
+                        min="0"
+                        max="1000"
+                        maxLength="4"
                         value={!weightReg ? "" : weightReg}
                         onChange={(e) => {
                           setWeightReg(safeParseFloat(e.target.value));
@@ -260,7 +263,10 @@ const ProfileForm = (props) => {
                       <input
                         type="number"
                         id="wide"
-                        maxLength="1"
+                        placeholder="0"
+                        min="0"
+                        max="10"
+                        maxLength="2"
                         value={!feet ? "" : feet}
                         onChange={(e) => {
                           const newFeet = safeParseInt(e.target.value);
@@ -279,8 +285,10 @@ const ProfileForm = (props) => {
                       <input
                         type="number"
                         id="wide"
-                        maxLength="2"
+                        placeholder="0"
+                        min="0"
                         max="12"
+                        maxLength="2"
                         value={!inches ? "" : inches}
                         onChange={(e) => {
                           const newInches = safeParseInt(e.target.value);
@@ -308,7 +316,10 @@ const ProfileForm = (props) => {
                         type="number"
                         step="0.1"
                         id="wide"
-                        maxLength="5"
+                        placeholder="0"
+                        min="0"
+                        max="500"
+                        maxLength="3"
                         value={
                           !weightReg ? "" : defaultConvertWeight(weightReg)
                         }
@@ -327,6 +338,9 @@ const ProfileForm = (props) => {
                       <input
                         type="number"
                         id="wide"
+                        placeholder="0"
+                        min="0"
+                        max="500"
                         maxLength="3"
                         value={!cm ? "" : cm}
                         onChange={(e) => {
@@ -350,6 +364,9 @@ const ProfileForm = (props) => {
                     <input
                       type="number"
                       id="wide"
+                      placeholder="0"
+                      min="0"
+                      max="100"
                       maxLength="3"
                       value={!ageReg ? "" : ageReg}
                       onChange={(e) => {
@@ -449,7 +466,10 @@ const ProfileForm = (props) => {
                             type="number"
                             step="0.1"
                             id="wide"
-                            maxLength="5"
+                            placeholder="0"
+                            min="0"
+                            max="1000"
+                            maxLength="4"
                             value={!targetWeightReg ? "" : targetWeightReg}
                             onChange={(e) => {
                               setTargetWeightReg(
@@ -474,7 +494,10 @@ const ProfileForm = (props) => {
                             type="number"
                             step="0.1"
                             id="wide"
-                            maxLength="5"
+                            placeholder="0"
+                            min="0"
+                            max="500"
+                            maxLength="3"
                             value={
                               !targetWeightReg
                                 ? ""

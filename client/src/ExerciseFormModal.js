@@ -185,6 +185,7 @@ const ExerciseFormModal = (props) => {
                   placeholder="1"
                   min="1"
                   max="99"
+                  maxLength="2"
                   value={!setsReg ? "" : setsReg}
                   onChange={(e) => {
                     setSetsReg(safeParseInt(e.target.value));
@@ -199,6 +200,7 @@ const ExerciseFormModal = (props) => {
                   placeholder="1"
                   min="1"
                   max="99"
+                  maxLength="2"
                   value={!repsLowReg ? "" : repsLowReg}
                   onChange={(e) => {
                     setRepsLowReg(safeParseInt(e.target.value));
@@ -210,6 +212,7 @@ const ExerciseFormModal = (props) => {
                   id="narrow"
                   min="0"
                   max="99"
+                  maxLength="2"
                   value={!repsHighReg ? "" : repsHighReg}
                   onChange={(e) => {
                     setRepsHighReg(safeParseInt(e.target.value));
@@ -226,6 +229,7 @@ const ExerciseFormModal = (props) => {
                     step="0.1"
                     min="0"
                     max="1500"
+                    maxLength="4"
                     value={!weightReg ? "" : weightReg}
                     onChange={(e) => {
                       setWeightReg(safeParseFloat(e.target.value));
@@ -243,6 +247,7 @@ const ExerciseFormModal = (props) => {
                     placeholder="0"
                     min="0"
                     max="750"
+                    maxLength="3"
                     value={!weightReg ? "" : defaultConvertWeight(weightReg)}
                     onChange={(e) => {
                       setWeightReg(
