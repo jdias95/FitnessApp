@@ -23,7 +23,6 @@ const Dashboard = (props) => {
     routines,
     setRoutines,
     exercises,
-    setExercises,
     trackedExercises,
     setTrackedExercises,
     weightData,
@@ -745,7 +744,6 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
-          setExercises={setExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
           convertWeight={convertWeight}
@@ -765,7 +763,6 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           selectedExercise={selectedExercise}
           setRoutineExercises={setRoutineExercises}
-          setExercises={setExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
           convertWeight={convertWeight}

@@ -16,7 +16,7 @@ const saltRounds = 10;
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000"] /* https://wegojim.net */,
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
@@ -38,9 +38,9 @@ app.use(
 
 const db = mysql.createPool({
   host: "localhost",
-  user: "root",
-  password: "password",
-  database: "fitnessapp",
+  user: "root" /* wegojygb_akomamathaino */,
+  password: "password" /* process.env.DB_PASSWORD */,
+  database: "fitnessapp" /* wegojygb_fitnessapp */,
 });
 
 const sendEmail = ({ OTP, recipient_email }) => {

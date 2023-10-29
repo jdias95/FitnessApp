@@ -9,7 +9,6 @@ const ExerciseFormModal = (props) => {
     selectedRoutine,
     routineExercises,
     setRoutineExercises,
-    setExercises,
     formattedDate,
     setTrackedExercises,
     convertWeight,
