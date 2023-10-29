@@ -23,6 +23,7 @@ const Dashboard = (props) => {
     routines,
     setRoutines,
     exercises,
+    setExercises,
     trackedExercises,
     setTrackedExercises,
     weightData,
@@ -31,6 +32,10 @@ const Dashboard = (props) => {
     convertWeight,
     defaultConvertWeight,
     safeParseFloat,
+    openMenus,
+    setOpenMenus,
+    routineExercises,
+    setRoutineExercises,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -45,8 +50,6 @@ const Dashboard = (props) => {
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [showStatisticsModal, setShowStatisticsModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
-  const [openMenus, setOpenMenus] = useState({});
-  const [routineExercises, setRoutineExercises] = useState({});
   const [selectedExercise, setSelectedExercise] = useState({});
   const [firstExercise, setFirstExercise] = useState({});
   const [weightTimeBtN, setWeightTimeBtN] = useState(0);
@@ -469,20 +472,20 @@ const Dashboard = (props) => {
             </h2>
           </div>
           <div>
-            {routines.map((val) => {
-              const isMenuOpen = openMenus[val.id] || false;
-              const exerciseList = routineExercises[val.id] || [];
+            {routines.map((routine) => {
+              const isMenuOpen = openMenus[routine.id] || false;
+              const exerciseList = routineExercises[routine.id] || [];
 
               return (
-                <div key={`${val.name}-routine`}>
+                <div key={`${routine.name}-routine`}>
                   <div className="dashboard flex list-title-card">
                     <div
                       className="flex workout-list-clickable"
                       onClick={() => {
-                        toggleMenu(val.id);
+                        toggleMenu(routine.id);
                       }}
                     >
-                      <h3>{val.name}</h3>
+                      <h3>{routine.name}</h3>
                       <h5 className="caret">&diams;</h5>
                     </div>
                     <div className="flex">
@@ -490,7 +493,7 @@ const Dashboard = (props) => {
                         className="img edit"
                         src={process.env.PUBLIC_URL + "/edit.png"}
                         onClick={() => {
-                          setSelectedRoutine(val);
+                          setSelectedRoutine(routine);
                           toggleModal("updateRoutine", true);
                         }}
                         alt="edit"
@@ -499,7 +502,7 @@ const Dashboard = (props) => {
                         className="img delete"
                         src={process.env.PUBLIC_URL + "/delete.png"}
                         onClick={() => {
-                          setSelectedRoutine(val);
+                          setSelectedRoutine(routine);
                           toggleModal("deleteRoutine", true);
                         }}
                         alt="delete"
@@ -543,7 +546,7 @@ const Dashboard = (props) => {
                                 className="img edit"
                                 src={process.env.PUBLIC_URL + "/edit.png"}
                                 onClick={() => {
-                                  setSelectedRoutine(val);
+                                  setSelectedRoutine(routine);
                                   setSelectedExercise(exercise);
                                   toggleModal("updateExercise", true);
                                 }}
@@ -553,7 +556,7 @@ const Dashboard = (props) => {
                                 className="img x"
                                 src={process.env.PUBLIC_URL + "/x.png"}
                                 onClick={() => {
-                                  setSelectedRoutine(val);
+                                  setSelectedRoutine(routine);
                                   setSelectedExercise(exercise);
                                   toggleModal("deleteExercise", true);
                                 }}
@@ -567,7 +570,7 @@ const Dashboard = (props) => {
                         <h1
                           id="list-plus"
                           onClick={() => {
-                            setSelectedRoutine(val);
+                            setSelectedRoutine(routine);
                             toggleModal("exercise", true);
                           }}
                         >
@@ -742,6 +745,7 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
+          setExercises={setExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
           convertWeight={convertWeight}
@@ -761,6 +765,7 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           selectedExercise={selectedExercise}
           setRoutineExercises={setRoutineExercises}
+          setExercises={setExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
           convertWeight={convertWeight}

@@ -6,7 +6,7 @@ const DeleteTrackedExerciseModal = (props) => {
 
   const deleteExercise = (id) => {
     Axios.delete(`http://localhost:3001/api/delete/tracked-exercise/${id}`)
-      .then((response) => {
+      .then(() => {
         setTrackedExercises((prevTrackedExercises) => {
           const updatedTrackedExercises = [
             ...prevTrackedExercises[selectedExercise.name],
@@ -15,6 +15,7 @@ const DeleteTrackedExerciseModal = (props) => {
           const indexToDelete = updatedTrackedExercises.findIndex(
             (exercise) => exercise.id === id
           );
+
           if (indexToDelete !== -1) {
             updatedTrackedExercises.splice(indexToDelete, 1);
           }

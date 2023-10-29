@@ -31,6 +31,8 @@ function App() {
   const [routines, setRoutines] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [trackedExercises, setTrackedExercises] = useState({});
+  const [routineExercises, setRoutineExercises] = useState({});
+  const [openMenus, setOpenMenus] = useState({});
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -163,6 +165,7 @@ function App() {
                 routines={routines}
                 setRoutines={setRoutines}
                 exercises={exercises}
+                setExercises={setExercises}
                 trackedExercises={trackedExercises}
                 setTrackedExercises={setTrackedExercises}
                 weightData={weightData}
@@ -171,6 +174,10 @@ function App() {
                 convertWeight={convertWeight}
                 defaultConvertWeight={defaultConvertWeight}
                 safeParseFloat={safeParseFloat}
+                openMenus={openMenus}
+                setOpenMenus={setOpenMenus}
+                routineExercises={routineExercises}
+                setRoutineExercises={setRoutineExercises}
               />
             </ProtectedRoute>
           }
@@ -318,7 +325,6 @@ function App() {
       setUserProfile(null);
       setRoutines([]);
       setExercises([]);
-      setExercises({});
       setTrackedExercises({});
     }
   }, [loginStatus]);

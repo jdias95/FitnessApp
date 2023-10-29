@@ -9,6 +9,7 @@ const UpdateExerciseModal = (props) => {
     selectedRoutine,
     selectedExercise,
     setRoutineExercises,
+    setExercises,
     formattedDate,
     setTrackedExercises,
     convertWeight,
@@ -51,12 +52,14 @@ const UpdateExerciseModal = (props) => {
           if (indexToUpdate !== -1) {
             updatedRoutineExercises[indexToUpdate] = {
               id: id,
+              user_id: loginStatus.id,
+              routine_id: selectedRoutine.id,
               name: nameReg,
-              reps_low: repsLowReg === "" ? 1 : repsLowReg,
               reps_high:
                 repsHighReg === "" || repsHighReg <= repsLowReg
                   ? null
                   : repsHighReg,
+              reps_low: repsLowReg === "" ? 1 : repsLowReg,
               sets: setsReg === "" ? 1 : setsReg,
               weight: weightReg === "" ? 0 : weightReg,
               tracked: trackReg,

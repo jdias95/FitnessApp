@@ -9,6 +9,7 @@ const ExerciseFormModal = (props) => {
     selectedRoutine,
     routineExercises,
     setRoutineExercises,
+    setExercises,
     formattedDate,
     setTrackedExercises,
     convertWeight,
@@ -48,6 +49,8 @@ const ExerciseFormModal = (props) => {
             ...existingExercisesForRoutine,
             {
               id: response.data.insertId,
+              user_id: loginStatus.id,
+              routine_id: selectedRoutine.id,
               name: nameReg,
               reps_high:
                 repsHighReg === "" || repsHighReg <= repsLowReg

@@ -7,7 +7,7 @@ const DeleteExerciseModal = (props) => {
 
   const deleteExercise = (id) => {
     Axios.delete(`http://localhost:3001/api/delete/exercise/${id}`)
-      .then((response) => {
+      .then(() => {
         setRoutineExercises((prevRoutineExercises) => {
           const updatedRoutineExercises = [
             ...prevRoutineExercises[selectedRoutine.id],
