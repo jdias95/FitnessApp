@@ -3,7 +3,8 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
-  const { loginStatus, setLoginStatus, setOTP, email, setEmail } = props;
+  const { loginStatus, setLoginStatus, setOTP, email, setEmail, apiURL } =
+    props;
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [nav, setNav] = useState(false);
@@ -11,7 +12,7 @@ const Login = (props) => {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.delete("http://localhost:3001/api/logout").then((response) => {
+      Axios.delete(`${apiURL}/api/logout`).then((response) => {
         if (response.status === 200) {
           setLoginStatus("");
           localStorage.clear();
@@ -39,7 +40,7 @@ const Login = (props) => {
       return;
     }
 
-    Axios.post("http://localhost:3001/api/login", {
+    Axios.post(`${apiURL}/api/login`, {
       email: email,
       password: password,
     })
@@ -79,7 +80,7 @@ const Login = (props) => {
       const OTP = Math.floor(Math.random() * 9000 + 1000);
       setOTP(OTP);
 
-      Axios.post("http://localhost:3001/api/send-recovery-email", {
+      Axios.post(`${apiURL}/api/send-recovery-email`, {
         OTP: OTP,
         recipient_email: email,
       })

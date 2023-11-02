@@ -35,6 +35,7 @@ const Dashboard = (props) => {
     setOpenMenus,
     routineExercises,
     setRoutineExercises,
+    apiURL,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
@@ -695,6 +696,7 @@ const Dashboard = (props) => {
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
           safeParseFloat={safeParseFloat}
+          apiURL={apiURL}
         />
       )}
 
@@ -706,6 +708,7 @@ const Dashboard = (props) => {
           }}
           routines={routines}
           setRoutines={setRoutines}
+          apiURL={apiURL}
         />
       )}
 
@@ -718,6 +721,7 @@ const Dashboard = (props) => {
           routines={routines}
           setRoutines={setRoutines}
           selectedRoutine={selectedRoutine}
+          apiURL={apiURL}
         />
       )}
 
@@ -730,6 +734,7 @@ const Dashboard = (props) => {
           setRoutines={setRoutines}
           routines={routines}
           selectedRoutine={selectedRoutine}
+          apiURL={apiURL}
         />
       )}
 
@@ -749,6 +754,7 @@ const Dashboard = (props) => {
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
           safeParseFloat={safeParseFloat}
+          apiURL={apiURL}
         />
       )}
 
@@ -768,6 +774,7 @@ const Dashboard = (props) => {
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
           safeParseFloat={safeParseFloat}
+          apiURL={apiURL}
         />
       )}
 
@@ -780,6 +787,7 @@ const Dashboard = (props) => {
           selectedExercise={selectedExercise}
           selectedRoutine={selectedRoutine}
           setRoutineExercises={setRoutineExercises}
+          apiURL={apiURL}
         />
       )}
 
@@ -790,6 +798,7 @@ const Dashboard = (props) => {
           }}
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
+          apiURL={apiURL}
         />
       )}
 

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import Axios from "axios";
 
 const UpdateRoutineModal = (props) => {
-  const { onClose, setRoutines, routines, selectedRoutine } = props;
+  const { onClose, setRoutines, routines, selectedRoutine, apiURL } = props;
   const [nameReg, setNameReg] = useState(selectedRoutine.name);
 
   const updateRoutine = (id) => {
-    Axios.put(`http://localhost:3001/api/update/routine/${id}`, {
+    Axios.put(`${apiURL}/api/update/routine/${id}`, {
       name: nameReg,
     })
       .then(() => {

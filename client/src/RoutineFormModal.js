@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import Axios from "axios";
 
 const RoutineFormModal = (props) => {
-  const { loginStatus, onClose, routines, setRoutines } = props;
+  const { loginStatus, onClose, routines, setRoutines, apiURL } = props;
   const [nameReg, setNameReg] = useState("");
 
   const createRoutine = () => {
-    Axios.post("http://localhost:3001/api/insert/routine", {
+    Axios.post(`${apiURL}/api/insert/routine`, {
       userId: loginStatus.id,
       name: nameReg,
     })

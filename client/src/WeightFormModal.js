@@ -15,13 +15,14 @@ const WeightFormModal = (props) => {
     convertWeight,
     defaultConvertWeight,
     safeParseFloat,
+    apiURL,
   } = props;
   const [weightReg, setWeightReg] = useState(
     previousWeight ? previousWeight.weight : 0
   );
 
   const setWeight = () => {
-    Axios.put(`http://localhost:3001/api/update/profile/${loginStatus.id}`, {
+    Axios.put(`${apiURL}/api/update/profile/${loginStatus.id}`, {
       userId: loginStatus.id,
       weight: weightReg,
       height: userProfile.height,
@@ -39,7 +40,7 @@ const WeightFormModal = (props) => {
       previousWeight.date &&
       previousWeight.date.slice(0, 10) === formattedDate.slice(0, 10)
     ) {
-      Axios.put(`http://localhost:3001/api/update/weight/${loginStatus.id}`, {
+      Axios.put(`${apiURL}/api/update/weight/${loginStatus.id}`, {
         userId: loginStatus.id,
         weight: weightReg,
         date: formattedDate.slice(0, 10),
@@ -77,7 +78,7 @@ const WeightFormModal = (props) => {
           console.error("Error setting weight:", error);
         });
     } else {
-      Axios.post("http://localhost:3001/api/insert/weight", {
+      Axios.post(`${apiURL}/api/insert/weight`, {
         userId: loginStatus.id,
         weight: weightReg,
         date: formattedDate,

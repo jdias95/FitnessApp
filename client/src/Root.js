@@ -3,11 +3,11 @@ import { useNavigate, Link, Outlet } from "react-router-dom";
 import Axios from "axios";
 
 const Root = (props) => {
-  const { setLoginStatus } = props;
+  const { setLoginStatus, apiURL } = props;
   const navigate = useNavigate();
 
   const logout = () => {
-    Axios.delete("http://localhost:3001/api/logout").then((response) => {
+    Axios.delete(`${apiURL}/api/logout`).then((response) => {
       if (response.status === 200) {
         setLoginStatus("");
         localStorage.clear();

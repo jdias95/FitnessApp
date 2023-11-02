@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = (props) => {
-  const { loginStatus, setLoginStatus } = props;
+  const { loginStatus, setLoginStatus, apiURL } = props;
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [firstNameReg, setFirstNameReg] = useState("");
@@ -14,7 +14,7 @@ const Register = (props) => {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.delete("http://localhost:3001/api/logout").then((response) => {
+      Axios.delete(`${apiURL}/api/logout`).then((response) => {
         if (response.status === 200) {
           setLoginStatus("");
           localStorage.clear();
@@ -51,7 +51,7 @@ const Register = (props) => {
     setPasswordError("");
     setFirstNameError("");
 
-    Axios.post("http://localhost:3001/api/register", {
+    Axios.post(`${apiURL}/api/register`, {
       email: emailReg,
       password: passwordReg,
       firstName: firstNameReg,

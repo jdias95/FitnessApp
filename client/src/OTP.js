@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const OTPClass = (props) => {
-  const { OTP, email } = props;
+  const { OTP, email, apiURL } = props;
   const [timerCount, setTimerCount] = useState(60);
   const [OTPInput, setOTPInput] = useState([0, 0, 0, 0]);
   const [message, setMessage] = useState("");
@@ -15,7 +15,7 @@ const OTPClass = (props) => {
     setMessage("");
 
     if (disable) return;
-    Axios.post("http://localhost:3001/api/send-recovery-email", {
+    Axios.post(`${apiURL}/api/send-recovery-email`, {
       OTP: OTP,
       recipient_email: email,
     })

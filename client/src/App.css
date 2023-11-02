@@ -19,12 +19,13 @@
   background-color: #1d2a35;
   color: rgba(255, 255, 255, 0.87);
   margin: 0;
-  padding: 0;
-  min-height: 100vh;
+  padding: 4em 0 2em 0;
+  min-height: calc(100vh - 6em);
   width: 100%;
   position: absolute;
+  top: 0;
   height: auto;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .nav {
@@ -723,6 +724,8 @@ button {
 @media (max-height: 500px) {
   .App {
     font-size: 0.75rem;
+    min-height: calc(100vh - 4.5em);
+    padding: 3em 0 1.5em 0;
   }
 
   .nav {

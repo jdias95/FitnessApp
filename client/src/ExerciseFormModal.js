@@ -14,6 +14,7 @@ const ExerciseFormModal = (props) => {
     convertWeight,
     defaultConvertWeight,
     safeParseFloat,
+    apiURL,
   } = props;
   const [nameReg, setNameReg] = useState("");
   const [repsHighReg, setRepsHighReg] = useState(0);
@@ -25,7 +26,7 @@ const ExerciseFormModal = (props) => {
   const [notesReg, setNotesReg] = useState("");
 
   const createExercise = () => {
-    Axios.post("http://localhost:3001/api/insert/exercise", {
+    Axios.post(`${apiURL}/api/insert/exercise`, {
       userId: loginStatus.id,
       routineId: selectedRoutine.id,
       name: nameReg,
@@ -66,7 +67,7 @@ const ExerciseFormModal = (props) => {
         }));
 
         if (trackReg) {
-          Axios.post("http://localhost:3001/api/insert/tracked-exercise", {
+          Axios.post(`${apiURL}/api/insert/tracked-exercise`, {
             userId: loginStatus.id,
             exerciseId: response.data.insertId,
             name: nameReg,

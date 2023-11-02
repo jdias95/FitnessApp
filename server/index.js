@@ -4,10 +4,13 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
-const app = express();
+const http = require("http");
 require("dotenv").config();
+
+const app = express();
+const server = http.createServer(app);
 
 process.env.CI = false;
 
@@ -573,6 +576,10 @@ app.delete("/api/delete/tracked-exercise/:id", (req, res) => {
   });
 });
 
-app.listen(3001, () => {
-  console.log("running on port 3001");
+app.get("/api", (req, res) => {
+  res.send("Hello World");
+});
+
+server.listen(3001, () => {
+  console.log(`Server is up and running on port 3001`);
 });

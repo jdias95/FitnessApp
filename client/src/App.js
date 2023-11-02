@@ -43,6 +43,11 @@ function App() {
     ).padStart(2, "0")}:${String(currentDate.getSeconds()).padStart(2, "0")}`
   );
   const formattedDate = `${year}-${month}-${day}T${time}`;
+  const applicationMode = "Development";
+  const apiURL =
+    applicationMode === "Production"
+      ? "https://api.wegojim.net"
+      : "http://localhost:3001";
 
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
@@ -106,7 +111,10 @@ function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Root setLoginStatus={setLoginStatus} />}>
+      <Route
+        path="/"
+        element={<Root setLoginStatus={setLoginStatus} apiURL={apiURL} />}
+      >
         <Route
           index
           element={
@@ -121,6 +129,7 @@ function App() {
             <Register
               loginStatus={loginStatus}
               setLoginStatus={setLoginStatus}
+              apiURL={apiURL}
             />
           }
         />
@@ -133,6 +142,7 @@ function App() {
               setOTP={setOTP}
               email={email}
               setEmail={setEmail}
+              apiURL={apiURL}
             />
           }
         />
@@ -140,7 +150,7 @@ function App() {
           path="otp"
           element={
             <RerouteOTP>
-              <OTPClass OTP={OTP} email={email} />
+              <OTPClass OTP={OTP} email={email} apiURL={apiURL} />
             </RerouteOTP>
           }
         />
@@ -148,7 +158,7 @@ function App() {
           path="password-reset"
           element={
             <RerouteOTP>
-              <ResetPassword email={email} />
+              <ResetPassword email={email} apiURL={apiURL} />
             </RerouteOTP>
           }
         />
@@ -177,6 +187,7 @@ function App() {
                 setOpenMenus={setOpenMenus}
                 routineExercises={routineExercises}
                 setRoutineExercises={setRoutineExercises}
+                apiURL={apiURL}
               />
             </ProtectedRoute>
           }
@@ -211,17 +222,18 @@ function App() {
                 defaultConvertWeight={defaultConvertWeight}
                 safeParseFloat={safeParseFloat}
                 defaultConvertHeightMetric={defaultConvertHeightMetric}
+                apiURL={apiURL}
               />
             </ProtectedRoute>
           }
         />
-        <Route path="logout" />
+        <Route path="logout" apiURL={apiURL} />
       </Route>
     )
   );
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/api/login")
+    Axios.get(`${apiURL}/api/login`)
       .then((response) => {
         if (response.data.loggedIn === true) {
           setLoginStatus(response.data.user);
@@ -237,7 +249,7 @@ function App() {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.get(`http://localhost:3001/api/get/routines/${loginStatus.id}`)
+      Axios.get(`${apiURL}/api/get/routines/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
             setRoutines(response.data);
@@ -247,9 +259,7 @@ function App() {
           console.error("Error fetching routines:", error);
         });
 
-      Axios.get(
-        `http://localhost:3001/api/get/tracked-exercises/${loginStatus.id}`
-      )
+      Axios.get(`${apiURL}/api/get/tracked-exercises/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
             const groupedExercises = {};
@@ -271,7 +281,7 @@ function App() {
           console.error("Error fetching exercises:", error);
         });
 
-      Axios.get(`http://localhost:3001/api/get/exercises/${loginStatus.id}`)
+      Axios.get(`${apiURL}/api/get/exercises/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
             setExercises(response.data);
@@ -281,7 +291,7 @@ function App() {
           console.error("Error fetching exercises:", error);
         });
 
-      Axios.get(`http://localhost:3001/api/get/profile/${loginStatus.id}`)
+      Axios.get(`${apiURL}/api/get/profile/${loginStatus.id}`)
         .then((response) => {
           setUserProfile(response.data);
         })
@@ -298,13 +308,11 @@ function App() {
               targetWeight: 0,
             };
 
-            Axios.post("http://localhost:3001/api/insert/profile", {
+            Axios.post(`${apiURL}/api/insert/profile`, {
               userId: loginStatus.id,
               ...newProfile,
             }).then(() => {
-              Axios.get(
-                `http://localhost:3001/api/get/profile/${loginStatus.id}`
-              )
+              Axios.get(`${apiURL}/api/get/profile/${loginStatus.id}`)
                 .then((response) => {
                   setUserProfile(response.data);
                 })
@@ -330,7 +338,7 @@ function App() {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.get(`http://localhost:3001/api/get/weight/${loginStatus.id}`)
+      Axios.get(`${apiURL}/api/get/weight/${loginStatus.id}`)
         .then((response) => {
           const weightData = response.data;
           const mostRecentWeight = weightData[weightData.length - 1];

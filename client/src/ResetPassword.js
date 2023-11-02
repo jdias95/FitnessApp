@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 
 const ResetPassword = (props) => {
-  const { email } = props;
+  const { email, apiURL } = props;
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -25,7 +25,7 @@ const ResetPassword = (props) => {
 
     setMessage("");
 
-    Axios.put("http://localhost:3001/api/reset-password", {
+    Axios.put(`${apiURL}/api/reset-password`, {
       email: email,
       password: password,
     })

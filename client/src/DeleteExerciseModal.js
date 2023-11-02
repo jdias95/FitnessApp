@@ -2,11 +2,16 @@ import React from "react";
 import Axios from "axios";
 
 const DeleteExerciseModal = (props) => {
-  const { onClose, selectedExercise, selectedRoutine, setRoutineExercises } =
-    props;
+  const {
+    onClose,
+    selectedExercise,
+    selectedRoutine,
+    setRoutineExercises,
+    apiURL,
+  } = props;
 
   const deleteExercise = (id) => {
-    Axios.delete(`http://localhost:3001/api/delete/exercise/${id}`)
+    Axios.delete(`${apiURL}/api/delete/exercise/${id}`)
       .then(() => {
         setRoutineExercises((prevRoutineExercises) => {
           const updatedRoutineExercises = [

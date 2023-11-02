@@ -2,10 +2,10 @@ import React from "react";
 import Axios from "axios";
 
 const DeleteTrackedExerciseModal = (props) => {
-  const { onClose, selectedExercise, setTrackedExercises } = props;
+  const { onClose, selectedExercise, setTrackedExercises, apiURL } = props;
 
   const deleteExercise = (id) => {
-    Axios.delete(`http://localhost:3001/api/delete/tracked-exercise/${id}`)
+    Axios.delete(`${apiURL}/api/delete/tracked-exercise/${id}`)
       .then(() => {
         setTrackedExercises((prevTrackedExercises) => {
           const updatedTrackedExercises = [

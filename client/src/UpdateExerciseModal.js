@@ -14,6 +14,7 @@ const UpdateExerciseModal = (props) => {
     convertWeight,
     defaultConvertWeight,
     safeParseFloat,
+    apiURL,
   } = props;
   const [nameReg, setNameReg] = useState(selectedExercise.name);
   const [repsLowReg, setRepsLowReg] = useState(selectedExercise.reps_low);
@@ -27,7 +28,7 @@ const UpdateExerciseModal = (props) => {
   );
 
   const updateExercise = (id) => {
-    Axios.put(`http://localhost:3001/api/update/exercise/${id}`, {
+    Axios.put(`${apiURL}/api/update/exercise/${id}`, {
       name: nameReg,
       repsLow: repsLowReg === "" ? 1 : repsLowReg,
       repsHigh:
@@ -68,7 +69,7 @@ const UpdateExerciseModal = (props) => {
           }
 
           if (trackReg) {
-            Axios.post("http://localhost:3001/api/insert/tracked-exercise", {
+            Axios.post(`${apiURL}/api/insert/tracked-exercise`, {
               userId: loginStatus.id,
               exerciseId: id,
               name: nameReg,
