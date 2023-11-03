@@ -28,19 +28,18 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const sessionStore = new MySQLStore({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "fitnessapp",
-});
-
 app.use(
   session({
     key: "userId",
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: new MySQLStore({
+      host: "localhost",
+      user: "root",
+      password: "password",
+      database: "fitnessapp",
+    }),
     cookie: {
       expires: 10000000000,
     },
