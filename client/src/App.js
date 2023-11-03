@@ -230,7 +230,7 @@ function App() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [setLoginStatus]);
+  }, [setLoginStatus, apiURL]);
 
   useEffect(() => {
     if (loginStatus) {
@@ -319,7 +319,7 @@ function App() {
       setExercises([]);
       setTrackedExercises({});
     }
-  }, [loginStatus]);
+  }, [loginStatus, apiURL]);
 
   useEffect(() => {
     if (loginStatus) {
@@ -380,7 +380,7 @@ function App() {
       setPreviousWeight({});
       setWeightData([]);
     }
-  }, [loginStatus, setPreviousWeight, userProfile]);
+  }, [loginStatus, setPreviousWeight, userProfile, apiURL]);
 
   return (
     <div className="App">
