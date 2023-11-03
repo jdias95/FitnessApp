@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
@@ -26,6 +27,13 @@ app.use(
 );
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const sessionStore = new MySQLStore({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "fitnessapp",
+});
 
 app.use(
   session({
