@@ -45,9 +45,9 @@ function App() {
   const formattedDate = `${year}-${month}-${day}T${time}`;
   const applicationMode = "Development";
   const apiURL =
-    applicationMode === "Production"
-      ? "https://api.wegojim.net"
-      : "http://localhost:3001";
+    applicationMode === "Development"
+      ? "http://localhost:3001"
+      : "https://api.wegojim.net";
 
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
