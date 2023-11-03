@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProfilePage = (props) => {
   const { userProfile, defaultConvertWeight, defaultConvertHeightMetric } =
@@ -26,6 +26,14 @@ const ProfilePage = (props) => {
       4: "Gain 0.5 kilogram per week",
     },
   };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("authToken")) {
+      localStorage.clear();
+      navigate("/login");
+    }
+  });
 
   const activityLevelPoints = useMemo(() => {
     return {

@@ -19,8 +19,8 @@
   background-color: #1d2a35;
   color: rgba(255, 255, 255, 0.87);
   margin: 0;
-  padding: 4em 0 2em 0;
-  min-height: calc(100vh - 6em);
+  padding: 4rem 0 2rem 0;
+  min-height: calc(100vh - 6rem);
   width: 100%;
   position: absolute;
   top: 0;
@@ -71,7 +71,7 @@ button:hover {
   border-radius: 1rem;
   width: 45%;
   height: 100%;
-  margin: 1.5%;
+  margin: 1rem 1.5%;
   padding: 1%;
   background-color: #38444d;
 }
@@ -396,18 +396,18 @@ button {
   width: 90%;
 }
 
-.workout-list-clickable:hover .caret {
-  color: #acedffc7;
+.workout-list-clickable:hover .rombus {
   cursor: pointer;
+  content: url("../public/rombus-hover.png");
 }
 
 .tracked-clickable {
   width: 100%;
 }
 
-.tracked-clickable:hover .caret {
-  color: #acedffc7;
+.tracked-clickable:hover .rombus {
   cursor: pointer;
+  content: url("../public/rombus-hover.png");
 }
 
 .question-mark {
@@ -433,13 +433,15 @@ button {
   top: 0.2rem;
 }
 
-.caret {
+.rombus {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
   margin: 0 0 0.25rem 0;
   align-self: flex-end;
   font-size: large;
+  width: 0.5em;
+  height: 0.7em;
 }
 
 .dropdown-menu {
@@ -724,8 +726,8 @@ button {
 @media (max-height: 500px) {
   .App {
     font-size: 0.75rem;
-    min-height: calc(100vh - 4.5em);
-    padding: 3em 0 1.5em 0;
+    min-height: calc(100vh - 4rem);
+    padding: 2.5rem 0 1.5rem 0;
   }
 
   .nav {

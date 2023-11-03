@@ -58,6 +58,13 @@ const ProfileForm = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem("authToken")) {
+      localStorage.clear();
+      navigate("/login");
+    }
+  });
+
+  useEffect(() => {
     const savedFormData = JSON.parse(localStorage.getItem("profileFormData"));
 
     if (savedFormData) {

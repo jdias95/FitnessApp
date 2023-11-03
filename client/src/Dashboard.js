@@ -12,6 +12,7 @@ import * as d3 from "d3";
 import moment from "moment";
 import InstructionsModal from "./InstructionsModal";
 import StatisticsModal from "./StatisticsModal";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = (props) => {
   const {
@@ -55,6 +56,14 @@ const Dashboard = (props) => {
   const [weightTimeBtN, setWeightTimeBtN] = useState(0);
   const [tickMultiplier, setTickMultiplier] = useState(6);
   const [timeSelection, setTimeSelection] = useState("1 month");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("authToken")) {
+      localStorage.clear();
+      navigate("/login");
+    }
+  });
 
   const toggleModal = (modalName, isOpen) => {
     switch (modalName) {
@@ -486,7 +495,11 @@ const Dashboard = (props) => {
                       }}
                     >
                       <h3>{routine.name}</h3>
-                      <h5 className="caret">&diams;</h5>
+                      <img
+                        src={process.env.PUBLIC_URL + "/rombus.png"}
+                        className="rombus"
+                        alt="click for drop down menu"
+                      />
                     </div>
                     <div className="flex">
                       <img
@@ -607,7 +620,11 @@ const Dashboard = (props) => {
                     }}
                   >
                     <h3>{exerciseName}</h3>
-                    <h5 className="caret">&diams;</h5>
+                    <img
+                      src={process.env.PUBLIC_URL + "/rombus.png"}
+                      className="rombus"
+                      alt="click for drop down menu"
+                    />
                   </div>
                 </div>
                 {openMenus[exerciseName] && (

@@ -83,15 +83,6 @@ function App() {
 
   Axios.defaults.withCredentials = true;
 
-  const ProtectedRoute = ({ children }) => {
-    if (!localStorage.getItem("authToken")) {
-      localStorage.clear();
-      return <Navigate to="/" replace />;
-    }
-
-    return children;
-  };
-
   const RerouteOTP = ({ children }) => {
     if (!email) {
       localStorage.clear();
@@ -165,66 +156,60 @@ function App() {
         <Route
           path="dashboard"
           element={
-            <ProtectedRoute>
-              <Dashboard
-                loginStatus={loginStatus}
-                userProfile={userProfile}
-                previousWeight={previousWeight}
-                setPreviousWeight={setPreviousWeight}
-                formattedDate={formattedDate}
-                routines={routines}
-                setRoutines={setRoutines}
-                exercises={exercises}
-                trackedExercises={trackedExercises}
-                setTrackedExercises={setTrackedExercises}
-                weightData={weightData}
-                setWeightData={setWeightData}
-                setUserProfile={setUserProfile}
-                convertWeight={convertWeight}
-                defaultConvertWeight={defaultConvertWeight}
-                safeParseFloat={safeParseFloat}
-                openMenus={openMenus}
-                setOpenMenus={setOpenMenus}
-                routineExercises={routineExercises}
-                setRoutineExercises={setRoutineExercises}
-                apiURL={apiURL}
-              />
-            </ProtectedRoute>
+            <Dashboard
+              loginStatus={loginStatus}
+              userProfile={userProfile}
+              previousWeight={previousWeight}
+              setPreviousWeight={setPreviousWeight}
+              formattedDate={formattedDate}
+              routines={routines}
+              setRoutines={setRoutines}
+              exercises={exercises}
+              trackedExercises={trackedExercises}
+              setTrackedExercises={setTrackedExercises}
+              weightData={weightData}
+              setWeightData={setWeightData}
+              setUserProfile={setUserProfile}
+              convertWeight={convertWeight}
+              defaultConvertWeight={defaultConvertWeight}
+              safeParseFloat={safeParseFloat}
+              openMenus={openMenus}
+              setOpenMenus={setOpenMenus}
+              routineExercises={routineExercises}
+              setRoutineExercises={setRoutineExercises}
+              apiURL={apiURL}
+            />
           }
         />
         <Route
           path="profile"
           element={
-            <ProtectedRoute>
-              <ProfilePage
-                setUserProfile={setUserProfile}
-                userProfile={userProfile}
-                defaultConvertWeight={defaultConvertWeight}
-                defaultConvertHeightMetric={defaultConvertHeightMetric}
-              />
-            </ProtectedRoute>
+            <ProfilePage
+              setUserProfile={setUserProfile}
+              userProfile={userProfile}
+              defaultConvertWeight={defaultConvertWeight}
+              defaultConvertHeightMetric={defaultConvertHeightMetric}
+            />
           }
         />
         <Route
           path="profile-form"
           element={
-            <ProtectedRoute>
-              <ProfileForm
-                loginStatus={loginStatus}
-                userProfile={userProfile}
-                setUserProfile={setUserProfile}
-                previousWeight={previousWeight}
-                setPreviousWeight={setPreviousWeight}
-                formattedDate={formattedDate}
-                setWeightData={setWeightData}
-                weightData={weightData}
-                convertWeight={convertWeight}
-                defaultConvertWeight={defaultConvertWeight}
-                safeParseFloat={safeParseFloat}
-                defaultConvertHeightMetric={defaultConvertHeightMetric}
-                apiURL={apiURL}
-              />
-            </ProtectedRoute>
+            <ProfileForm
+              loginStatus={loginStatus}
+              userProfile={userProfile}
+              setUserProfile={setUserProfile}
+              previousWeight={previousWeight}
+              setPreviousWeight={setPreviousWeight}
+              formattedDate={formattedDate}
+              setWeightData={setWeightData}
+              weightData={weightData}
+              convertWeight={convertWeight}
+              defaultConvertWeight={defaultConvertWeight}
+              safeParseFloat={safeParseFloat}
+              defaultConvertHeightMetric={defaultConvertHeightMetric}
+              apiURL={apiURL}
+            />
           }
         />
         <Route path="logout" apiURL={apiURL} />
