@@ -269,7 +269,12 @@ const Dashboard = (props) => {
         .attr("d", line)
         .attr("clip-path", "url(#clip-path)");
 
-      if (userProfile && userProfile.target_weight) {
+      if (
+        userProfile &&
+        userProfile.target_weight &&
+        userProfile.target_weight >= minValue - padding &&
+        userProfile.target_weight <= maxValue + padding
+      ) {
         if (userProfile.measurement_type !== "metric") {
           svg
             .append("line")

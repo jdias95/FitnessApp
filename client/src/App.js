@@ -97,6 +97,7 @@ function App() {
       return <Navigate to="/dashboard" replace />;
     }
 
+    localStorage.clear();
     return children;
   };
 

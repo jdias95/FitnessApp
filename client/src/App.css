@@ -21,7 +21,7 @@
   margin: 0;
   padding: 4rem 0 2rem 0;
   min-height: calc(100vh - 6rem);
-  width: 100%;
+  width: 100vw;
   position: absolute;
   top: 0;
   height: auto;
