@@ -1,6 +1,6 @@
 # FitnessApp
 
-**FitnessApp** is a web application developed with a technology stack that includes React for the front-end, Node.js/Express for the server-side, and a MySQL database. As a gym rat myself, I created this app to provide a convenient way to track workout progress and stay motivated while also delving into the world of React, a highly relevant technology in the tech industry.
+**FitnessApp** is a web application developed with a technology stack that includes React for the front-end, Node.js/Express for the server-side, and a MySQL database. As a gym rat myself, I created this app to provide a convenient way to track workout progress and stay motivated while also learning React, a highly relevant technology in the industry.
 
 You can access the app at [WeGoJim.net](https://WeGoJim.net). Feel free to register and explore its features. After logging in, you can set up your profile to estimate your daily calorie intake and expenditure. The central hub of the app is the dashboard, where you can:
 
