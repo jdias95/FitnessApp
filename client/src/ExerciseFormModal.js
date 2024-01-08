@@ -79,7 +79,7 @@ const ExerciseFormModal = (props) => {
               tracked: trackReg,
               bw: bwReg,
               notes: notesReg,
-              sortOrder: newExerciseId,
+              sort_order: newExerciseId,
             },
           ],
         }));

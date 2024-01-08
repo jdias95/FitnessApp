@@ -336,7 +336,7 @@ const Dashboard = (props) => {
     defaultConvertWeight,
   ]);
 
-  const handleOnDragEnd = (result, routineExerciseList, routineId) => {
+  const handleOnDragEnd = (result, routineExerciseList) => {
     const { source, destination } = result;
 
     if (!destination) {
@@ -351,23 +351,29 @@ const Dashboard = (props) => {
     const [exerciseMoved] = routineExerciseList.splice(sourceIndex, 1);
     routineExerciseList.splice(destinationIndex, 0, exerciseMoved);
 
-    const updateRequests = routineExerciseList.map((exercise, index) => {
-      return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
-        name: exercise.name,
-        repsLow: exercise.reps_low,
-        repsHigh: exercise.reps_high,
-        sets: exercise.sets,
-        weight: exercise.weight,
-        tracked: exercise.tracked,
-        bw: exercise.bw,
-        notes: exercise.notes,
-        sortOrder: sortOrder[index],
-      });
+    routineExerciseList.forEach((exercise, index) => {
+      exercise.sort_order = sortOrder[index];
     });
 
-    Promise.all(updateRequests).catch((error) => {
+    Promise.all(
+      routineExerciseList.map((exercise, index) => {
+        return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
+          name: exercise.name,
+          repsLow: exercise.reps_low,
+          repsHigh: exercise.reps_high,
+          sets: exercise.sets,
+          weight: exercise.weight,
+          tracked: exercise.tracked,
+          bw: exercise.bw,
+          notes: exercise.notes,
+          sortOrder: sortOrder[index],
+        });
+      })
+    ).catch((error) => {
       console.log(error);
     });
+
+    setSelectedExercise(routineExerciseList[destinationIndex]);
   };
 
   return (
