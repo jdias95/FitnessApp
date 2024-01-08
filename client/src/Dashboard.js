@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import RoutineFormModal from "./RoutineFormModal";
 import WeightFormModal from "./WeightFormModal";
 import DeleteRoutineModal from "./DeleteRoutineModal";
@@ -59,7 +59,6 @@ const Dashboard = (props) => {
   const [tickMultiplier, setTickMultiplier] = useState(6);
   const [timeSelection, setTimeSelection] = useState("1 month");
   const navigate = useNavigate();
-  const myRef = useRef();
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
@@ -337,7 +336,7 @@ const Dashboard = (props) => {
     defaultConvertWeight,
   ]);
 
-  const handleOnDragEnd = (result, routineExerciseList) => {
+  const handleOnDragEnd = (result, routineExerciseList, routineId) => {
     const { source, destination } = result;
 
     if (!destination) {

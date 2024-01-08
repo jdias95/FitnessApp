@@ -40,6 +40,23 @@ const ExerciseFormModal = (props) => {
       notes: notesReg,
     })
       .then((response) => {
+        const newExerciseId = response.data.insertId;
+
+        Axios.put(`${apiURL}/api/update/exercise/${newExerciseId}`, {
+          name: nameReg,
+          repsLow: repsLowReg === "" ? 1 : repsLowReg,
+          repsHigh:
+            repsHighReg === "" || repsHighReg <= repsLowReg
+              ? null
+              : repsHighReg,
+          sets: setsReg === "" ? 1 : setsReg,
+          weight: weightReg === "" ? 0 : weightReg,
+          tracked: trackReg,
+          bw: bwReg,
+          notes: notesReg,
+          sortOrder: newExerciseId,
+        });
+
         const existingExercisesForRoutine =
           routineExercises[selectedRoutine.id] || [];
 
@@ -62,6 +79,7 @@ const ExerciseFormModal = (props) => {
               tracked: trackReg,
               bw: bwReg,
               notes: notesReg,
+              sortOrder: newExerciseId,
             },
           ],
         }));

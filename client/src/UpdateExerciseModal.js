@@ -26,6 +26,7 @@ const UpdateExerciseModal = (props) => {
   const [notesReg, setNotesReg] = useState(
     selectedExercise.notes ? selectedExercise.notes : ""
   );
+  const sortOrder = selectedExercise.sort_order;
 
   const updateExercise = (id) => {
     Axios.put(`${apiURL}/api/update/exercise/${id}`, {
@@ -38,8 +39,11 @@ const UpdateExerciseModal = (props) => {
       tracked: trackReg,
       bw: bwReg,
       notes: notesReg,
+      sortOrder: sortOrder,
     })
       .then(() => {
+        console.log(selectedExercise);
+
         setRoutineExercises((prevRoutineExercises) => {
           const updatedRoutineExercises = [
             ...prevRoutineExercises[selectedRoutine.id],
@@ -65,6 +69,7 @@ const UpdateExerciseModal = (props) => {
               tracked: trackReg,
               bw: bwReg,
               notes: notesReg,
+              sort_order: sortOrder,
             };
           }
 
