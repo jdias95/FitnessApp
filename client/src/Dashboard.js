@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import RoutineFormModal from "./RoutineFormModal";
 import WeightFormModal from "./WeightFormModal";
 import DeleteRoutineModal from "./DeleteRoutineModal";
@@ -13,6 +13,8 @@ import moment from "moment";
 import InstructionsModal from "./InstructionsModal";
 import StatisticsModal from "./StatisticsModal";
 import { useNavigate } from "react-router-dom";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Axios from "axios";
 
 const Dashboard = (props) => {
   const {
@@ -57,6 +59,7 @@ const Dashboard = (props) => {
   const [tickMultiplier, setTickMultiplier] = useState(6);
   const [timeSelection, setTimeSelection] = useState("1 month");
   const navigate = useNavigate();
+  const myRef = useRef();
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
@@ -334,6 +337,40 @@ const Dashboard = (props) => {
     defaultConvertWeight,
   ]);
 
+  const handleOnDragEnd = (result, routineExerciseList) => {
+    const { source, destination } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    const sourceIndex = source.index;
+    const destinationIndex = destination.index;
+
+    let sortOrder = routineExerciseList.map((exercise) => exercise.sort_order);
+
+    const [exerciseMoved] = routineExerciseList.splice(sourceIndex, 1);
+    routineExerciseList.splice(destinationIndex, 0, exerciseMoved);
+
+    const updateRequests = routineExerciseList.map((exercise, index) => {
+      return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
+        name: exercise.name,
+        repsLow: exercise.reps_low,
+        repsHigh: exercise.reps_high,
+        sets: exercise.sets,
+        weight: exercise.weight,
+        tracked: exercise.tracked,
+        bw: exercise.bw,
+        notes: exercise.notes,
+        sortOrder: sortOrder[index],
+      });
+    });
+
+    Promise.all(updateRequests).catch((error) => {
+      console.log(error);
+    });
+  };
+
   return (
     <div className="App">
       <div className="row flex">
@@ -485,13 +522,13 @@ const Dashboard = (props) => {
               +
             </h2>
           </div>
-          <div>
+          <ul className="unordered-list">
             {routines.map((routine) => {
               const isMenuOpen = openMenus[routine.id] || false;
               const exerciseList = routineExercises[routine.id] || [];
 
               return (
-                <div key={`${routine.name}-routine`}>
+                <li key={`${routine.name}-routine`}>
                   <div className="dashboard flex list-title-card">
                     <div
                       className="flex workout-list-clickable"
@@ -529,61 +566,122 @@ const Dashboard = (props) => {
                   </div>
                   {isMenuOpen && (
                     <div className="dropdown-menu">
-                      <ul>
-                        {exerciseList.map((exercise) => (
-                          <li key={exercise.id} className="dashboard flex">
-                            <div className="exercise-container">
-                              {exercise.name} | {exercise.sets} x{" "}
-                              {exercise.reps_low}
-                              {exercise.reps_high
-                                ? `-${exercise.reps_high}`
-                                : ""}
-                              {exercise.weight &&
-                              userProfile.measurement_type === "imperial"
-                                ? ` | ${exercise.weight} lbs`
-                                : exercise.weight &&
-                                  userProfile.measurement_type === "metric"
-                                ? ` | ${defaultConvertWeight(
-                                    exercise.weight
-                                  )} kgs`
-                                : ""}
-                              {exercise.notes && (
-                                <img
-                                  className="img notes"
-                                  src={process.env.PUBLIC_URL + "/notes.png"}
-                                  onClick={() => {
-                                    setSelectedExercise(exercise);
-                                    toggleModal("notes", true);
+                      <DragDropContext
+                        onDragEnd={(result) =>
+                          handleOnDragEnd(result, exerciseList)
+                        }
+                      >
+                        <Droppable droppableId="exercises">
+                          {(provided) => (
+                            <ul
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                            >
+                              {exerciseList.map((exercise, index) => (
+                                <Draggable
+                                  key={exercise.id}
+                                  draggableId={`exercise-id-${exercise.id}`}
+                                  index={index}
+                                >
+                                  {(provided) => {
+                                    return (
+                                      <li
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        className="dashboard flex"
+                                        style={{
+                                          ...provided.draggableProps.style,
+                                          cursor: "default",
+                                        }}
+                                      >
+                                        <div className="exercise-container">
+                                          {exercise.name} | {exercise.sets} x{" "}
+                                          {exercise.reps_low}
+                                          {exercise.reps_high
+                                            ? `-${exercise.reps_high}`
+                                            : ""}
+                                          {exercise.weight &&
+                                          userProfile.measurement_type ===
+                                            "imperial"
+                                            ? ` | ${exercise.weight} lbs`
+                                            : exercise.weight &&
+                                              userProfile.measurement_type ===
+                                                "metric"
+                                            ? ` | ${defaultConvertWeight(
+                                                exercise.weight
+                                              )} kgs`
+                                            : ""}
+                                          {exercise.notes && (
+                                            <img
+                                              className="img notes"
+                                              src={
+                                                process.env.PUBLIC_URL +
+                                                "/notes.png"
+                                              }
+                                              onClick={() => {
+                                                setSelectedExercise(exercise);
+                                                toggleModal("notes", true);
+                                              }}
+                                              alt="notes"
+                                            />
+                                          )}
+                                        </div>
+                                        <div className="flex">
+                                          <img
+                                            className="img edit"
+                                            src={
+                                              process.env.PUBLIC_URL +
+                                              "/edit.png"
+                                            }
+                                            onClick={() => {
+                                              setSelectedRoutine(routine);
+                                              setSelectedExercise(exercise);
+                                              toggleModal(
+                                                "updateExercise",
+                                                true
+                                              );
+                                            }}
+                                            alt="edit"
+                                          />
+                                          <img
+                                            className="img x"
+                                            src={
+                                              process.env.PUBLIC_URL + "/x.png"
+                                            }
+                                            onClick={() => {
+                                              setSelectedRoutine(routine);
+                                              setSelectedExercise(exercise);
+                                              toggleModal(
+                                                "deleteExercise",
+                                                true
+                                              );
+                                            }}
+                                            alt="delete"
+                                          />
+                                          <img
+                                            className="img sort"
+                                            src={
+                                              process.env.PUBLIC_URL +
+                                              "/sort.png"
+                                            }
+                                            onClick={() => {
+                                              setSelectedRoutine(routine);
+                                              setSelectedExercise(exercise);
+                                            }}
+                                            alt="sort"
+                                          />
+                                        </div>
+                                      </li>
+                                    );
                                   }}
-                                  alt="notes"
-                                />
-                              )}
-                            </div>
-                            <div className="flex">
-                              <img
-                                className="img edit"
-                                src={process.env.PUBLIC_URL + "/edit.png"}
-                                onClick={() => {
-                                  setSelectedRoutine(routine);
-                                  setSelectedExercise(exercise);
-                                  toggleModal("updateExercise", true);
-                                }}
-                                alt="edit"
-                              />
-                              <img
-                                className="img x"
-                                src={process.env.PUBLIC_URL + "/x.png"}
-                                onClick={() => {
-                                  setSelectedRoutine(routine);
-                                  setSelectedExercise(exercise);
-                                  toggleModal("deleteExercise", true);
-                                }}
-                                alt="delete"
-                              />
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
+                                </Draggable>
+                              ))}
+                              {provided.placeholder}
+                            </ul>
+                          )}
+                        </Droppable>
+                      </DragDropContext>
                       <div className="plus-container">
                         <h1
                           id="list-plus"
@@ -597,10 +695,10 @@ const Dashboard = (props) => {
                       </div>
                     </div>
                   )}
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </div>
         <div className="tracked container">
           <div className="dashboard flex title">
