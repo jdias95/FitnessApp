@@ -336,7 +336,8 @@ const Dashboard = (props) => {
     defaultConvertWeight,
   ]);
 
-  const handleOnDragEnd = (result, routineExerciseList) => {
+  // Handles logic for dragging items when sorting lists
+  const handleOnDragEnd = (result, sortableList, listType) => {
     const { source, destination } = result;
 
     if (!destination) {
@@ -346,34 +347,46 @@ const Dashboard = (props) => {
     const sourceIndex = source.index;
     const destinationIndex = destination.index;
 
-    let sortOrder = routineExerciseList.map((exercise) => exercise.sort_order);
+    if (listType === "trackedExercises") {
+      console.log(sortableList, sourceIndex, destinationIndex);
+      return;
+    }
 
-    const [exerciseMoved] = routineExerciseList.splice(sourceIndex, 1);
-    routineExerciseList.splice(destinationIndex, 0, exerciseMoved);
+    // Copies the sort order as a new list
+    let sortOrder = sortableList.map((item) => item.sort_order);
 
-    routineExerciseList.forEach((exercise, index) => {
-      exercise.sort_order = sortOrder[index];
+    // Moves the item on the front-end
+    const [itemMoved] = sortableList.splice(sourceIndex, 1);
+    sortableList.splice(destinationIndex, 0, itemMoved);
+
+    // Updates the sort_order values to prepare them for the database
+    sortableList.forEach((item, index) => {
+      item.sort_order = sortOrder[index];
     });
 
-    Promise.all(
-      routineExerciseList.map((exercise, index) => {
-        return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
-          name: exercise.name,
-          repsLow: exercise.reps_low,
-          repsHigh: exercise.reps_high,
-          sets: exercise.sets,
-          weight: exercise.weight,
-          tracked: exercise.tracked,
-          bw: exercise.bw,
-          notes: exercise.notes,
-          sortOrder: sortOrder[index],
-        });
-      })
-    ).catch((error) => {
-      console.log(error);
-    });
+    // Checks the list type and updates the sort_order values in the database
+    if (listType === "routineExercises") {
+      Promise.all(
+        sortableList.map((exercise, index) => {
+          return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
+            name: exercise.name,
+            repsLow: exercise.reps_low,
+            repsHigh: exercise.reps_high,
+            sets: exercise.sets,
+            weight: exercise.weight,
+            tracked: exercise.tracked,
+            bw: exercise.bw,
+            notes: exercise.notes,
+            sortOrder: sortOrder[index],
+          });
+        })
+      ).catch((error) => {
+        console.log(error);
+      });
 
-    setSelectedExercise(routineExerciseList[destinationIndex]);
+      // Sets the selected exercise to reflect the new order if the exercises is updated after sorting
+      setSelectedExercise(sortableList[destinationIndex]);
+    }
   };
 
   return (
@@ -573,7 +586,11 @@ const Dashboard = (props) => {
                     <div className="dropdown-menu">
                       <DragDropContext
                         onDragEnd={(result) =>
-                          handleOnDragEnd(result, exerciseList)
+                          handleOnDragEnd(
+                            result,
+                            exerciseList,
+                            "routineExercises"
+                          )
                         }
                       >
                         <Droppable droppableId="exercises">
@@ -717,91 +734,151 @@ const Dashboard = (props) => {
               alt="instuctions"
             />
           </div>
-          <div>
-            {Object.keys(trackedExercises).map((exerciseName) => (
-              <div key={exerciseName}>
-                <div className="dashboard flex list-title-card">
-                  <div
-                    className="flex tracked-clickable"
-                    onClick={() => {
-                      toggleTrackedMenu(exerciseName);
-                    }}
-                  >
-                    <h3>{exerciseName}</h3>
-                    <img
-                      src={process.env.PUBLIC_URL + "/rombus.png"}
-                      className="rombus"
-                      alt="click for drop down menu"
-                    />
-                  </div>
-                </div>
-                {openMenus[exerciseName] && (
-                  <div className="tracked-dropdown dropdown-menu">
-                    <ul>
-                      {trackedExercises[exerciseName]
-                        .slice()
-                        .reverse()
-                        .map((exercise) => (
-                          <li key={exercise.id} className="dashboard flex">
-                            <div className="exercise-container">
-                              {`${new Date(exercise.date).toLocaleDateString()}
-                                `}
-                              :{" "}
-                              {exercise.weight &&
-                              userProfile.measurement_type === "imperial"
-                                ? `${exercise.weight} lbs | `
-                                : exercise.weight &&
-                                  userProfile.measurement_type === "metric"
-                                ? `${defaultConvertWeight(
-                                    exercise.weight
-                                  )} kgs | `
-                                : " "}
-                              {exercise.bw
-                                ? `(${compareBW(
-                                    userProfile.weight,
-                                    exercise.weight
-                                  )}xBW) | `
-                                : " "}
-                              {exercise.sets} x {exercise.reps_low}
-                              {exercise.reps_high
-                                ? `-${exercise.reps_high}`
-                                : ""}
-                              {exercise.weight ? (
-                                <img
-                                  alt="exercise statistics"
-                                  className="img stats"
-                                  src={
-                                    process.env.PUBLIC_URL + "/statistics.png"
-                                  }
-                                  onClick={() => {
-                                    setSelectedExercise(exercise);
-                                    setFirstExercise(
-                                      trackedExercises[exerciseName].find(
-                                        (entry) => entry.weight > 0
-                                      )
-                                    );
-                                    toggleModal("exerciseStatistics", true);
-                                  }}
-                                />
-                              ) : null}
-                            </div>
-                            <img
-                              className="img x"
-                              src={process.env.PUBLIC_URL + "/x.png"}
-                              onClick={() => {
-                                setSelectedExercise(exercise);
-                                toggleModal("deleteTrackedExercise", true);
+          <DragDropContext
+            onDragEnd={(result) =>
+              handleOnDragEnd(result, trackedExercises, "trackedExercises")
+            }
+          >
+            <Droppable droppableId="trackedExercises">
+              {(provided) => (
+                <ul
+                  className="unordered-list"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {trackedExercises.sortOrder
+                    ? trackedExercises.sortOrder.map((exercise, index) => (
+                        <Draggable
+                          key={exercise.name}
+                          draggableId={exercise.name}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <li
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                                cursor: "default",
                               }}
-                              alt="delete"
-                            />
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+                            >
+                              <div className="dashboard flex list-title-card">
+                                <div
+                                  className="flex tracked-clickable"
+                                  onClick={() => {
+                                    toggleTrackedMenu(exercise.name);
+                                  }}
+                                >
+                                  <h3>{exercise.name}</h3>
+                                  <img
+                                    src={process.env.PUBLIC_URL + "/rombus.png"}
+                                    className="rombus"
+                                    alt="click for drop down menu"
+                                  />
+                                </div>
+                                <div>
+                                  <img
+                                    className="img sort"
+                                    src={process.env.PUBLIC_URL + "/sort.png"}
+                                    alt="sort"
+                                  />
+                                </div>
+                              </div>
+                              {openMenus[exercise.name] && (
+                                <div className="tracked-dropdown dropdown-menu">
+                                  <ul>
+                                    {trackedExercises[exercise.name]
+                                      .slice()
+                                      .reverse()
+                                      .map((exercise) => (
+                                        <li
+                                          key={exercise.id}
+                                          className="dashboard flex"
+                                        >
+                                          <div className="exercise-container">
+                                            {`${new Date(
+                                              exercise.date
+                                            ).toLocaleDateString()}
+                                      `}
+                                            :{" "}
+                                            {exercise.weight &&
+                                            userProfile.measurement_type ===
+                                              "imperial"
+                                              ? `${exercise.weight} lbs | `
+                                              : exercise.weight &&
+                                                userProfile.measurement_type ===
+                                                  "metric"
+                                              ? `${defaultConvertWeight(
+                                                  exercise.weight
+                                                )} kgs | `
+                                              : " "}
+                                            {exercise.bw
+                                              ? `(${compareBW(
+                                                  userProfile.weight,
+                                                  exercise.weight
+                                                )}xBW) | `
+                                              : " "}
+                                            {exercise.sets} x{" "}
+                                            {exercise.reps_low}
+                                            {exercise.reps_high
+                                              ? `-${exercise.reps_high}`
+                                              : ""}
+                                            {exercise.weight ? (
+                                              <img
+                                                alt="exercise statistics"
+                                                className="img stats"
+                                                src={
+                                                  process.env.PUBLIC_URL +
+                                                  "/statistics.png"
+                                                }
+                                                onClick={() => {
+                                                  setSelectedExercise(exercise);
+                                                  setFirstExercise(
+                                                    trackedExercises[
+                                                      exercise.name
+                                                    ].find(
+                                                      (entry) =>
+                                                        entry.weight > 0
+                                                    )
+                                                  );
+                                                  toggleModal(
+                                                    "exerciseStatistics",
+                                                    true
+                                                  );
+                                                }}
+                                              />
+                                            ) : null}
+                                          </div>
+                                          <img
+                                            className="img x"
+                                            src={
+                                              process.env.PUBLIC_URL + "/x.png"
+                                            }
+                                            onClick={() => {
+                                              setSelectedExercise(exercise);
+                                              toggleModal(
+                                                "deleteTrackedExercise",
+                                                true
+                                              );
+                                            }}
+                                            alt="delete"
+                                          />
+                                        </li>
+                                      ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </li>
+                          )}
+                        </Draggable>
+                      ))
+                    : ""}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </div>
 

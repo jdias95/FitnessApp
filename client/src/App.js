@@ -249,6 +249,7 @@ function App() {
         .then((response) => {
           if (response.data.length > 0) {
             const groupedExercises = {};
+            let trackedExerciseOrder = [];
 
             response.data.forEach((exercise) => {
               const exerciseName = exercise.name;
@@ -258,6 +259,19 @@ function App() {
               }
 
               groupedExercises[exerciseName].push(exercise);
+            });
+
+            Axios.get(
+              `${apiURL}/api/get/tracked_exercise_order/${loginStatus.id}`
+            ).then((response) => {
+              response.data.forEach((exerciseType) => {
+                const exercise = {
+                  name: exerciseType.name,
+                  sort_order: exerciseType.sort_order,
+                };
+                trackedExerciseOrder.push(exercise);
+              });
+              groupedExercises["sortOrder"] = trackedExerciseOrder;
             });
 
             setTrackedExercises(groupedExercises);

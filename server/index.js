@@ -8,6 +8,7 @@ const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const http = require("http");
+const { userInfo } = require("os");
 require("dotenv").config();
 
 const app = express();
@@ -540,12 +541,24 @@ app.post("/api/insert/tracked-exercise", (req, res) => {
   const weight = req.body.weight;
   const bw = req.body.bw;
   const date = req.body.date;
+  const sortOrder = req.body.sortOrder;
 
   const sqlInsert =
-    "INSERT INTO tracked_exercises (user_id, exercise_id, name, sets, reps_high, reps_low, weight, bw, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO tracked_exercises (user_id, exercise_id, name, sets, reps_high, reps_low, weight, bw, date, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlInsert,
-    [userId, exerciseId, name, sets, repsHigh, repsLow, weight, bw, date],
+    [
+      userId,
+      exerciseId,
+      name,
+      sets,
+      repsHigh,
+      repsLow,
+      weight,
+      bw,
+      date,
+      sortOrder,
+    ],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });
@@ -583,6 +596,56 @@ app.delete("/api/delete/tracked-exercise/:id", (req, res) => {
       console.error("Error deleting exercise:", err);
     } else {
       res.status(204).send();
+    }
+  });
+});
+
+app.post("/api/post/tracked_exercise_order/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const name = req.body.name;
+  const sortOrder = req.body.sortOrder;
+  const sqlInsert =
+    "INSERT INTO tracked_exercises_order (user_id, name, sort_order) VALUES (?, ?, ?)";
+
+  db.query(sqlInsert, [userId, name, sortOrder], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.put("/api/update/tracked_exercise_order/:id", (req, res) => {
+  const id = req.params.id;
+  const name = req.body.name;
+  const sortOrder = req.body.sortOrder;
+  const sqlUpdate = `UPDATE tracked_exercises_order SET name = ?, sort_order = ? WHERE id = ?`;
+
+  db.query(sqlUpdate, [name, sortOrder, id], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get("/api/get/tracked_exercise_order/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const sqlSelect =
+    "SELECT * FROM tracked_exercises_order WHERE user_id = ? ORDER BY sort_order";
+
+  db.query(sqlSelect, [userId], (err, result) => {
+    if (err) {
+      console.error("Error retrieving tracked exercise order:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (result.length === 0) {
+      res.status(404).json({ error: "Exercise order not found" });
+    } else {
+      res.status(200).json(result);
     }
   });
 });
