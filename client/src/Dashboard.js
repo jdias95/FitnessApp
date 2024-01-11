@@ -619,7 +619,6 @@ const Dashboard = (props) => {
                                       <li
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
                                         className="dashboard flex"
                                         style={{
                                           ...provided.draggableProps.style,
@@ -691,6 +690,7 @@ const Dashboard = (props) => {
                                             alt="delete"
                                           />
                                           <img
+                                            {...provided.dragHandleProps}
                                             className="img sort"
                                             src={
                                               process.env.PUBLIC_URL +
@@ -770,7 +770,6 @@ const Dashboard = (props) => {
                             <li
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              {...provided.dragHandleProps}
                               style={{
                                 ...provided.draggableProps.style,
                                 cursor: "default",
@@ -792,6 +791,7 @@ const Dashboard = (props) => {
                                 </div>
                                 <div>
                                   <img
+                                    {...provided.dragHandleProps}
                                     className="img sort"
                                     src={process.env.PUBLIC_URL + "/sort.png"}
                                     alt="sort"
