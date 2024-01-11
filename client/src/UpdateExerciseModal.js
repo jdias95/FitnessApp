@@ -11,6 +11,7 @@ const UpdateExerciseModal = (props) => {
     setRoutineExercises,
     formattedDate,
     setTrackedExercises,
+    trackedExercises,
     convertWeight,
     defaultConvertWeight,
     safeParseFloat,
@@ -42,8 +43,6 @@ const UpdateExerciseModal = (props) => {
       sortOrder: sortOrder,
     })
       .then(() => {
-        console.log(selectedExercise);
-
         setRoutineExercises((prevRoutineExercises) => {
           const updatedRoutineExercises = [
             ...prevRoutineExercises[selectedRoutine.id],
@@ -137,6 +136,49 @@ const UpdateExerciseModal = (props) => {
               .catch((error) => {
                 console.error("Error tracking exercise:", error);
               });
+
+            if (
+              trackedExercises.sortOrder &&
+              !trackedExercises.sortOrder.some(
+                (exercise) => exercise.name === nameReg
+              )
+            ) {
+              Axios.post(
+                `${apiURL}/api/insert/tracked-exercise-order/${loginStatus.id}`,
+                {
+                  name: nameReg,
+                }
+              )
+                .then((response3) => {
+                  Axios.put(
+                    `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
+                    {
+                      name: nameReg,
+                      sortOrder: response3.data.insertId,
+                    }
+                  ).catch((error) => {
+                    console.error(error);
+                  });
+
+                  const existingTrackedExercises =
+                    trackedExercises["sortOrder"] || [];
+
+                  setTrackedExercises((prevTrackedExercises) => ({
+                    ...prevTrackedExercises,
+                    ["sortOrder"]: [
+                      ...existingTrackedExercises,
+                      {
+                        id: response3.data.insertId,
+                        name: nameReg,
+                        sort_order: response3.data.insertId,
+                      },
+                    ],
+                  }));
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            }
           }
 
           return {

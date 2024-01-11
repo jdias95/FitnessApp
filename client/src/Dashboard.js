@@ -361,7 +361,6 @@ const Dashboard = (props) => {
 
     // Checks the list type and updates the sort_order values in the database
     if (listType === "routineExercises") {
-      console.log(sortableList);
       Promise.all(
         sortableList.map((exercise, index) => {
           return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
@@ -383,7 +382,6 @@ const Dashboard = (props) => {
       // Sets the selected exercise to reflect the new order if the exercises is updated after sorting
       setSelectedExercise(sortableList[destinationIndex]);
     } else if (listType === "trackedExercises") {
-      console.log(sortableList, sourceIndex, destinationIndex);
       Promise.all(
         sortableList.map((exercise, index) => {
           return Axios.put(
@@ -765,7 +763,7 @@ const Dashboard = (props) => {
                     ? trackedExercises.sortOrder.map((exercise, index) => (
                         <Draggable
                           key={exercise.name}
-                          draggableId={exercise.name}
+                          draggableId={exercise.name || "unnamed"}
                           index={index}
                         >
                           {(provided) => (
@@ -968,6 +966,7 @@ const Dashboard = (props) => {
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
+          trackedExercises={trackedExercises}
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
           safeParseFloat={safeParseFloat}
@@ -988,6 +987,7 @@ const Dashboard = (props) => {
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
           setTrackedExercises={setTrackedExercises}
+          trackedExercises={trackedExercises}
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
           safeParseFloat={safeParseFloat}
@@ -1015,6 +1015,7 @@ const Dashboard = (props) => {
           }}
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
+          trackedExercises={trackedExercises}
           apiURL={apiURL}
         />
       )}

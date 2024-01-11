@@ -264,15 +264,17 @@ function App() {
             Axios.get(
               `${apiURL}/api/get/tracked-exercise-order/${loginStatus.id}`
             ).then((response) => {
-              response.data.forEach((exerciseType) => {
-                const exercise = {
-                  id: exerciseType.id,
-                  name: exerciseType.name,
-                  sort_order: exerciseType.sort_order,
-                };
-                trackedExerciseOrder.push(exercise);
-              });
-              groupedExercises["sortOrder"] = trackedExerciseOrder;
+              if (response.data.length > 0) {
+                response.data.forEach((exerciseType) => {
+                  const exercise = {
+                    id: exerciseType.id,
+                    name: exerciseType.name,
+                    sort_order: exerciseType.sort_order,
+                  };
+                  trackedExerciseOrder.push(exercise);
+                });
+                groupedExercises["sortOrder"] = trackedExerciseOrder;
+              }
             });
 
             setTrackedExercises(groupedExercises);

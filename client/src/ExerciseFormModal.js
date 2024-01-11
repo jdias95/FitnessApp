@@ -11,6 +11,7 @@ const ExerciseFormModal = (props) => {
     setRoutineExercises,
     formattedDate,
     setTrackedExercises,
+    trackedExercises,
     convertWeight,
     defaultConvertWeight,
     safeParseFloat,
@@ -144,6 +145,50 @@ const ExerciseFormModal = (props) => {
                   };
                 }
               });
+
+              if (
+                trackedExercises.sortOrder &&
+                !trackedExercises.sortOrder.some(
+                  (exercise) => exercise.name === nameReg
+                )
+              ) {
+                Axios.post(
+                  `${apiURL}/api/insert/tracked-exercise-order/${loginStatus.id}`,
+                  {
+                    name: nameReg,
+                  }
+                )
+                  .then((response3) => {
+                    console.log(response3.data.insertId);
+                    Axios.put(
+                      `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
+                      {
+                        name: nameReg,
+                        sortOrder: response3.data.insertId,
+                      }
+                    ).catch((error) => {
+                      console.error(error);
+                    });
+
+                    const existingTrackedExercises =
+                      trackedExercises["sortOrder"] || [];
+
+                    setTrackedExercises((prevTrackedExercises) => ({
+                      ...prevTrackedExercises,
+                      ["sortOrder"]: [
+                        ...existingTrackedExercises,
+                        {
+                          id: response3.data.insertId,
+                          name: nameReg,
+                          sort_order: response3.data.insertId,
+                        },
+                      ],
+                    }));
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }
             })
             .catch((error) => {
               console.error("Error tracking exercise:", error);
