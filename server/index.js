@@ -600,7 +600,7 @@ app.delete("/api/delete/tracked-exercise/:id", (req, res) => {
   });
 });
 
-app.post("/api/post/tracked_exercise_order/:userId", (req, res) => {
+app.post("/api/post/tracked-exercise-order/:userId", (req, res) => {
   const userId = req.params.userId;
   const name = req.body.name;
   const sortOrder = req.body.sortOrder;
@@ -617,7 +617,7 @@ app.post("/api/post/tracked_exercise_order/:userId", (req, res) => {
   });
 });
 
-app.put("/api/update/tracked_exercise_order/:id", (req, res) => {
+app.put("/api/update/tracked-exercise-order/:id", (req, res) => {
   const id = req.params.id;
   const name = req.body.name;
   const sortOrder = req.body.sortOrder;
@@ -633,7 +633,7 @@ app.put("/api/update/tracked_exercise_order/:id", (req, res) => {
   });
 });
 
-app.get("/api/get/tracked_exercise_order/:userId", (req, res) => {
+app.get("/api/get/tracked-exercise-order/:userId", (req, res) => {
   const userId = req.params.userId;
   const sqlSelect =
     "SELECT * FROM tracked_exercises_order WHERE user_id = ? ORDER BY sort_order";

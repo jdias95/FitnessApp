@@ -347,11 +347,6 @@ const Dashboard = (props) => {
     const sourceIndex = source.index;
     const destinationIndex = destination.index;
 
-    if (listType === "trackedExercises") {
-      console.log(sortableList, sourceIndex, destinationIndex);
-      return;
-    }
-
     // Copies the sort order as a new list
     let sortOrder = sortableList.map((item) => item.sort_order);
 
@@ -366,6 +361,7 @@ const Dashboard = (props) => {
 
     // Checks the list type and updates the sort_order values in the database
     if (listType === "routineExercises") {
+      console.log(sortableList);
       Promise.all(
         sortableList.map((exercise, index) => {
           return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
@@ -386,6 +382,21 @@ const Dashboard = (props) => {
 
       // Sets the selected exercise to reflect the new order if the exercises is updated after sorting
       setSelectedExercise(sortableList[destinationIndex]);
+    } else if (listType === "trackedExercises") {
+      console.log(sortableList, sourceIndex, destinationIndex);
+      Promise.all(
+        sortableList.map((exercise, index) => {
+          return Axios.put(
+            `${apiURL}/api/update/tracked-exercise-order/${exercise.id}`,
+            {
+              name: exercise.name,
+              sortOrder: sortOrder[index],
+            }
+          );
+        })
+      ).catch((error) => {
+        console.log(error);
+      });
     }
   };
 
@@ -736,7 +747,11 @@ const Dashboard = (props) => {
           </div>
           <DragDropContext
             onDragEnd={(result) =>
-              handleOnDragEnd(result, trackedExercises, "trackedExercises")
+              handleOnDragEnd(
+                result,
+                trackedExercises.sortOrder,
+                "trackedExercises"
+              )
             }
           >
             <Droppable droppableId="trackedExercises">

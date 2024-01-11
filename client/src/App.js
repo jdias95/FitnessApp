@@ -262,10 +262,11 @@ function App() {
             });
 
             Axios.get(
-              `${apiURL}/api/get/tracked_exercise_order/${loginStatus.id}`
+              `${apiURL}/api/get/tracked-exercise-order/${loginStatus.id}`
             ).then((response) => {
               response.data.forEach((exerciseType) => {
                 const exercise = {
+                  id: exerciseType.id,
                   name: exerciseType.name,
                   sort_order: exerciseType.sort_order,
                 };

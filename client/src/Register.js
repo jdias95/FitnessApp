@@ -21,7 +21,7 @@ const Register = (props) => {
         }
       });
     }
-  }, [setLoginStatus, loginStatus]);
+  }, [setLoginStatus, loginStatus, apiURL]);
 
   const isEmailValid = (email) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

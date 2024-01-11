@@ -19,7 +19,7 @@ const Login = (props) => {
         }
       });
     }
-  }, [setLoginStatus, loginStatus]);
+  }, [setLoginStatus, loginStatus, apiURL]);
 
   useEffect(() => {
     if (nav) {
