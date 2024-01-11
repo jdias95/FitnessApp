@@ -229,7 +229,7 @@ button:hover {
 
 .error-message {
   color: rgba(240, 58, 71, 0.87);
-  margin: 0 0 0 1em;
+  margin: 0.5em 0;
 }
 
 .error-message2 {

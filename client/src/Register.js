@@ -6,6 +6,7 @@ const Register = (props) => {
   const { loginStatus, setLoginStatus, apiURL } = props;
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
+  const [confirmPasswordReg, setConfirmPasswordReg] = useState("");
   const [firstNameReg, setFirstNameReg] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -41,6 +42,9 @@ const Register = (props) => {
       return;
     } else if (!passwordReg) {
       setPasswordError("Must enter password");
+      return;
+    } else if (confirmPasswordReg !== passwordReg) {
+      setPasswordError("Passwords must be the same");
       return;
     } else if (!firstNameReg) {
       setFirstNameError("Must enter name");
@@ -80,8 +84,8 @@ const Register = (props) => {
                 setEmailReg(e.target.value);
               }}
             />
-            {emailError && <p className="error-message">{emailError}</p>}
           </div>
+          {emailError && <p className="error-message">{emailError}</p>}
           <div className="flex">
             <input
               type="password"
@@ -92,7 +96,18 @@ const Register = (props) => {
                 setPasswordReg(e.target.value);
               }}
             />
-            {passwordError && <p className="error-message">{passwordError}</p>}
+          </div>
+          {passwordError && <p className="error-message">{passwordError}</p>}
+          <div>
+            <input
+              type="password"
+              value={confirmPasswordReg}
+              placeholder="Confirm Password"
+              maxLength="100"
+              onChange={(e) => {
+                setConfirmPasswordReg(e.target.value);
+              }}
+            />
           </div>
           <div className="flex">
             <input
@@ -104,10 +119,8 @@ const Register = (props) => {
                 setFirstNameReg(e.target.value);
               }}
             />
-            {firstNameError && (
-              <p className="error-message">{firstNameError}</p>
-            )}
           </div>
+          {firstNameError && <p className="error-message">{firstNameError}</p>}
           <div className="button-container">
             <button className="auth-button" onClick={register}>
               {" "}
