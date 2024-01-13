@@ -195,9 +195,9 @@ button:hover {
   max-height: calc(100vh - 4rem);
   position: absolute;
   bottom: 0;
-  background-image: url("../public/background.jpg");
+  background-image: url("../public/background_cropped.jpg");
   background-size: cover;
-  background-position: center center;
+  background-position: 18% center;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -219,7 +219,7 @@ button:hover {
 }
 
 #quote {
-  font-family: "Krona One", sans-serif;
+  font-family: "Merriweather", serif;
   font-style: italic;
 }
 

@@ -146,8 +146,40 @@ const ExerciseFormModal = (props) => {
                 }
               });
 
-              if (
-                trackedExercises.sortOrder &&
+              if (!trackedExercises.sortOrder) {
+                Axios.post(
+                  `${apiURL}/api/insert/tracked-exercise-order/${loginStatus.id}`,
+                  {
+                    name: nameReg,
+                  }
+                )
+                  .then((response3) => {
+                    Axios.put(
+                      `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
+                      {
+                        name: nameReg,
+                        sortOrder: response3.data.insertId,
+                      }
+                    ).catch((error) => {
+                      console.error(error);
+                    });
+
+                    setTrackedExercises((prevTrackedExercises) => ({
+                      ...prevTrackedExercises,
+                      ["sortOrder"]: [
+                        {
+                          id: response3.data.insertId,
+                          name: nameReg,
+                          sort_order: response3.data.insertId,
+                        },
+                      ],
+                    }));
+                    console.log(trackedExercises);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              } else if (
                 !trackedExercises.sortOrder.some(
                   (exercise) => exercise.name === nameReg
                 )
@@ -159,7 +191,6 @@ const ExerciseFormModal = (props) => {
                   }
                 )
                   .then((response3) => {
-                    console.log(response3.data.insertId);
                     Axios.put(
                       `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
                       {
