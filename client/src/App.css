@@ -76,6 +76,10 @@ button:hover {
   background-color: #38444d;
 }
 
+.profile {
+  width: 45%;
+}
+
 .container label {
   font-weight: bold;
 }
