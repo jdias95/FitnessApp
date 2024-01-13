@@ -69,7 +69,7 @@ button:hover {
 
 .container {
   border-radius: 1rem;
-  width: 45%;
+  width: 28.2%;
   height: 100%;
   margin: 1rem 1.5%;
   padding: 1%;
@@ -101,6 +101,7 @@ button:hover {
   transform: translate(-50%, -50%);
   height: 20em;
   max-height: 70%;
+  min-height: auto;
   display: flex;
 }
 
@@ -115,10 +116,6 @@ button:hover {
   display: flex;
   justify-content: right;
   margin-top: auto;
-}
-
-.auth-button {
-  width: 6em;
 }
 
 .forgot-password {
@@ -292,8 +289,8 @@ button:hover {
 }
 
 .img {
-  height: 1rem;
-  width: 1rem;
+  height: 1.2rem;
+  width: 1.2rem;
   margin: 0 0.1rem;
 }
 
@@ -331,11 +328,6 @@ button:hover {
 
 a {
   text-decoration: none;
-}
-
-button {
-  margin: 0.5rem 0;
-  padding: 0.3rem;
 }
 
 .form select {
@@ -401,18 +393,28 @@ button {
   width: 90%;
 }
 
-.workout-list-clickable:hover .rombus {
+.workout-list-clickable:hover .up-arrow {
   cursor: pointer;
-  content: url("../public/rombus-hover.png");
+  content: url("../public/double-up-arrow.png");
+}
+
+.workout-list-clickable:hover .down-arrow {
+  cursor: pointer;
+  content: url("../public/double-down-arrow.png");
 }
 
 .tracked-clickable {
   width: 100%;
 }
 
-.tracked-clickable:hover .rombus {
+.tracked-clickable:hover .up-arrow {
   cursor: pointer;
-  content: url("../public/rombus-hover.png");
+  content: url("../public/double-up-arrow.png");
+}
+
+.tracked-clickable:hover .down-arrow {
+  cursor: pointer;
+  content: url("../public/double-down-arrow.png");
 }
 
 .question-mark {
@@ -438,15 +440,16 @@ button {
   top: 0.2rem;
 }
 
-.rombus {
+.down-arrow,
+.up-arrow {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
   margin: 0 0 0.25rem 0;
   align-self: flex-end;
   font-size: large;
-  width: 0.5em;
-  height: 0.7em;
+  width: 1em;
+  height: 1em;
 }
 
 .dropdown-menu {
@@ -535,6 +538,7 @@ li {
 
 .dropdown-menu li {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.1em 0;
 }
 
 .dropdown-menu li .exercise-container {
@@ -614,7 +618,7 @@ li {
   width: auto;
 }
 
-.modal-button {
+.App button {
   padding: 0.3rem;
   cursor: pointer;
   margin: 0.5rem 0.1rem;
@@ -661,7 +665,8 @@ li {
   }
 
   .container {
-    width: 95%;
+    width: calc(97% - 2.2em);
+    padding: 1em;
   }
 
   .login,
@@ -697,7 +702,7 @@ li {
   }
 
   .App {
-    font-size: 0.75rem;
+    font-size: 0.9em;
   }
 
   .home-flex {
@@ -710,10 +715,6 @@ li {
 
   .nav .name {
     font-size: 1.5rem;
-  }
-
-  .nav a {
-    font-size: 0.8rem;
   }
 
   .home {
@@ -736,9 +737,16 @@ li {
   }
 }
 
+@media (max-height: 700px) {
+  .register,
+  .login {
+    top: 50%;
+  }
+}
+
 @media (max-height: 500px) {
   .App {
-    font-size: 0.75rem;
+    font-size: 0.9em;
     min-height: calc(100vh - 4rem);
     padding: 2.5rem 0 1.5rem 0;
   }
@@ -757,10 +765,5 @@ li {
   .exercise-modal-body,
   .modal-body {
     padding: 0.5rem;
-  }
-
-  .login,
-  .register {
-    top: calc(50% - 1rem);
   }
 }

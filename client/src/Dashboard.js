@@ -564,11 +564,19 @@ const Dashboard = (props) => {
                       }}
                     >
                       <h3>{routine.name}</h3>
-                      <img
-                        src={process.env.PUBLIC_URL + "/rombus.png"}
-                        className="rombus"
-                        alt="click for drop down menu"
-                      />
+                      {isMenuOpen ? (
+                        <img
+                          src={process.env.PUBLIC_URL + "/up-arrow.png"}
+                          className="up-arrow"
+                          alt="click to collapse drop down menu"
+                        />
+                      ) : (
+                        <img
+                          src={process.env.PUBLIC_URL + "/down-arrow.png"}
+                          className="down-arrow"
+                          alt="click for drop down menu"
+                        />
+                      )}
                     </div>
                     <div className="flex">
                       <img
@@ -783,11 +791,25 @@ const Dashboard = (props) => {
                                   }}
                                 >
                                   <h3>{exercise.name}</h3>
-                                  <img
-                                    src={process.env.PUBLIC_URL + "/rombus.png"}
-                                    className="rombus"
-                                    alt="click for drop down menu"
-                                  />
+
+                                  {openMenus[exercise.name] ? (
+                                    <img
+                                      src={
+                                        process.env.PUBLIC_URL + "/up-arrow.png"
+                                      }
+                                      className="up-arrow"
+                                      alt="click to collapse drop down menu"
+                                    />
+                                  ) : (
+                                    <img
+                                      src={
+                                        process.env.PUBLIC_URL +
+                                        "/down-arrow.png"
+                                      }
+                                      className="down-arrow"
+                                      alt="click for drop down menu"
+                                    />
+                                  )}
                                 </div>
                                 <div>
                                   <img
