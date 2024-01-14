@@ -702,7 +702,7 @@ const Dashboard = (props) => {
                                             className="img sort"
                                             src={
                                               process.env.PUBLIC_URL +
-                                              "/sort.png"
+                                              "/sort-list.png"
                                             }
                                             onClick={() => {
                                               setSelectedRoutine(routine);
@@ -815,7 +815,9 @@ const Dashboard = (props) => {
                                   <img
                                     {...provided.dragHandleProps}
                                     className="img sort"
-                                    src={process.env.PUBLIC_URL + "/sort.png"}
+                                    src={
+                                      process.env.PUBLIC_URL + "/sort-list.png"
+                                    }
                                     alt="sort"
                                   />
                                 </div>
