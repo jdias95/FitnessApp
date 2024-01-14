@@ -55,7 +55,11 @@
 }
 
 .nav a:hover {
-  color: rgba(172, 237, 255, 0.87);
+  font-weight: bold;
+}
+
+.nav a.active {
+  font-weight: bold;
 }
 
 button:hover {
