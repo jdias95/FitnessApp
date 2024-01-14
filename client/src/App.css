@@ -399,15 +399,14 @@ a {
 
 .workout-list-clickable {
   width: 90%;
+  cursor: pointer;
 }
 
 .workout-list-clickable:hover .up-arrow {
-  cursor: pointer;
   content: url("../public/double-up-arrow.png");
 }
 
 .workout-list-clickable:hover .down-arrow {
-  cursor: pointer;
   content: url("../public/double-down-arrow.png");
 }
 
@@ -416,12 +415,10 @@ a {
 }
 
 .tracked-clickable:hover .up-arrow {
-  cursor: pointer;
   content: url("../public/double-up-arrow.png");
 }
 
 .tracked-clickable:hover .down-arrow {
-  cursor: pointer;
   content: url("../public/double-down-arrow.png");
 }
 

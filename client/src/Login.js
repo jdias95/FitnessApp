@@ -80,9 +80,10 @@ const Login = (props) => {
       const OTP = Math.floor(Math.random() * 9000 + 1000);
       setOTP(OTP);
 
-      Axios.post(`${apiURL}/api/send-recovery-email`, {
+      Axios.post(`${apiURL}/api/send-email`, {
         OTP: OTP,
         recipient_email: email,
+        email_type: "recovery",
       })
         .then((response) => {
           if (response.data.message) {

@@ -62,6 +62,12 @@ const Register = (props) => {
     })
       .then((response) => {
         console.log("Server response:", response.data);
+
+        Axios.post(`${apiURL}/api/send-email`, {
+          OTP: null,
+          recipient_email: emailReg,
+          email_type: "welcome",
+        }).catch((error) => console.error(error));
         navigate("/login");
       })
       .catch((error) => {
