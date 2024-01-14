@@ -8,7 +8,6 @@ const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const http = require("http");
-const { userInfo } = require("os");
 require("dotenv").config();
 
 const app = express();
@@ -54,7 +53,7 @@ const db = mysql.createPool({
   database: "fitnessapp",
 });
 
-const sendEmail = ({ OTP, recipient_email }) => {
+const sendEmail = ({ OTP, recipient_email, email_type }) => {
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
       host: "smtp-relay.brevo.com",
@@ -65,11 +64,13 @@ const sendEmail = ({ OTP, recipient_email }) => {
       },
     });
 
-    const mail_configs = {
-      from: "wegojim315@gmail.com",
-      to: recipient_email,
-      subject: "Reset Password",
-      html: `<!DOCTYPE html>
+    const mail_configs =
+      email_type === "recovery"
+        ? {
+            from: "wegojim315@gmail.com",
+            to: recipient_email,
+            subject: "Reset Password",
+            html: `<!DOCTYPE html>
               <html>
                 <body>
                   <div>
@@ -78,7 +79,34 @@ const sendEmail = ({ OTP, recipient_email }) => {
                   </div>
                 </body>
               </html>`,
-    };
+          }
+        : email_type === "welcome"
+        ? {
+            from: "wegojim315@gmail.com",
+            to: recipient_email,
+            subject: "Welcome!",
+            html: `<!DOCTYPE html>
+              <html>
+                <body>
+                  <div>
+                    <p>Welcome to WeGoJim!<br><br>Thank you for trying out my app. If you have any questions or feedback, please feel free to reach out. I hope its features allow you to better manage your fitness progress.<br><br>Best Regards,<br>Josh</p>
+                  </div>
+                </body>
+              </html>`,
+          }
+        : {
+            from: "wegojim315@gmail.com",
+            to: recipient_email,
+            subject: "Password Successfully Reset",
+            html: `<!DOCTYPE html>
+              <html>
+                <body>
+                  <div>
+                    <p>You successfully reset your password to WeGoJim!</p>
+                  </div>
+                </body>
+              </html>`,
+          };
 
     transporter.sendMail(mail_configs, (error, info) => {
       if (error) {
@@ -90,7 +118,7 @@ const sendEmail = ({ OTP, recipient_email }) => {
   });
 };
 
-app.post("/api/send-recovery-email", (req, res) => {
+app.post("/api/send-email", (req, res) => {
   const sqlSelect = `SELECT * FROM users WHERE email = ?`;
 
   db.query(sqlSelect, [req.body.recipient_email], (err, result) => {
@@ -126,6 +154,7 @@ app.put("/api/reset-password", (req, res) => {
         return res.status(500).json({ message: "Error during password reset" });
       } else {
         console.log("Password reset successful:", result);
+        sendEmail({ OTP: null, recipient_email: email, email_type: "success" });
         res.status(200).json({ message: "Password reset successful" });
       }
     });
