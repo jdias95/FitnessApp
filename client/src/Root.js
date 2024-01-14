@@ -23,7 +23,7 @@ const Root = (props) => {
         {localStorage.getItem("authToken") ? (
           <>
             <h1 className="name">
-              Hello {JSON.parse(localStorage.getItem("authToken")).firstName}!
+              Hello, {JSON.parse(localStorage.getItem("authToken")).firstName}!
             </h1>
             <Link
               className={location.pathname === "/dashboard" ? "active" : ""}

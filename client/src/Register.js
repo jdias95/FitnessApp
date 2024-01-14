@@ -8,9 +8,7 @@ const Register = (props) => {
   const [passwordReg, setPasswordReg] = useState("");
   const [confirmPasswordReg, setConfirmPasswordReg] = useState("");
   const [firstNameReg, setFirstNameReg] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [firstNameError, setFirstNameError] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,30 +28,26 @@ const Register = (props) => {
   };
 
   const register = () => {
-    setEmailError("");
-    setPasswordError("");
-    setFirstNameError("");
+    setError("");
 
     if (!emailReg) {
-      setEmailError("Must enter email");
+      setError("Must enter email");
       return;
     } else if (!isEmailValid(emailReg)) {
-      setEmailError("Invalid email format");
+      setError("Invalid email format");
       return;
     } else if (!passwordReg) {
-      setPasswordError("Must enter password");
+      setError("Must enter password");
       return;
     } else if (confirmPasswordReg !== passwordReg) {
-      setPasswordError("Passwords must be the same");
+      setError("Passwords must be the same");
       return;
     } else if (!firstNameReg) {
-      setFirstNameError("Must enter name");
+      setError("Must enter name");
       return;
     }
 
-    setEmailError("");
-    setPasswordError("");
-    setFirstNameError("");
+    setError("");
 
     Axios.post(`${apiURL}/api/register`, {
       email: emailReg,
@@ -71,6 +65,7 @@ const Register = (props) => {
         navigate("/login");
       })
       .catch((error) => {
+        setError("User already exists");
         console.error("Error registering", error);
       });
   };
@@ -91,7 +86,6 @@ const Register = (props) => {
               }}
             />
           </div>
-          {emailError && <p className="error-message">{emailError}</p>}
           <div className="flex">
             <input
               type="password"
@@ -103,7 +97,6 @@ const Register = (props) => {
               }}
             />
           </div>
-          {passwordError && <p className="error-message">{passwordError}</p>}
           <div>
             <input
               type="password"
@@ -126,7 +119,7 @@ const Register = (props) => {
               }}
             />
           </div>
-          {firstNameError && <p className="error-message">{firstNameError}</p>}
+          {error && <p className="error-message">{error}</p>}
           <div className="button-container">
             <button className="auth-button" onClick={register}>
               {" "}
