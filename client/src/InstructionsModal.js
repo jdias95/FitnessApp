@@ -18,9 +18,9 @@ const InstructionsModal = (props) => {
                   alt="edit"
                   src={process.env.PUBLIC_URL + "/edit.png"}
                 />
-                {")"} an exercise in 'Workout Routines' with 'Track Progress?'
-                selected, a new entry will be added to a 'Track Progress' list
-                of the <span className="bold">SAME NAME</span>.
+                {")"} an exercise in a workout routine with 'Track Progress?'
+                selected, a new entry will be added below to a list of the{" "}
+                <span className="bold">SAME NAME</span>.
               </p>
             </div>
             <div>
