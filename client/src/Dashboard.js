@@ -181,7 +181,28 @@ const Dashboard = (props) => {
 
       const yScale = d3
         .scaleLinear()
-        .domain([minValue - padding, maxValue + padding])
+        .domain([
+          userProfile &&
+          userProfile.target_weight &&
+          userProfile.measurement_type !== "metric"
+            ? d3.min([userProfile.target_weight - padding, minValue - padding])
+            : userProfile && userProfile.target_weight
+            ? d3.min([
+                defaultConvertWeight(userProfile.target_weight) - padding,
+                minValue - padding,
+              ])
+            : minValue - padding,
+          userProfile &&
+          userProfile.target_weight &&
+          userProfile.measurement_type !== "metric"
+            ? d3.max([userProfile.target_weight + padding, maxValue + padding])
+            : userProfile && userProfile.target_weight
+            ? d3.max([
+                defaultConvertWeight(userProfile.target_weight) + padding,
+                maxValue + padding,
+              ])
+            : maxValue + padding,
+        ])
         .nice()
         .range([graphHeight - marginBottom, marginTop]);
 
@@ -267,12 +288,7 @@ const Dashboard = (props) => {
         .attr("d", line)
         .attr("clip-path", "url(#clip-path)");
 
-      if (
-        userProfile &&
-        userProfile.target_weight &&
-        userProfile.target_weight >= minValue - padding &&
-        userProfile.target_weight <= maxValue + padding
-      ) {
+      if (userProfile && userProfile.target_weight) {
         if (userProfile.measurement_type !== "metric") {
           svg
             .append("line")

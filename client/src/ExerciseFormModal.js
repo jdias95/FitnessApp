@@ -176,7 +176,6 @@ const ExerciseFormModal = (props) => {
                         },
                       ],
                     }));
-                    console.log(trackedExercises);
                   })
                   .catch((error) => {
                     console.error(error);

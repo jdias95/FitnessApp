@@ -33,7 +33,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  z-index: 100;
+  z-index: 200;
   width: 100%;
   height: 4rem;
   top: 0;
@@ -463,7 +463,7 @@ a {
   padding: 0 0.5em;
   font-size: 0.85em;
   width: 30em;
-  top: 58%;
+  top: 60%;
   transform: translateX(-5.5%);
   transition: opacity 0.3s ease-in-out;
 }
