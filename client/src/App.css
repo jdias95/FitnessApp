@@ -60,6 +60,7 @@
 
 .nav a.active {
   font-weight: bold;
+  cursor: default;
 }
 
 button:hover {
@@ -297,14 +298,14 @@ button:hover {
 }
 
 .img {
-  height: 1.2rem;
-  width: 1.2rem;
+  height: 1rem;
+  width: 1rem;
   margin: 0 0.1rem;
 }
 
 .sort {
   height: 1.5rem;
-  width: 1.5rem;
+  width: 1rem;
 }
 
 .delete:hover {
@@ -427,15 +428,69 @@ a {
   content: url("../public/double-down-arrow.png");
 }
 
-.question-mark {
+.shift-left {
+  transform: translate(-1.2em);
+}
+
+.tooltip-png {
   width: 1.5rem;
   height: 1.5rem;
 }
 
-.question-mark:hover {
+.tooltip-png2 {
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 0.3em;
+}
+
+.tooltip-png:hover,
+.tooltip-png2:hover {
   cursor: pointer;
-  content: url("../public/question-mark-hover.png");
+  content: url("../public/tooltip-hover.png");
   transition: content 0.3s;
+}
+
+.tooltip-container {
+  position: relative;
+  z-index: 100;
+}
+
+.tooltip {
+  position: absolute;
+  right: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 0 0.5em;
+  font-size: 0.85em;
+  width: 30em;
+  top: 58%;
+  transform: translateX(-5.5%);
+  transition: opacity 0.3s ease-in-out;
+}
+
+.tooltip-exercise {
+  left: 6%;
+  padding: 0.5em;
+}
+
+#sets {
+  top: -110%;
+}
+
+#reps {
+  top: -170%;
+}
+
+#weight {
+  top: -150%;
+}
+
+#track {
+  top: -340%;
+}
+
+#bw {
+  top: -420%;
 }
 
 .bold {
@@ -499,7 +554,7 @@ a {
 .exercise-modal-body {
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 2.5rem;
   width: 100%;
   max-width: calc(100% - 3rem);
 }
@@ -712,7 +767,16 @@ li {
   }
 
   .App {
-    font-size: 0.9em;
+    font-size: 0.85em;
+  }
+
+  .tooltip-png2 {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+
+  .tooltip-exercise {
+    left: 9%;
   }
 
   .home-flex {
@@ -774,6 +838,6 @@ li {
 
   .exercise-modal-body,
   .modal-body {
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
   }
 }

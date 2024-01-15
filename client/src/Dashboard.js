@@ -10,7 +10,6 @@ import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
 import NotesModal from "./NotesModal";
 import * as d3 from "d3";
 import moment from "moment";
-import InstructionsModal from "./InstructionsModal";
 import StatisticsModal from "./StatisticsModal";
 import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -50,7 +49,6 @@ const Dashboard = (props) => {
   const [showDeleteTrackedExerciseModal, setShowDeleteTrackedExerciseModal] =
     useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
-  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [showStatisticsModal, setShowStatisticsModal] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState({});
@@ -58,6 +56,7 @@ const Dashboard = (props) => {
   const [weightTimeBtN, setWeightTimeBtN] = useState(0);
   const [tickMultiplier, setTickMultiplier] = useState(6);
   const [timeSelection, setTimeSelection] = useState("1 month");
+  const [showInfo, setShowInfo] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,9 +94,6 @@ const Dashboard = (props) => {
         break;
       case "deleteTrackedExercise":
         setShowDeleteTrackedExerciseModal(isOpen);
-        break;
-      case "instructions":
-        setShowInstructionsModal(isOpen);
         break;
       case "exerciseStatistics":
         setShowStatisticsModal(isOpen);
@@ -740,16 +736,36 @@ const Dashboard = (props) => {
           </ul>
         </div>
         <div className="tracked container">
-          <div className="dashboard flex title">
+          <div className="dashboard flex title tooltip-container">
             <h2>Track Progress</h2>
             <img
-              className="question-mark"
-              src={process.env.PUBLIC_URL + "/question-mark.png"}
-              onClick={() => {
-                toggleModal("instructions", true);
+              className="tooltip-png"
+              src={process.env.PUBLIC_URL + "/tooltip.png"}
+              onMouseOver={() => {
+                setShowInfo("track progress");
               }}
-              alt="instuctions"
+              onMouseOut={() => {
+                setShowInfo("");
+              }}
+              alt="tooltip"
             />
+            {showInfo === "track progress" && (
+              <div className="tooltip">
+                <p>
+                  When you create {"("}
+                  <span className="bold">+</span>
+                  {")"} or update {"("}
+                  <img
+                    id="edit"
+                    alt="edit"
+                    src={process.env.PUBLIC_URL + "/edit.png"}
+                  />
+                  {")"} an exercise in a workout routine with 'Track Progress?'
+                  selected, a new entry will be added below to a list of the{" "}
+                  <span className="bold">SAME NAME</span> as the exercise.
+                </p>
+              </div>
+            )}
           </div>
           <DragDropContext
             onDragEnd={(result) =>
@@ -989,6 +1005,8 @@ const Dashboard = (props) => {
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
+          setShowInfo={setShowInfo}
+          showInfo={showInfo}
           setTrackedExercises={setTrackedExercises}
           trackedExercises={trackedExercises}
           convertWeight={convertWeight}
@@ -1010,6 +1028,8 @@ const Dashboard = (props) => {
           selectedExercise={selectedExercise}
           setRoutineExercises={setRoutineExercises}
           formattedDate={formattedDate}
+          setShowInfo={setShowInfo}
+          showInfo={showInfo}
           setTrackedExercises={setTrackedExercises}
           trackedExercises={trackedExercises}
           convertWeight={convertWeight}
@@ -1050,14 +1070,6 @@ const Dashboard = (props) => {
             toggleModal("notes", false);
           }}
           selectedExercise={selectedExercise}
-        />
-      )}
-
-      {showInstructionsModal && (
-        <InstructionsModal
-          onClose={() => {
-            toggleModal("instructions", false);
-          }}
         />
       )}
 
