@@ -57,6 +57,7 @@ const Dashboard = (props) => {
   const [tickMultiplier, setTickMultiplier] = useState(6);
   const [timeSelection, setTimeSelection] = useState("1 month");
   const [showInfo, setShowInfo] = useState("");
+  const [weightForcast, setWeightForcast] = useState([0, ""]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -136,6 +137,36 @@ const Dashboard = (props) => {
   const compareBW = (bw, weight) => {
     return Number(weight / bw).toFixed(2);
   };
+
+  useEffect(() => {
+    if (
+      userProfile &&
+      userProfile.target_weight &&
+      userProfile.weight_goal &&
+      userProfile.weight_goal !== 0
+    ) {
+      const weightDifference = userProfile.target_weight - userProfile.weight;
+      if (
+        (userProfile.weight_goal < 0 && weightDifference < 0) ||
+        (userProfile.weight_goal > 0 && weightDifference > 0)
+      ) {
+        setWeightForcast(
+          weightDifference / userProfile.weight_goal >= 1
+            ? [
+                (weightDifference / userProfile.weight_goal).toFixed(1),
+                "months",
+              ]
+            : weightDifference / userProfile.weight_goal < 1 &&
+              weightDifference / userProfile.weight_goal > 0
+            ? [
+                (weightDifference / (userProfile.weight_goal / 4)).toFixed(1),
+                "weeks",
+              ]
+            : [0, ""]
+        );
+      }
+    }
+  }, [userProfile]);
 
   useEffect(() => {
     d3.select(".weightGraph svg").remove();
@@ -289,27 +320,43 @@ const Dashboard = (props) => {
         .attr("clip-path", "url(#clip-path)");
 
       if (userProfile && userProfile.target_weight) {
-        if (userProfile.measurement_type !== "metric") {
-          svg
-            .append("line")
-            .attr("class", "target-line")
-            .attr("x1", marginLeft)
-            .attr("y1", yScale(userProfile.target_weight))
-            .attr("x2", graphWidth - marginRight)
-            .attr("y2", yScale(userProfile.target_weight))
-            .attr("stroke", "rgb(138, 201, 38)")
-            .attr("stroke-width", 2);
-        } else {
-          svg
-            .append("line")
-            .attr("class", "target-line")
-            .attr("x1", marginLeft)
-            .attr("y1", yScale(defaultConvertWeight(userProfile.target_weight)))
-            .attr("x2", graphWidth - marginRight)
-            .attr("y2", yScale(defaultConvertWeight(userProfile.target_weight)))
-            .attr("stroke", "rgb(138, 201, 38)")
-            .attr("stroke-width", 2);
-        }
+        const targetWeight =
+          userProfile.measurement_type !== "metric"
+            ? userProfile.target_weight
+            : defaultConvertWeight(userProfile.target_weight);
+
+        svg
+          .append("line")
+          .attr("class", "target-line")
+          .attr("x1", marginLeft)
+          .attr("y1", yScale(targetWeight))
+          .attr("x2", graphWidth - marginRight)
+          .attr("y2", yScale(targetWeight))
+          .attr("stroke", "rgb(138, 201, 38)")
+          .attr("stroke-width", 2);
+
+        svg
+          .append("text")
+          .attr("x", (graphWidth - marginLeft - marginRight) / 2)
+          .attr(
+            "y",
+            userProfile.target_weight - userProfile.weight > 0
+              ? yScale(targetWeight) - 10
+              : yScale(targetWeight) + 20
+          )
+          .attr("text-anchor", "start")
+          .attr("fill", "rgb(138, 201, 38)")
+          .text(
+            weightForcast[0] > 1 ||
+              (weightForcast[0] > 0 && weightForcast[0] < 1)
+              ? `${Number(weightForcast[0])} ${weightForcast[1]}`
+              : Number(weightForcast[0]) === 1
+              ? `${Number(weightForcast[0])} ${weightForcast[1].slice(
+                  0,
+                  weightForcast[1].length - 1
+                )}`
+              : ""
+          );
       }
 
       const yAxisGroup = svg
@@ -346,9 +393,10 @@ const Dashboard = (props) => {
     timeSelection,
     userProfile,
     defaultConvertWeight,
+    weightForcast,
   ]);
 
-  // Handles logic for dragging items when sorting lists
+  // Handles logic for list sorting
   const handleOnDragEnd = (result, sortableList, listType) => {
     const { source, destination } = result;
 
@@ -777,7 +825,7 @@ const Dashboard = (props) => {
                     src={process.env.PUBLIC_URL + "/edit.png"}
                   />
                   {")"} an exercise in a workout routine with 'Track Progress?'
-                  selected, a new entry will be added below to a list of the{" "}
+                  selected, a new entry will be added below to a list with the{" "}
                   <span className="bold">SAME NAME</span> as the exercise.
                 </p>
               </div>
