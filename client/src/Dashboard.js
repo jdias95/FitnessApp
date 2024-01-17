@@ -371,12 +371,12 @@ const Dashboard = (props) => {
           svg
             .append("image")
             .attr("class", "tooltip-png2")
-            .attr("x", (graphWidth - marginLeft - marginRight) / 2 - 20)
+            .attr("x", (graphWidth - marginLeft - marginRight) / 2 - 18)
             .attr(
               "y",
               userProfile.target_weight - userProfile.weight > 0
-                ? yScale(targetWeight) - 21
-                : yScale(targetWeight) + 10
+                ? yScale(targetWeight) - 22
+                : yScale(targetWeight) + 9
             )
             .attr("xlink:href", process.env.PUBLIC_URL + "/tooltip.png")
             .on("mouseover", function (event) {

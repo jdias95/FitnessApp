@@ -465,7 +465,6 @@ a {
   width: 30em;
   top: 60%;
   transform: translateX(-5.5%);
-  transition: opacity 0.3s ease-in-out;
 }
 
 .tooltip-exercise {
@@ -768,11 +767,6 @@ li {
 
   .App {
     font-size: 0.85em;
-  }
-
-  .tooltip-png2 {
-    width: 0.7rem;
-    height: 0.7rem;
   }
 
   .tooltip-exercise {
