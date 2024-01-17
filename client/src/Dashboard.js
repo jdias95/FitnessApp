@@ -335,6 +335,15 @@ const Dashboard = (props) => {
           .attr("stroke", "rgb(138, 201, 38)")
           .attr("stroke-width", 2);
 
+        const tooltip = d3
+          .select("body")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0)
+          .style("padding", "15px")
+          .style("font-size", "14px")
+          .style("font-family", "Open Sans");
+
         svg
           .append("text")
           .attr("x", (graphWidth - marginLeft - marginRight) / 2)
@@ -357,6 +366,41 @@ const Dashboard = (props) => {
                 )}`
               : ""
           );
+
+        if (weightForcast[0]) {
+          svg
+            .append("image")
+            .attr("class", "tooltip-png2")
+            .attr("x", (graphWidth - marginLeft - marginRight) / 2 - 20)
+            .attr(
+              "y",
+              userProfile.target_weight - userProfile.weight > 0
+                ? yScale(targetWeight) - 21
+                : yScale(targetWeight) + 10
+            )
+            .attr("xlink:href", process.env.PUBLIC_URL + "/tooltip.png")
+            .on("mouseover", function (event) {
+              d3.select(this).attr(
+                "xlink:href",
+                process.env.PUBLIC_URL + "/tooltip-hover.png"
+              );
+              tooltip
+                .html(
+                  "Please note, the estimated daily calorie budget is tailored to your weekly goal and profile settings. This calculation assumes your average daily calorie intake aligns closely with the budget. Remember, it's a rough estimate, and you may discover better results by adjusting your calorie intake based on your preferences and needs."
+                )
+                .style("opacity", 1)
+                .style("position", "absolute")
+                .style("left", `${event.pageX - 155}px`)
+                .style("top", `${event.pageY - 160}px`);
+            })
+            .on("mouseout", function () {
+              d3.select(this).attr(
+                "xlink:href",
+                process.env.PUBLIC_URL + "/tooltip.png"
+              );
+              tooltip.style("opacity", 0);
+            });
+        }
       }
 
       const yAxisGroup = svg
