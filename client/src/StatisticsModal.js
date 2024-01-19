@@ -15,6 +15,7 @@ const StatisticsModal = (props) => {
   const [tickMultiplierTracked, setTickMultiplierTracked] = useState(18);
   const [exerciseTimeBTN, setExerciseTimeBTN] = useState(0);
   const [timeSelectionTracked, setTimeSelectionTracked] = useState("3 months");
+  const [graphSelection, setGraphSelection] = useState("working weight");
 
   const calcVolume = (weight, sets, reps) => {
     const volume = weight * sets * reps;
@@ -81,17 +82,66 @@ const StatisticsModal = (props) => {
       (exercise) => exercise.weight
     );
 
-    console.log(filteredExercises);
-
     const metricFilteredExercises = filteredExercises.map((exercise) => {
       return { ...exercise, weight: defaultConvertWeight(exercise.weight) };
     });
 
-    console.log(metricFilteredExercises);
+    const exerciseVolumes = filteredExercises.map((exercise) => {
+      return {
+        ...exercise,
+        weight:
+          exercise.reps_high &&
+          userProfile &&
+          userProfile.measurement_type !== "metric"
+            ? Number(
+                (
+                  (calcVolume(
+                    exercise.weight,
+                    exercise.sets,
+                    exercise.reps_low
+                  ) +
+                    calcVolume(
+                      exercise.weight,
+                      exercise.sets,
+                      exercise.reps_high
+                    )) /
+                  2
+                ).toFixed(1)
+              )
+            : userProfile && userProfile.measurement_type !== "metric"
+            ? calcVolume(exercise.weight, exercise.sets, exercise.reps_low)
+            : exercise.reps_high
+            ? defaultConvertWeight(
+                Number(
+                  (
+                    (calcVolume(
+                      exercise.weight,
+                      exercise.sets,
+                      exercise.reps_low
+                    ) +
+                      calcVolume(
+                        exercise.weight,
+                        exercise.sets,
+                        exercise.reps_high
+                      )) /
+                    2
+                  ).toFixed(1)
+                )
+              )
+            : defaultConvertWeight(
+                calcVolume(exercise.weight, exercise.sets, exercise.reps_low)
+              ),
+      };
+    });
 
     const weightValues = filteredExercises
       .filter((d) => d.weight != null)
       .map((d) => d.weight);
+
+    const volumeWeightValues = exerciseVolumes
+      .filter((d) => d.weight != null)
+      .map((d) => d.weight);
+
     const dateValues = filteredExercises
       .filter((d) => d.weight != null)
       .map((d) => d.date);
@@ -122,15 +172,28 @@ const StatisticsModal = (props) => {
     const meanValue = d3.mean(weightValues);
     const padding = meanValue * 0.025;
 
+    const volumeMinValue = d3.min(volumeWeightValues);
+    const volumeMaxValue = d3.max(volumeWeightValues);
+    const volumeMeanValue = d3.mean(volumeWeightValues);
+    const volumePadding = volumeMeanValue * 0.025;
+
     const yScale = d3
       .scaleLinear()
       .domain([
-        userProfile && userProfile.measurement_type !== "metric"
+        userProfile &&
+        userProfile.measurement_type !== "metric" &&
+        graphSelection === "working weight"
           ? minValue - padding
-          : defaultConvertWeight(minValue - padding),
-        userProfile && userProfile.measurement_type !== "metric"
+          : graphSelection === "working weight"
+          ? defaultConvertWeight(minValue - padding)
+          : volumeMinValue - volumePadding,
+        userProfile &&
+        userProfile.measurement_type !== "metric" &&
+        graphSelection === "working weight"
           ? maxValue + padding
-          : defaultConvertWeight(maxValue + padding),
+          : graphSelection === "working weight"
+          ? defaultConvertWeight(maxValue + padding)
+          : volumeMaxValue + volumePadding,
       ])
       .nice()
       .range([graphHeight - marginBottom, marginTop]);
@@ -179,20 +242,6 @@ const StatisticsModal = (props) => {
       )
       .call(xAxis);
 
-    // svg
-    //   .append("path")
-    //   .datum(filteredExercises)
-    //   .attr("fill", "none")
-    //   .attr("stroke", "steelblue")
-    //   .attr("stroke-width", 2)
-    //   .attr(
-    //     "d",
-    //     d3
-    //       .line()
-    //       .x((exercise) => xScale(new Date(exercise.date)))
-    //       .y((exercise) => yScale(exercise.weight))
-    //   );
-
     svg
       .append("defs")
       .append("clipPath")
@@ -205,9 +254,13 @@ const StatisticsModal = (props) => {
       .append("g")
       .append("path")
       .datum(
-        userProfile && userProfile.measurement_type !== "metric"
+        userProfile &&
+          userProfile.measurement_type !== "metric" &&
+          graphSelection === "working weight"
           ? filteredExercises
-          : metricFilteredExercises
+          : graphSelection === "working weight"
+          ? metricFilteredExercises
+          : exerciseVolumes
       )
       .attr("fill", "none")
       .attr("stroke", "steelblue")
@@ -222,6 +275,24 @@ const StatisticsModal = (props) => {
           .x((exercise) => xScale(new Date(exercise.date)))
           .y((exercise) => yScale(exercise.weight))
       );
+
+    // svg
+    //   .append("g")
+    //   .append("path")
+    //   .datum(exerciseVolumes)
+    //   .attr("fill", "none")
+    //   .attr("stroke", "steelblue")
+    //   .attr("stroke-width", 2)
+    //   .attr("stroke-linecap", "round")
+    //   .attr("clip-path", "url(#clip-path)")
+    //   .attr("transform", `translate(${-marginLeft}, 0)`)
+    //   .attr(
+    //     "d",
+    //     d3
+    //       .line()
+    //       .x((exercise) => xScale(new Date(exercise.date)))
+    //       .y((exercise) => yScale(exercise.weight))
+    //   );
 
     const yAxisGroup = svg
       .append("g")
