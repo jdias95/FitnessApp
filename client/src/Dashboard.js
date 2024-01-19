@@ -342,7 +342,8 @@ const Dashboard = (props) => {
           .style("opacity", 0)
           .style("padding", "15px")
           .style("font-size", "14px")
-          .style("font-family", "Open Sans");
+          .style("font-family", "Open Sans")
+          .style("z-index", "-100");
 
         svg
           .append("text")
@@ -391,7 +392,8 @@ const Dashboard = (props) => {
                 .style("opacity", 1)
                 .style("position", "absolute")
                 .style("left", `${event.pageX - 155}px`)
-                .style("top", `${event.pageY - 160}px`);
+                .style("top", `${event.pageY - 160}px`)
+                .style("z-index", "100");
             })
             .on("mouseout", function () {
               d3.select(this).attr(
@@ -915,7 +917,6 @@ const Dashboard = (props) => {
                                   }}
                                 >
                                   <h3>{exercise.name}</h3>
-
                                   {openMenus[exercise.name] ? (
                                     <img
                                       src={
@@ -935,7 +936,30 @@ const Dashboard = (props) => {
                                     />
                                   )}
                                 </div>
-                                <div>
+                                <div className="flex">
+                                  {trackedExercises[exercise.name].find(
+                                    (exercise) => exercise.weight
+                                  ) ? (
+                                    <img
+                                      alt="exercise statistics"
+                                      className="img stats"
+                                      src={
+                                        process.env.PUBLIC_URL +
+                                        "/statistics.png"
+                                      }
+                                      onClick={() => {
+                                        setSelectedExercise(
+                                          trackedExercises[exercise.name]
+                                        );
+                                        setFirstExercise(
+                                          trackedExercises[exercise.name].find(
+                                            (entry) => entry.weight > 0
+                                          )
+                                        );
+                                        toggleModal("exerciseStatistics", true);
+                                      }}
+                                    />
+                                  ) : null}
                                   <img
                                     {...provided.dragHandleProps}
                                     className="img sort"
@@ -953,78 +977,53 @@ const Dashboard = (props) => {
                                       .slice()
                                       .reverse()
                                       .map((exercise) => (
-                                        <li
-                                          key={exercise.id}
-                                          className="dashboard flex"
-                                        >
-                                          <div className="exercise-container">
-                                            {`${new Date(
-                                              exercise.date
-                                            ).toLocaleDateString()}
+                                        <li key={exercise.id}>
+                                          <div className="dashboard flex">
+                                            <div className="exercise-container">
+                                              {`${new Date(
+                                                exercise.date
+                                              ).toLocaleDateString()}
                                       `}
-                                            :{" "}
-                                            {exercise.weight &&
-                                            userProfile.measurement_type ===
-                                              "imperial"
-                                              ? `${exercise.weight} lbs | `
-                                              : exercise.weight &&
-                                                userProfile.measurement_type ===
-                                                  "metric"
-                                              ? `${defaultConvertWeight(
-                                                  exercise.weight
-                                                )} kgs | `
-                                              : " "}
-                                            {exercise.bw
-                                              ? `(${compareBW(
-                                                  userProfile.weight,
-                                                  exercise.weight
-                                                )}xBW) | `
-                                              : " "}
-                                            {exercise.sets} x{" "}
-                                            {exercise.reps_low}
-                                            {exercise.reps_high
-                                              ? `-${exercise.reps_high}`
-                                              : ""}
-                                            {exercise.weight ? (
-                                              <img
-                                                alt="exercise statistics"
-                                                className="img stats"
-                                                src={
-                                                  process.env.PUBLIC_URL +
-                                                  "/statistics.png"
-                                                }
-                                                onClick={() => {
-                                                  setSelectedExercise(exercise);
-                                                  setFirstExercise(
-                                                    trackedExercises[
-                                                      exercise.name
-                                                    ].find(
-                                                      (entry) =>
-                                                        entry.weight > 0
-                                                    )
-                                                  );
-                                                  toggleModal(
-                                                    "exerciseStatistics",
-                                                    true
-                                                  );
-                                                }}
-                                              />
-                                            ) : null}
+                                              :{" "}
+                                              {exercise.weight &&
+                                              userProfile.measurement_type ===
+                                                "imperial"
+                                                ? `${exercise.weight} lbs | `
+                                                : exercise.weight &&
+                                                  userProfile.measurement_type ===
+                                                    "metric"
+                                                ? `${defaultConvertWeight(
+                                                    exercise.weight
+                                                  )} kgs | `
+                                                : " "}
+                                              {exercise.bw
+                                                ? `(${compareBW(
+                                                    userProfile.weight,
+                                                    exercise.weight
+                                                  )}xBW) | `
+                                                : " "}
+                                              {exercise.sets} x{" "}
+                                              {exercise.reps_low}
+                                              {exercise.reps_high
+                                                ? `-${exercise.reps_high}`
+                                                : ""}
+                                            </div>
+                                            <img
+                                              className="img x"
+                                              src={
+                                                process.env.PUBLIC_URL +
+                                                "/x.png"
+                                              }
+                                              onClick={() => {
+                                                setSelectedExercise(exercise);
+                                                toggleModal(
+                                                  "deleteTrackedExercise",
+                                                  true
+                                                );
+                                              }}
+                                              alt="delete"
+                                            />
                                           </div>
-                                          <img
-                                            className="img x"
-                                            src={
-                                              process.env.PUBLIC_URL + "/x.png"
-                                            }
-                                            onClick={() => {
-                                              setSelectedExercise(exercise);
-                                              toggleModal(
-                                                "deleteTrackedExercise",
-                                                true
-                                              );
-                                            }}
-                                            alt="delete"
-                                          />
                                         </li>
                                       ))}
                                   </ul>
@@ -1186,7 +1185,8 @@ const Dashboard = (props) => {
           onClose={() => {
             toggleModal("exerciseStatistics", false);
           }}
-          selectedExercise={selectedExercise}
+          selectedExercise={selectedExercise[selectedExercise.length - 1]}
+          selectedExerciseList={selectedExercise}
           firstExercise={firstExercise}
           userProfile={userProfile}
           defaultConvertWeight={defaultConvertWeight}

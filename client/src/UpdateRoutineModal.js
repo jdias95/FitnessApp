@@ -29,16 +29,19 @@ const UpdateRoutineModal = (props) => {
       <div className="modal-content">
         <div className="modal-flex">
           <div className="modal-body">
-            <input
-              type="text"
-              id="input"
-              placeholder="Name"
-              maxLength="45"
-              value={nameReg}
-              onChange={(e) => {
-                setNameReg(e.target.value);
-              }}
-            />
+            <div className="flex">
+              <label className="flex-input">Name: </label>
+              <input
+                type="text"
+                id="wider"
+                placeholder="Ex: Push, Lower Body, etc."
+                maxLength="45"
+                value={nameReg}
+                onChange={(e) => {
+                  setNameReg(e.target.value);
+                }}
+              />
+            </div>
             <span className="modal-button-container">
               <button
                 className="modal-button"

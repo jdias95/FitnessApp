@@ -566,6 +566,10 @@ a {
   width: 4rem;
 }
 
+#wider {
+  width: 14em;
+}
+
 #narrow {
   width: 2.5rem;
 }
