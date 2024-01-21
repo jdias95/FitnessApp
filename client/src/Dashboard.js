@@ -746,10 +746,12 @@ const Dashboard = (props) => {
                                             ? `-${exercise.reps_high}`
                                             : ""}
                                           {exercise.weight &&
+                                          userProfile &&
                                           userProfile.measurement_type ===
                                             "imperial"
                                             ? ` | ${exercise.weight} lbs`
                                             : exercise.weight &&
+                                              userProfile &&
                                               userProfile.measurement_type ===
                                                 "metric"
                                             ? ` | ${defaultConvertWeight(
@@ -989,17 +991,21 @@ const Dashboard = (props) => {
                                       `}
                                               :{" "}
                                               {exercise.weight &&
+                                              userProfile &&
                                               userProfile.measurement_type ===
                                                 "imperial"
                                                 ? `${exercise.weight} lbs | `
                                                 : exercise.weight &&
+                                                  userProfile &&
                                                   userProfile.measurement_type ===
                                                     "metric"
                                                 ? `${defaultConvertWeight(
                                                     exercise.weight
                                                   )} kgs | `
                                                 : " "}
-                                              {exercise.bw
+                                              {exercise.bw &&
+                                              userProfile &&
+                                              userProfile.weight
                                                 ? `(${compareBW(
                                                     userProfile.weight,
                                                     exercise.weight
