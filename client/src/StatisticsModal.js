@@ -10,6 +10,8 @@ const StatisticsModal = (props) => {
     firstExercise,
     userProfile,
     defaultConvertWeight,
+    setShowInfo,
+    showInfo,
   } = props;
 
   const [tickMultiplierTracked, setTickMultiplierTracked] = useState(18);
@@ -74,6 +76,28 @@ const StatisticsModal = (props) => {
       : 0;
 
   const volumeDifference = volume - firstVolume;
+
+  const renderPercentageDifference = (difference, first) => {
+    const percentage = Number(Math.abs((difference / first) * 100).toFixed(1));
+
+    if (difference > 0) {
+      return (
+        <p>
+          &nbsp;(<span id="positive">&#8657;</span>
+          {percentage}%)
+        </p>
+      );
+    } else if (difference < 0) {
+      return (
+        <p>
+          &nbsp;(<span id="negative">&#8659;</span>
+          {percentage}%)
+        </p>
+      );
+    } else {
+      return null;
+    }
+  };
 
   useEffect(() => {
     d3.select(".exerciseGraph svg").remove();
@@ -150,6 +174,7 @@ const StatisticsModal = (props) => {
       new Date(dateValues[dateValues.length - 1]).getTime() -
         new Date(dateValues[0]).getTime()
     );
+
     if (timeSelectionTracked === "3 months") {
       setTickMultiplierTracked(18);
     } else if (timeSelectionTracked === "6 months") {
@@ -203,11 +228,7 @@ const StatisticsModal = (props) => {
       .append("svg")
       .attr("width", "100%")
       .attr("height", graphHeight)
-      .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`)
-      .attr(
-        "transform",
-        `translate(${-marginLeft - marginRight}, ${marginTop})`
-      );
+      .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
 
     const tickValues = [];
     const enddDate = moment(selectedExercise.date, "YYYY-MM-DD");
@@ -223,7 +244,7 @@ const StatisticsModal = (props) => {
         new Date(tickValues[tickValues.length - 1]),
         new Date(tickValues[0]),
       ])
-      .range([marginLeft, graphWidth + marginRight + 5]);
+      .range([marginLeft, graphWidth - marginRight]);
 
     const xAxis = d3
       .axisBottom(xScale)
@@ -236,10 +257,7 @@ const StatisticsModal = (props) => {
     svg
       .append("g")
       .attr("class", "x-axis")
-      .attr(
-        "transform",
-        `translate(${-marginLeft}, ${graphHeight - marginBottom})`
-      )
+      .attr("transform", `translate(0, ${graphHeight - marginBottom})`)
       .call(xAxis);
 
     svg
@@ -247,6 +265,7 @@ const StatisticsModal = (props) => {
       .append("clipPath")
       .attr("id", "clip-path")
       .append("rect")
+      .attr("transform", `translate(${marginLeft}, 0)`)
       .attr("width", graphWidth)
       .attr("height", graphHeight);
 
@@ -263,11 +282,10 @@ const StatisticsModal = (props) => {
           : exerciseVolumes
       )
       .attr("fill", "none")
-      .attr("stroke", "steelblue")
+      .attr("stroke", "#ACEDFF")
       .attr("stroke-width", 2)
       .attr("stroke-linecap", "round")
       .attr("clip-path", "url(#clip-path)")
-      .attr("transform", `translate(${-marginLeft}, 0)`)
       .attr(
         "d",
         d3
@@ -276,28 +294,10 @@ const StatisticsModal = (props) => {
           .y((exercise) => yScale(exercise.weight))
       );
 
-    // svg
-    //   .append("g")
-    //   .append("path")
-    //   .datum(exerciseVolumes)
-    //   .attr("fill", "none")
-    //   .attr("stroke", "steelblue")
-    //   .attr("stroke-width", 2)
-    //   .attr("stroke-linecap", "round")
-    //   .attr("clip-path", "url(#clip-path)")
-    //   .attr("transform", `translate(${-marginLeft}, 0)`)
-    //   .attr(
-    //     "d",
-    //     d3
-    //       .line()
-    //       .x((exercise) => xScale(new Date(exercise.date)))
-    //       .y((exercise) => yScale(exercise.weight))
-    //   );
-
     const yAxisGroup = svg
       .append("g")
       .attr("class", "y-axis")
-      .attr("transform", `translate(0, 0)`)
+      .attr("transform", `translate(${marginLeft}, 0)`)
       .call(d3.axisLeft(yScale));
 
     yAxisGroup
@@ -312,7 +312,7 @@ const StatisticsModal = (props) => {
       .attr("class", "gridline")
       .attr("x1", 0)
       .attr("y1", 0)
-      .attr("x2", graphWidth)
+      .attr("x2", graphWidth - marginRight - marginLeft)
       .attr("y2", 0)
       .attr("stroke", "rgba(156, 165, 174, .4");
 
@@ -327,113 +327,186 @@ const StatisticsModal = (props) => {
       <div className="modal-content">
         <div className="modal-flex">
           <div className="exercise-modal-body">
-            <div className="flex">
-              <p>Working Weight:&nbsp;</p>
-              {userProfile.measurement_type !== "metric" ? (
-                <p>{selectedExercise.weight} lbs</p>
-              ) : (
-                <p>{defaultConvertWeight(selectedExercise.weight)} kgs</p>
-              )}
-              {workingWeightDifference > 0 ? (
-                <div className="flex">
-                  <p>&nbsp;(</p>
-                  <p id="positive">&#8657;</p>
-                  <p>
-                    {Number(
-                      (
-                        (workingWeightDifference / firstExercise.weight) *
-                        100
-                      ).toFixed(1)
-                    )}
-                    %)
-                  </p>
-                </div>
-              ) : workingWeightDifference < 0 ? (
-                <div className="flex">
-                  <p>&nbsp;(</p>
-                  <p id="negative">&#8659;</p>
-                  <p>
-                    {Number(
-                      (
-                        (Math.abs(workingWeightDifference) /
-                          firstExercise.weight) *
-                        100
-                      ).toFixed(1)
-                    )}
-                    %)
-                  </p>
-                </div>
-              ) : (
-                ""
-              )}
+            <div className="modal-header">
+              <h1>{selectedExercise.name}</h1>
+              <select
+                id="time-selection-tracked"
+                name="timeSelectionTracked"
+                value={timeSelectionTracked}
+                onChange={(e) => {
+                  setTimeSelectionTracked(e.target.value);
+                }}
+              >
+                <option value="3 months">3 months</option>
+                {exerciseTimeBTN >= 15552000000 ? (
+                  <option value="6 months">6 months</option>
+                ) : (
+                  ""
+                )}
+                {exerciseTimeBTN >= 31104000000 ? (
+                  <option value="1 year">1 year</option>
+                ) : (
+                  ""
+                )}
+                {exerciseTimeBTN >= 8294400000 ? (
+                  <option value="All">All</option>
+                ) : (
+                  ""
+                )}
+              </select>
             </div>
-            <div className="flex">
-              <p>Volume:&nbsp;</p>
-              {userProfile.measurement_type !== "metric" ? (
-                <p>
-                  {calcVolume(
-                    selectedExercise.weight,
-                    selectedExercise.sets,
-                    selectedExercise.reps_low
+            <div className="flex space-between">
+              <div>
+                <div className="flex shift-left">
+                  <div className="tooltip-container">
+                    <img
+                      className="tooltip-png2"
+                      src={process.env.PUBLIC_URL + "/tooltip.png"}
+                      onMouseOver={() => {
+                        setShowInfo("working weight");
+                      }}
+                      onMouseOut={() => {
+                        setShowInfo("");
+                      }}
+                      alt="tooltip"
+                    />
+                  </div>
+                  {showInfo === "working weight" && (
+                    <div
+                      className="tooltip tooltip-exercise"
+                      id="working-weight"
+                    >
+                      <p>
+                        Working weight is the amount of weight lifted for a
+                        specific exercise during a workout routine.
+                      </p>
+                    </div>
                   )}
-                  {selectedExercise.reps_high
-                    ? `-${calcVolume(
-                        selectedExercise.weight,
-                        selectedExercise.sets,
-                        selectedExercise.reps_high
-                      )}`
-                    : ""}
-                  {" lbs "}
-                </p>
-              ) : (
-                <p>
-                  {defaultConvertWeight(
-                    calcVolume(
-                      selectedExercise.weight,
-                      selectedExercise.sets,
-                      selectedExercise.reps_low
-                    )
+                  <div
+                    className="flex exercise-graph-selector"
+                    id={
+                      graphSelection === "working weight"
+                        ? "exercise-graph-selector-clicked"
+                        : ""
+                    }
+                    onClick={() => {
+                      setGraphSelection("working weight");
+                    }}
+                  >
+                    <p>Working Weight:&nbsp;</p>
+                    {userProfile.measurement_type !== "metric" ? (
+                      <p>{selectedExercise.weight} lbs</p>
+                    ) : (
+                      <p>{defaultConvertWeight(selectedExercise.weight)} kgs</p>
+                    )}
+                    <div className="flex">
+                      {renderPercentageDifference(
+                        workingWeightDifference,
+                        firstExercise.weight
+                      )}
+                    </div>
+                  </div>
+                  {graphSelection === "working weight" ? (
+                    <img
+                      className="selected-graph"
+                      alt="selected graph"
+                      src={process.env.PUBLIC_URL + "/graph-indication.png"}
+                    />
+                  ) : null}
+                </div>
+                <div className="flex shift-left">
+                  <div className="tooltip-container">
+                    <img
+                      className="tooltip-png2"
+                      src={process.env.PUBLIC_URL + "/tooltip.png"}
+                      onMouseOver={() => {
+                        setShowInfo("volume");
+                      }}
+                      onMouseOut={() => {
+                        setShowInfo("");
+                      }}
+                      alt="tooltip"
+                    />
+                  </div>
+                  {showInfo === "volume" && (
+                    <div className="tooltip tooltip-exercise" id="volume">
+                      <p>
+                        Volume refers to the total amount of work performed in a
+                        workout. It is calculated by multiplying the number of
+                        sets, repetitions, and weight lifted for an exercise in
+                        a routine.
+                      </p>
+                    </div>
                   )}
-                  {selectedExercise.reps_high
-                    ? `-${defaultConvertWeight(
-                        calcVolume(
+                  <div
+                    className="flex exercise-graph-selector"
+                    id={
+                      graphSelection === "volume"
+                        ? "exercise-graph-selector-clicked"
+                        : ""
+                    }
+                    onClick={() => {
+                      setGraphSelection("volume");
+                    }}
+                  >
+                    <p>Volume:&nbsp;</p>
+                    {userProfile.measurement_type !== "metric" ? (
+                      <p>
+                        {calcVolume(
                           selectedExercise.weight,
                           selectedExercise.sets,
-                          selectedExercise.reps_high
-                        )
-                      )}`
-                    : ""}
-                  {" kgs "}
-                </p>
-              )}
-              {volumeDifference > 0 && firstVolume ? (
-                <div className="flex">
-                  <p>&nbsp;(</p>
-                  <p id="positive">&#8657;</p>
-                  <p>
-                    {Number(
-                      ((volumeDifference / firstVolume) * 100).toFixed(1)
+                          selectedExercise.reps_low
+                        )}
+                        {selectedExercise.reps_high
+                          ? `-${calcVolume(
+                              selectedExercise.weight,
+                              selectedExercise.sets,
+                              selectedExercise.reps_high
+                            )}`
+                          : ""}
+                        {" lbs "}
+                      </p>
+                    ) : (
+                      <p>
+                        {defaultConvertWeight(
+                          calcVolume(
+                            selectedExercise.weight,
+                            selectedExercise.sets,
+                            selectedExercise.reps_low
+                          )
+                        )}
+                        {selectedExercise.reps_high
+                          ? `-${defaultConvertWeight(
+                              calcVolume(
+                                selectedExercise.weight,
+                                selectedExercise.sets,
+                                selectedExercise.reps_high
+                              )
+                            )}`
+                          : ""}
+                        {" kgs "}
+                      </p>
                     )}
-                    %)
-                  </p>
-                </div>
-              ) : volumeDifference < 0 && firstVolume ? (
-                <div className="flex">
-                  <p>&nbsp;(</p>
-                  <p id="negative">&#8659;</p>
-                  <p>
-                    {Number(
-                      (
-                        (Math.abs(volumeDifference) / firstVolume) *
-                        100
-                      ).toFixed(1)
+                    {firstVolume ? (
+                      <div className="flex">
+                        {renderPercentageDifference(
+                          volumeDifference,
+                          firstVolume
+                        )}
+                      </div>
+                    ) : (
+                      ""
                     )}
-                    %)
-                  </p>
+                  </div>
+                  {graphSelection === "volume" ? (
+                    <img
+                      className="selected-graph"
+                      alt="selected graph"
+                      src={process.env.PUBLIC_URL + "/graph-indication.png"}
+                    />
+                  ) : null}
                 </div>
-              ) : (
-                ""
-              )}
+              </div>
             </div>
             <div className="exerciseGraph"></div>
             <div>

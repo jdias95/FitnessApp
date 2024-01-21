@@ -266,7 +266,7 @@ const Dashboard = (props) => {
       svg
         .append("g")
         .attr("class", "x-axis")
-        .attr("transform", `translate(0,${graphHeight - marginBottom})`)
+        .attr("transform", `translate(0, ${graphHeight - marginBottom})`)
         .call(
           d3
             .axisBottom(xScale)
@@ -761,7 +761,7 @@ const Dashboard = (props) => {
                                               className="img notes"
                                               src={
                                                 process.env.PUBLIC_URL +
-                                                "/notes.png"
+                                                "/notepad.png"
                                               }
                                               onClick={() => {
                                                 setSelectedExercise(exercise);
@@ -939,13 +939,16 @@ const Dashboard = (props) => {
                                 <div className="flex">
                                   {trackedExercises[exercise.name].find(
                                     (exercise) => exercise.weight
-                                  ) ? (
+                                  ) &&
+                                  trackedExercises[exercise.name].filter(
+                                    (exercise) => exercise.weight
+                                  ).length > 1 ? (
                                     <img
                                       alt="exercise statistics"
                                       className="img stats"
                                       src={
                                         process.env.PUBLIC_URL +
-                                        "/statistics.png"
+                                        "/linegraph.png"
                                       }
                                       onClick={() => {
                                         setSelectedExercise(
@@ -1190,6 +1193,8 @@ const Dashboard = (props) => {
           firstExercise={firstExercise}
           userProfile={userProfile}
           defaultConvertWeight={defaultConvertWeight}
+          setShowInfo={setShowInfo}
+          showInfo={showInfo}
         />
       )}
     </div>
