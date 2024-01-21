@@ -335,13 +335,15 @@ const Dashboard = (props) => {
           .attr("stroke", "rgb(138, 201, 38)")
           .attr("stroke-width", 2);
 
+        const screenWidth = window.innerWidth;
+
         const tooltip = d3
           .select("body")
           .append("div")
           .attr("class", "tooltip")
           .style("opacity", 0)
           .style("padding", "15px")
-          .style("font-size", "14px")
+          .style("font-size", screenWidth < 800 ? "11px" : "14px")
           .style("font-family", "Open Sans")
           .style("z-index", "-100");
 
@@ -391,8 +393,18 @@ const Dashboard = (props) => {
                 )
                 .style("opacity", 1)
                 .style("position", "absolute")
-                .style("left", `${event.pageX - 155}px`)
-                .style("top", `${event.pageY - 160}px`)
+                .style(
+                  "left",
+                  screenWidth < 800
+                    ? `${event.pageX - 137}px`
+                    : `${event.pageX - 155}px`
+                )
+                .style(
+                  "top",
+                  screenWidth < 800
+                    ? `${event.pageY - 140}px`
+                    : `${event.pageY - 160}px`
+                )
                 .style("z-index", "100");
             })
             .on("mouseout", function () {
@@ -400,7 +412,7 @@ const Dashboard = (props) => {
                 "xlink:href",
                 process.env.PUBLIC_URL + "/tooltip.png"
               );
-              tooltip.style("opacity", 0);
+              tooltip.style("opacity", 0).style("z-index", "-100");
             });
         }
       }
