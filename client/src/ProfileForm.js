@@ -3,6 +3,15 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const ProfileForm = (props) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("authToken")) {
+      localStorage.clear();
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const {
     loginStatus,
     userProfile,
@@ -55,14 +64,6 @@ const ProfileForm = (props) => {
   const [targetWeightReg, setTargetWeightReg] = useState(
     userProfile && userProfile.target_weight ? userProfile.target_weight : 0
   );
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  });
 
   useEffect(() => {
     const savedFormData = JSON.parse(localStorage.getItem("profileFormData"));

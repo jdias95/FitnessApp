@@ -17,7 +17,6 @@ import ProfileForm from "./ProfileForm";
 import Home from "./Home";
 import "./App.css";
 import Axios from "axios";
-import moment from "moment";
 import OTPClass from "./OTP";
 import ResetPassword from "./ResetPassword";
 
@@ -347,53 +346,8 @@ function App() {
     if (loginStatus) {
       Axios.get(`${apiURL}/api/get/weight/${loginStatus.id}`)
         .then((response) => {
-          const weightData = response.data;
-          const mostRecentWeight = weightData[weightData.length - 1];
-          const formattedDate = mostRecentWeight.date.slice(0, 10);
-          setPreviousWeight({ ...mostRecentWeight, date: formattedDate });
-
-          let transformedData = [];
-
-          if (userProfile && userProfile.measurement_type === "metric") {
-            transformedData = response.data.map((item) => ({
-              weight: defaultConvertWeight(item.weight),
-              date: moment(item.date).format("YYYY-MM-DD"),
-            }));
-          } else {
-            transformedData = response.data.map((item) => ({
-              weight: item.weight,
-              date: moment(item.date).format("YYYY-MM-DD"),
-            }));
-          }
-
-          const startDate = new Date(response.data[0].date);
-          const endDate = new Date(
-            response.data[response.data.length - 1].date
-          );
-
-          const dateRange = [];
-          for (
-            let currentDate = startDate;
-            currentDate <= endDate;
-            currentDate.setDate(currentDate.getDate() + 1)
-          ) {
-            dateRange.push(new Date(currentDate));
-          }
-
-          const formattedDateRange = dateRange.map((date) => {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, "0");
-            const day = date.getDate().toString().padStart(2, "0");
-            return `${year}-${month}-${day}`;
-          });
-
-          const newData = formattedDateRange.map((date) => {
-            const existingData = transformedData.find(
-              (item) => item.date === date
-            );
-            return existingData ? existingData : { weight: null, date };
-          });
-          setWeightData(newData);
+          setPreviousWeight(response.data[response.data.length - 1]);
+          setWeightData(response.data);
         })
         .catch((error) => {
           console.error("Error fetching weight data:", error);

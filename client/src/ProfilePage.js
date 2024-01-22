@@ -2,6 +2,15 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProfilePage = (props) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("authToken")) {
+      localStorage.clear();
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const { userProfile, defaultConvertWeight, defaultConvertHeightMetric } =
     props;
   const [infoBool, setInfoBool] = useState(false);
@@ -26,14 +35,6 @@ const ProfilePage = (props) => {
       4: "Gain 0.5 kilogram per week",
     },
   };
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  });
 
   const activityLevelPoints = useMemo(() => {
     return {

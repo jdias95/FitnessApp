@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import * as d3 from "d3";
 import moment from "moment";
 
@@ -14,10 +14,17 @@ const StatisticsModal = (props) => {
     showInfo,
   } = props;
 
-  const [tickMultiplierTracked, setTickMultiplierTracked] = useState(18);
   const [exerciseTimeBTN, setExerciseTimeBTN] = useState(0);
   const [timeSelectionTracked, setTimeSelectionTracked] = useState("3 months");
   const [graphSelection, setGraphSelection] = useState("working weight");
+  const timeMultipliers = useMemo(() => {
+    return {
+      "3 months": 18,
+      "6 months": 36,
+      "1 year": 72,
+      All: Math.ceil(exerciseTimeBTN / 432000000),
+    };
+  }, [exerciseTimeBTN]);
 
   const calcVolume = (weight, sets, reps) => {
     const volume = weight * sets * reps;
@@ -175,22 +182,12 @@ const StatisticsModal = (props) => {
         new Date(dateValues[0]).getTime()
     );
 
-    if (timeSelectionTracked === "3 months") {
-      setTickMultiplierTracked(18);
-    } else if (timeSelectionTracked === "6 months") {
-      setTickMultiplierTracked(36);
-    } else if (timeSelectionTracked === "1 year") {
-      setTickMultiplierTracked(72);
-    } else if (timeSelectionTracked === "All") {
-      setTickMultiplierTracked(Math.ceil(exerciseTimeBTN / 432000000));
-    }
-
     const graphWidth = 400;
     const graphHeight = 300;
     const marginTop = 20;
     const marginRight = 20;
     const marginBottom = 20;
-    const marginLeft = 30;
+    const marginLeft = 45;
 
     const minValue = d3.min(weightValues);
     const maxValue = d3.max(weightValues);
@@ -234,7 +231,10 @@ const StatisticsModal = (props) => {
     const enddDate = moment(selectedExercise.date, "YYYY-MM-DD");
 
     for (let i = 0; i < 6; i++) {
-      const date = moment(enddDate).subtract(tickMultiplierTracked * i, "days");
+      const date = moment(enddDate).subtract(
+        timeMultipliers[timeSelectionTracked] * i,
+        "days"
+      );
       tickValues.push(date.toDate());
     }
 
@@ -250,7 +250,6 @@ const StatisticsModal = (props) => {
       .axisBottom(xScale)
       .tickValues(tickValues)
       .tickFormat((date) => {
-        // const timeFormat = d3.timeFormat("%m/%d");
         return date.toLocaleDateString().slice(0, -5);
       });
 
@@ -263,7 +262,7 @@ const StatisticsModal = (props) => {
     svg
       .append("defs")
       .append("clipPath")
-      .attr("id", "clip-path")
+      .attr("id", "clip-path2")
       .append("rect")
       .attr("transform", `translate(${marginLeft}, 0)`)
       .attr("width", graphWidth)
@@ -285,7 +284,7 @@ const StatisticsModal = (props) => {
       .attr("stroke", "#ACEDFF")
       .attr("stroke-width", 2)
       .attr("stroke-linecap", "round")
-      .attr("clip-path", "url(#clip-path)")
+      .attr("clip-path", "url(#clip-path2)")
       .attr(
         "d",
         d3
@@ -312,7 +311,7 @@ const StatisticsModal = (props) => {
       .attr("class", "gridline")
       .attr("x1", 0)
       .attr("y1", 0)
-      .attr("x2", graphWidth - marginRight - marginLeft)
+      .attr("x2", graphWidth - marginRight - marginLeft + 3)
       .attr("y2", 0)
       .attr("stroke", "rgba(156, 165, 174, .4");
 
@@ -320,7 +319,15 @@ const StatisticsModal = (props) => {
     svg.selectAll(".x-axis .tick line").remove();
     svg.selectAll(".y-axis .tick line:first-child").remove();
     svg.selectAll("text").style("font-size", "12px");
-  });
+  }, [
+    selectedExerciseList,
+    userProfile,
+    graphSelection,
+    defaultConvertWeight,
+    selectedExercise.date,
+    timeMultipliers,
+    timeSelectionTracked,
+  ]);
 
   return (
     <div className="modal">

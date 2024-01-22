@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import RoutineFormModal from "./RoutineFormModal";
 import WeightFormModal from "./WeightFormModal";
 import DeleteRoutineModal from "./DeleteRoutineModal";
@@ -16,6 +16,15 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Axios from "axios";
 
 const Dashboard = (props) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("authToken")) {
+      localStorage.clear();
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const {
     loginStatus,
     userProfile,
@@ -53,19 +62,20 @@ const Dashboard = (props) => {
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState({});
   const [firstExercise, setFirstExercise] = useState({});
-  const [weightTimeBtN, setWeightTimeBtN] = useState(0);
-  const [tickMultiplier, setTickMultiplier] = useState(6);
+  const [weightTimeBTN, setWeightTimeBTN] = useState(0);
   const [timeSelection, setTimeSelection] = useState("1 month");
+  const timeMultipliers = useMemo(() => {
+    return {
+      "1 month": 6,
+      "2 months": 12,
+      "3 months": 18,
+      "6 months": 36,
+      "1 year": 72,
+      All: Math.ceil(weightTimeBTN / 432000000),
+    };
+  }, [weightTimeBTN]);
   const [showInfo, setShowInfo] = useState("");
   const [weightForcast, setWeightForcast] = useState([0, ""]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
-      localStorage.clear();
-      navigate("/login");
-    }
-  });
 
   const toggleModal = (modalName, isOpen) => {
     switch (modalName) {
@@ -179,24 +189,10 @@ const Dashboard = (props) => {
         .filter((d) => d.weight != null)
         .map((d) => d.date);
 
-      setWeightTimeBtN(
+      setWeightTimeBTN(
         new Date(dateValues[dateValues.length - 1]).getTime() -
           new Date(dateValues[0]).getTime()
       );
-
-      if (timeSelection === "1 month") {
-        setTickMultiplier(6);
-      } else if (timeSelection === "2 months") {
-        setTickMultiplier(12);
-      } else if (timeSelection === "3 months") {
-        setTickMultiplier(18);
-      } else if (timeSelection === "6 months") {
-        setTickMultiplier(36);
-      } else if (timeSelection === "1 year") {
-        setTickMultiplier(72);
-      } else if (timeSelection === "All") {
-        setTickMultiplier(Math.ceil(weightTimeBtN / 432000000));
-      }
 
       const graphWidth = 500;
       const graphHeight = 400;
@@ -251,7 +247,10 @@ const Dashboard = (props) => {
       );
 
       for (let i = 0; i < 6; i++) {
-        const date = moment(endDate).subtract(tickMultiplier * i, "days");
+        const date = moment(endDate).subtract(
+          timeMultipliers[timeSelection] * i,
+          "days"
+        );
         tickValues.push(date.toDate());
       }
 
@@ -272,7 +271,6 @@ const Dashboard = (props) => {
             .axisBottom(xScale)
             .tickValues(tickValues)
             .tickFormat((date) => {
-              // const timeFormat = d3.timeFormat("%m/%d");
               return date.toLocaleDateString().slice(0, -5);
             })
         );
@@ -293,20 +291,6 @@ const Dashboard = (props) => {
         .attr("transform", `translate(${marginLeft}, 0)`)
         .attr("width", graphWidth)
         .attr("height", graphHeight);
-
-      svg
-        .append("path")
-        .datum(
-          weightData.filter((d) => {
-            return d.weight != null;
-          })
-        )
-        .attr("fill", "none")
-        .attr("stroke", "#ACEDFF")
-        .attr("stroke-width", 3)
-        .attr("width", graphWidth)
-        .attr("d", line)
-        .attr("clip-path", "url(#clip-path)");
 
       svg
         .append("path")
@@ -446,12 +430,12 @@ const Dashboard = (props) => {
     }
   }, [
     weightData,
-    weightTimeBtN,
-    tickMultiplier,
+    weightTimeBTN,
     timeSelection,
     userProfile,
     defaultConvertWeight,
     weightForcast,
+    timeMultipliers,
   ]);
 
   // Handles logic for list sorting
@@ -543,27 +527,27 @@ const Dashboard = (props) => {
                   }}
                 >
                   <option value="1 month">1 month</option>
-                  {weightTimeBtN >= 5184000000 ? (
+                  {weightTimeBTN >= 5184000000 ? (
                     <option value="2 months">2 months</option>
                   ) : (
                     ""
                   )}
-                  {weightTimeBtN >= 7776000000 ? (
+                  {weightTimeBTN >= 7776000000 ? (
                     <option value="3 months">3 months</option>
                   ) : (
                     ""
                   )}
-                  {weightTimeBtN >= 15552000000 ? (
+                  {weightTimeBTN >= 15552000000 ? (
                     <option value="6 months">6 months</option>
                   ) : (
                     ""
                   )}
-                  {weightTimeBtN >= 31104000000 ? (
+                  {weightTimeBTN >= 31104000000 ? (
                     <option value="1 year">1 year</option>
                   ) : (
                     ""
                   )}
-                  {weightTimeBtN >= 3110400000 ? (
+                  {weightTimeBTN >= 3110400000 ? (
                     <option value="All">All</option>
                   ) : (
                     ""

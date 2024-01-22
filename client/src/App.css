@@ -502,23 +502,23 @@ a {
 }
 
 #sets {
-  top: -110%;
+  top: -120%;
 }
 
 #reps {
-  top: -170%;
+  top: -180%;
 }
 
 #weight {
-  top: -150%;
+  top: -170%;
 }
 
 #track {
-  top: -340%;
+  top: -350%;
 }
 
 #bw {
-  top: -420%;
+  top: -440%;
 }
 
 #working-weight {
@@ -818,7 +818,7 @@ li {
   }
 
   .App {
-    font-size: 0.85em;
+    font-size: 0.9em;
   }
 
   .tooltip-exercise {
