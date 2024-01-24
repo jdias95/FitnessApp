@@ -336,31 +336,35 @@ const StatisticsModal = (props) => {
           <div className="exercise-modal-body">
             <div className="modal-header">
               <h1>{selectedExercise.name}</h1>
-              <select
-                id="time-selection-tracked"
-                name="timeSelectionTracked"
-                value={timeSelectionTracked}
-                onChange={(e) => {
-                  setTimeSelectionTracked(e.target.value);
-                }}
-              >
-                <option value="3 months">3 months</option>
-                {exerciseTimeBTN >= 15552000000 ? (
-                  <option value="6 months">6 months</option>
-                ) : (
-                  ""
-                )}
-                {exerciseTimeBTN >= 31104000000 ? (
-                  <option value="1 year">1 year</option>
-                ) : (
-                  ""
-                )}
-                {exerciseTimeBTN >= 8294400000 ? (
-                  <option value="All">All</option>
-                ) : (
-                  ""
-                )}
-              </select>
+              {selectedExerciseList.length > 1 ? (
+                <select
+                  id="time-selection-tracked"
+                  name="timeSelectionTracked"
+                  value={timeSelectionTracked}
+                  onChange={(e) => {
+                    setTimeSelectionTracked(e.target.value);
+                  }}
+                >
+                  <option value="3 months">3 months</option>
+                  {exerciseTimeBTN >= 15552000000 ? (
+                    <option value="6 months">6 months</option>
+                  ) : (
+                    ""
+                  )}
+                  {exerciseTimeBTN >= 31104000000 ? (
+                    <option value="1 year">1 year</option>
+                  ) : (
+                    ""
+                  )}
+                  {exerciseTimeBTN >= 8294400000 ? (
+                    <option value="All">All</option>
+                  ) : (
+                    ""
+                  )}
+                </select>
+              ) : (
+                ""
+              )}
             </div>
             <div className="flex space-between">
               <div>
@@ -390,9 +394,14 @@ const StatisticsModal = (props) => {
                     </div>
                   )}
                   <div
-                    className="flex exercise-graph-selector"
+                    className={
+                      selectedExerciseList.length > 1
+                        ? "flex exercise-graph-selector"
+                        : "flex"
+                    }
                     id={
-                      graphSelection === "working weight"
+                      graphSelection === "working weight" &&
+                      selectedExerciseList.length > 1
                         ? "exercise-graph-selector-clicked"
                         : ""
                     }
@@ -413,7 +422,8 @@ const StatisticsModal = (props) => {
                       )}
                     </div>
                   </div>
-                  {graphSelection === "working weight" ? (
+                  {graphSelection === "working weight" &&
+                  selectedExerciseList.length > 1 ? (
                     <img
                       className="selected-graph"
                       alt="selected graph"
@@ -446,9 +456,14 @@ const StatisticsModal = (props) => {
                     </div>
                   )}
                   <div
-                    className="flex exercise-graph-selector"
+                    className={
+                      selectedExerciseList.length > 1
+                        ? "flex exercise-graph-selector"
+                        : "flex"
+                    }
                     id={
-                      graphSelection === "volume"
+                      graphSelection === "volume" &&
+                      selectedExerciseList.length > 1
                         ? "exercise-graph-selector-clicked"
                         : ""
                     }
@@ -505,7 +520,8 @@ const StatisticsModal = (props) => {
                       ""
                     )}
                   </div>
-                  {graphSelection === "volume" ? (
+                  {graphSelection === "volume" &&
+                  selectedExerciseList.length > 1 ? (
                     <img
                       className="selected-graph"
                       alt="selected graph"
@@ -515,7 +531,11 @@ const StatisticsModal = (props) => {
                 </div>
               </div>
             </div>
-            <div className="exerciseGraph"></div>
+            {selectedExerciseList.length > 1 ? (
+              <div className="exerciseGraph"></div>
+            ) : (
+              ""
+            )}
             <div>
               <span className="modal-button-container">
                 <button className="modal-button" onClick={onClose}>

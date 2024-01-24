@@ -165,6 +165,7 @@ function App() {
               routines={routines}
               setRoutines={setRoutines}
               exercises={exercises}
+              setExercises={setExercises}
               trackedExercises={trackedExercises}
               setTrackedExercises={setTrackedExercises}
               weightData={weightData}

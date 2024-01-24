@@ -14,6 +14,7 @@ import StatisticsModal from "./StatisticsModal";
 import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Axios from "axios";
+import StarterRoutinesModal from "./StarterRoutinesModal";
 
 const Dashboard = (props) => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const Dashboard = (props) => {
     routines,
     setRoutines,
     exercises,
+    setExercises,
     trackedExercises,
     setTrackedExercises,
     weightData,
@@ -59,6 +61,8 @@ const Dashboard = (props) => {
     useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
   const [showStatisticsModal, setShowStatisticsModal] = useState(false);
+  const [showStarterRoutinesModal, setShowStarterRoutinesModal] =
+    useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState({});
   const [firstExercise, setFirstExercise] = useState({});
@@ -108,6 +112,9 @@ const Dashboard = (props) => {
         break;
       case "exerciseStatistics":
         setShowStatisticsModal(isOpen);
+        break;
+      case "starterRoutines":
+        setShowStarterRoutinesModal(isOpen);
         break;
       default:
         break;
@@ -842,6 +849,13 @@ const Dashboard = (props) => {
               );
             })}
           </ul>
+          <button
+            className="link"
+            id="need-help"
+            onClick={() => toggleModal("starterRoutines", true)}
+          >
+            Need help?
+          </button>
         </div>
         <div className="tracked container">
           <div className="dashboard flex title tooltip-container">
@@ -937,10 +951,7 @@ const Dashboard = (props) => {
                                 <div className="flex">
                                   {trackedExercises[exercise.name].find(
                                     (exercise) => exercise.weight
-                                  ) &&
-                                  trackedExercises[exercise.name].filter(
-                                    (exercise) => exercise.weight
-                                  ).length > 1 ? (
+                                  ) ? (
                                     <img
                                       alt="exercise statistics"
                                       className="img stats"
@@ -1197,6 +1208,20 @@ const Dashboard = (props) => {
           defaultConvertWeight={defaultConvertWeight}
           setShowInfo={setShowInfo}
           showInfo={showInfo}
+        />
+      )}
+
+      {showStarterRoutinesModal && (
+        <StarterRoutinesModal
+          loginStatus={loginStatus}
+          onClose={() => {
+            toggleModal("starterRoutines", false);
+          }}
+          routines={routines}
+          setRoutines={setRoutines}
+          exercises={exercises}
+          setExercises={setExercises}
+          apiURL={apiURL}
         />
       )}
     </div>

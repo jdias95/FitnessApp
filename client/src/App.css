@@ -28,6 +28,10 @@
   overflow-x: hidden;
 }
 
+p {
+  line-height: 1.5;
+}
+
 .nav {
   position: fixed;
   display: flex;
@@ -127,7 +131,7 @@ button:hover {
   margin-top: auto;
 }
 
-.forgot-password {
+.link {
   background: none;
   border: none;
   text-decoration: none;
@@ -135,9 +139,16 @@ button:hover {
   font-size: 12px;
 }
 
-.forgot-password:hover {
+.link:hover {
   cursor: pointer;
   color: rgba(172, 237, 255, 0.87);
+  background: none;
+}
+
+#need-help {
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+  text-align: left;
 }
 
 .auth-flex-end {
@@ -502,23 +513,23 @@ a {
 }
 
 #sets {
-  top: -120%;
+  top: -140%;
 }
 
 #reps {
-  top: -180%;
+  top: -230%;
 }
 
 #weight {
-  top: -170%;
+  top: -210%;
 }
 
 #track {
-  top: -350%;
+  top: -440%;
 }
 
 #bw {
-  top: -440%;
+  top: -550%;
 }
 
 #working-weight {
