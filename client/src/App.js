@@ -42,7 +42,7 @@ function App() {
     ).padStart(2, "0")}:${String(currentDate.getSeconds()).padStart(2, "0")}`
   );
   const formattedDate = `${year}-${month}-${day}T${time}`;
-  const applicationMode = "Production";
+  const applicationMode = "Development";
   const apiURL =
     applicationMode === "Development"
       ? "http://localhost:3001"
@@ -97,6 +97,21 @@ function App() {
     }
 
     localStorage.clear();
+    return children;
+  };
+
+  const RerouteDashboard = ({ children }) => {
+    if (
+      userProfile &&
+      userProfile.weight === 0 &&
+      userProfile.height === 0 &&
+      userProfile.age === 0 &&
+      userProfile.activity_level === "" &&
+      userProfile.gender === ""
+    ) {
+      return <Navigate to="/profile" replace />;
+    }
+
     return children;
   };
 
@@ -156,30 +171,32 @@ function App() {
         <Route
           path="dashboard"
           element={
-            <Dashboard
-              loginStatus={loginStatus}
-              userProfile={userProfile}
-              previousWeight={previousWeight}
-              setPreviousWeight={setPreviousWeight}
-              formattedDate={formattedDate}
-              routines={routines}
-              setRoutines={setRoutines}
-              exercises={exercises}
-              setExercises={setExercises}
-              trackedExercises={trackedExercises}
-              setTrackedExercises={setTrackedExercises}
-              weightData={weightData}
-              setWeightData={setWeightData}
-              setUserProfile={setUserProfile}
-              convertWeight={convertWeight}
-              defaultConvertWeight={defaultConvertWeight}
-              safeParseFloat={safeParseFloat}
-              openMenus={openMenus}
-              setOpenMenus={setOpenMenus}
-              routineExercises={routineExercises}
-              setRoutineExercises={setRoutineExercises}
-              apiURL={apiURL}
-            />
+            <RerouteDashboard>
+              <Dashboard
+                loginStatus={loginStatus}
+                userProfile={userProfile}
+                previousWeight={previousWeight}
+                setPreviousWeight={setPreviousWeight}
+                formattedDate={formattedDate}
+                routines={routines}
+                setRoutines={setRoutines}
+                exercises={exercises}
+                setExercises={setExercises}
+                trackedExercises={trackedExercises}
+                setTrackedExercises={setTrackedExercises}
+                weightData={weightData}
+                setWeightData={setWeightData}
+                setUserProfile={setUserProfile}
+                convertWeight={convertWeight}
+                defaultConvertWeight={defaultConvertWeight}
+                safeParseFloat={safeParseFloat}
+                openMenus={openMenus}
+                setOpenMenus={setOpenMenus}
+                routineExercises={routineExercises}
+                setRoutineExercises={setRoutineExercises}
+                apiURL={apiURL}
+              />
+            </RerouteDashboard>
           }
         />
         <Route

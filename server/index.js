@@ -178,10 +178,14 @@ app.post("/api/register", (req, res) => {
 
     db.query(sqlPost, [email, hash, firstName], (err, result) => {
       if (err) {
+        if (err.code === "ER_DUP_ENTRY") {
+          return res.status(200).json({
+            message: "User already exists",
+          });
+        }
         console.log("Error executing SQL query:", err);
         return res.status(500).json({ message: "Error during registration" });
       }
-      console.log("Registration successful:", result);
       res.status(200).json({ message: "Registration successful" });
     });
   });

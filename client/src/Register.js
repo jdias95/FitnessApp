@@ -55,7 +55,10 @@ const Register = (props) => {
       firstName: firstNameReg,
     })
       .then((response) => {
-        console.log("Server response:", response.data);
+        if (response.data.message === "User already exists") {
+          setError(response.data.message);
+          return;
+        }
 
         Axios.post(`${apiURL}/api/send-email`, {
           OTP: null,
@@ -65,7 +68,6 @@ const Register = (props) => {
         navigate("/login");
       })
       .catch((error) => {
-        setError("User already exists");
         console.error("Error registering", error);
       });
   };
