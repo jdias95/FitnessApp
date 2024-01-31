@@ -17,6 +17,7 @@ process.env.CI = false;
 
 const saltRounds = 10;
 
+app.use(express.static("public", { maxAge: 26 * 7 * 24 * 60 * 60 * 1000 }));
 app.use(express.json());
 app.use(
   cors({

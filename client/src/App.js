@@ -42,7 +42,7 @@ function App() {
     ).padStart(2, "0")}:${String(currentDate.getSeconds()).padStart(2, "0")}`
   );
   const formattedDate = `${year}-${month}-${day}T${time}`;
-  const applicationMode = "Development";
+  const applicationMode = "Production";
   const apiURL =
     applicationMode === "Development"
       ? "http://localhost:3001"

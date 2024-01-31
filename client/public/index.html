@@ -5,7 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/dumbbell.png" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+      content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
     />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -30,9 +30,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:ital@1&family=Open+Sans&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="../public/background_cropped.webp"
+      as="image"
+      type="image/webp"
     />
+    <link
+      rel="preload"
+      href="../public/background_cropped.jpg"
+      as="image"
+      type="image/jpeg"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital@1&family=Open+Sans&display=swap"
+    />
+    <script>
+      const fontStylesheet = document.createElement("link");
+      fontStylesheet.rel = "stylesheet";
+      fontStylesheet.href =
+        "https://fonts.googleapis.com/css2?family=Merriweather:ital@1&family=Open+Sans&display=swap";
+      document.head.appendChild(fontStylesheet);
+    </script>
     <title>We Go Jim!!!</title>
   </head>
   <body>

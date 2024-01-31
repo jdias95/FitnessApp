@@ -212,7 +212,8 @@ button:hover {
   max-height: calc(100vh - 4rem);
   position: absolute;
   bottom: 0;
-  background-image: url("../public/background_cropped.jpg");
+  background-image: url("../public/background_cropped.webp"),
+    url("../public/background_cropped.jpg");
   background-size: cover;
   background-position: 18% center;
   display: flex;
