@@ -992,11 +992,6 @@ const Dashboard = (props) => {
                                         <li key={exercise.id}>
                                           <div className="dashboard flex">
                                             <div className="exercise-container">
-                                              {`${new Date(
-                                                exercise.date
-                                              ).toLocaleDateString()}
-                                      `}
-                                              :{" "}
                                               {exercise.weight &&
                                               userProfile &&
                                               userProfile.measurement_type ===
@@ -1024,21 +1019,28 @@ const Dashboard = (props) => {
                                                 ? `-${exercise.reps_high}`
                                                 : ""}
                                             </div>
-                                            <img
-                                              className="img x"
-                                              src={
-                                                process.env.PUBLIC_URL +
-                                                "/x.png"
-                                              }
-                                              onClick={() => {
-                                                setSelectedExercise(exercise);
-                                                toggleModal(
-                                                  "deleteTrackedExercise",
-                                                  true
-                                                );
-                                              }}
-                                              alt="delete"
-                                            />
+                                            <div>
+                                              {`${new Date(
+                                                exercise.date
+                                              ).toLocaleDateString()}
+                                        `}
+                                              &nbsp;
+                                              <img
+                                                className="img x"
+                                                src={
+                                                  process.env.PUBLIC_URL +
+                                                  "/x.png"
+                                                }
+                                                onClick={() => {
+                                                  setSelectedExercise(exercise);
+                                                  toggleModal(
+                                                    "deleteTrackedExercise",
+                                                    true
+                                                  );
+                                                }}
+                                                alt="delete"
+                                              />
+                                            </div>
                                           </div>
                                         </li>
                                       ))}
