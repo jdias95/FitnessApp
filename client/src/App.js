@@ -378,6 +378,11 @@ function App() {
 
   return (
     <div className="App">
+      <img
+        className="walkthrough-img"
+        src={process.env.PUBLIC_URL + "/walkthrough.png"}
+        alt="walkthrough"
+      />
       <RouterProvider router={router}>
         {localStorage.getItem("authToken") ? (
           <NavbarLoggedIn />

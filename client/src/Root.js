@@ -19,27 +19,34 @@ const Root = (props) => {
 
   return (
     <>
-      <div className="nav">
+      <div className="nav space-between">
+        <img
+          className="walkthrough-img"
+          src={process.env.PUBLIC_URL + "/walkthrough.png"}
+          alt="walkthrough"
+        />
         {localStorage.getItem("authToken") ? (
           <>
             <h1 className="name">
               Hello, {JSON.parse(localStorage.getItem("authToken")).firstName}!
             </h1>
-            <Link
-              className={location.pathname === "/dashboard" ? "active" : ""}
-              to="/dashboard"
-            >
-              Dashboard
-            </Link>
-            <Link
-              className={location.pathname === "/profile" ? "active" : ""}
-              to="/profile"
-            >
-              Profile
-            </Link>
-            <Link to="/logout" onClick={logout}>
-              Logout
-            </Link>
+            <div>
+              <Link
+                className={location.pathname === "/dashboard" ? "active" : ""}
+                to="/dashboard"
+              >
+                Dashboard
+              </Link>
+              <Link
+                className={location.pathname === "/profile" ? "active" : ""}
+                to="/profile"
+              >
+                Profile
+              </Link>
+              <Link to="/logout" onClick={logout}>
+                Logout
+              </Link>
+            </div>
           </>
         ) : (
           <>

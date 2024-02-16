@@ -38,7 +38,7 @@ p {
   align-items: center;
   justify-content: flex-end;
   z-index: 200;
-  width: 100%;
+  width: 100vw;
   height: 4rem;
   top: 0;
   background-color: #38444d;
@@ -65,6 +65,19 @@ p {
 .nav a.active {
   font-weight: bold;
   cursor: default;
+}
+
+.walkthrough-img {
+  position: relative;
+  left: 1.5em;
+  width: 50px;
+  height: 50px;
+}
+
+.walkthrough-img:hover {
+  cursor: pointer;
+  content: url("../public/walkthrough-hover.png");
+  transition: content 0.3s;
 }
 
 button:hover {
@@ -805,9 +818,13 @@ li {
   }
 
   .nav .name {
-    left: 2rem;
+    left: calc(1.7em + 50px);
     transform: none;
     width: auto;
+  }
+
+  .nav a {
+    margin: 0.2em;
   }
 
   .graph {
@@ -845,8 +862,14 @@ li {
     width: 100%;
   }
 
+  .walkthrough-img {
+    width: 30px;
+    height: 30px;
+  }
+
   .nav .name {
-    font-size: 1.5rem;
+    left: calc(2em + 30px);
+    font-size: 1.4em;
   }
 
   .home {
@@ -885,6 +908,15 @@ li {
 
   .nav {
     height: 2.5rem;
+  }
+
+  .walkthrough-img {
+    height: 30px;
+    width: 30px;
+  }
+
+  .nav .name {
+    left: calc(2em + 30px);
   }
 
   .background-container {
