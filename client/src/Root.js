@@ -3,7 +3,7 @@ import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
 import Axios from "axios";
 
 const Root = (props) => {
-  const { setLoginStatus, apiURL } = props;
+  const { setLoginStatus, apiURL, setShowWalkthroughModal } = props;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,6 +23,9 @@ const Root = (props) => {
         <img
           className="walkthrough-img"
           src={process.env.PUBLIC_URL + "/walkthrough.png"}
+          onClick={() => {
+            setShowWalkthroughModal(true);
+          }}
           alt="walkthrough"
         />
         {localStorage.getItem("authToken") ? (
@@ -50,18 +53,20 @@ const Root = (props) => {
           </>
         ) : (
           <>
-            <Link
-              className={location.pathname === "/login" ? "active" : ""}
-              to="/login"
-            >
-              Login
-            </Link>
-            <Link
-              className={location.pathname === "/register" ? "active" : ""}
-              to="/register"
-            >
-              Register
-            </Link>
+            <div>
+              <Link
+                className={location.pathname === "/login" ? "active" : ""}
+                to="/login"
+              >
+                Login
+              </Link>
+              <Link
+                className={location.pathname === "/register" ? "active" : ""}
+                to="/register"
+              >
+                Register
+              </Link>
+            </div>
           </>
         )}
       </div>

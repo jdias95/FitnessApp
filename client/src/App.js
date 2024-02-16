@@ -19,6 +19,7 @@ import "./App.css";
 import Axios from "axios";
 import OTPClass from "./OTP";
 import ResetPassword from "./ResetPassword";
+import WalkthroughModal from "./WalkthroughModal";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -32,6 +33,7 @@ function App() {
   const [trackedExercises, setTrackedExercises] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
   const [openMenus, setOpenMenus] = useState({});
+  const [showWalkthroughModal, setShowWalkthroughModal] = useState(false);
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -119,7 +121,13 @@ function App() {
     createRoutesFromElements(
       <Route
         path="/"
-        element={<Root setLoginStatus={setLoginStatus} apiURL={apiURL} />}
+        element={
+          <Root
+            setLoginStatus={setLoginStatus}
+            apiURL={apiURL}
+            setShowWalkthroughModal={setShowWalkthroughModal}
+          />
+        }
       >
         <Route
           index
@@ -378,11 +386,6 @@ function App() {
 
   return (
     <div className="App">
-      <img
-        className="walkthrough-img"
-        src={process.env.PUBLIC_URL + "/walkthrough.png"}
-        alt="walkthrough"
-      />
       <RouterProvider router={router}>
         {localStorage.getItem("authToken") ? (
           <NavbarLoggedIn />
@@ -390,6 +393,14 @@ function App() {
           <NavbarLoggedOut />
         )}
       </RouterProvider>
+
+      {showWalkthroughModal && (
+        <WalkthroughModal
+          onClose={() => {
+            setShowWalkthroughModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }
