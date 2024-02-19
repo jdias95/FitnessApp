@@ -80,6 +80,42 @@ p {
   transition: content 0.3s;
 }
 
+.page {
+  cursor: pointer;
+}
+
+.position {
+  position: relative;
+}
+
+.page-arrow {
+  height: 2.5em;
+  width: 2.5em;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -25%);
+}
+
+.page-left {
+  left: -1em;
+}
+
+.page-left:hover {
+  cursor: pointer;
+  content: url("../public/page-left-hovered.png");
+  transition: content 0.3s;
+}
+
+.page-right {
+  right: -1em;
+}
+
+.page-right:hover {
+  cursor: pointer;
+  content: url("../public/page-right-hovered.png");
+  transition: content 0.3s;
+}
+
 button:hover {
   background-color: #868686;
   cursor: pointer;
