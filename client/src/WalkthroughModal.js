@@ -7,11 +7,13 @@ const WalkthroughModal = (props) => {
 
   return (
     <div className="modal">
-      <div className="modal-content">
+      <div className="modal-content" id="walkthrough">
         <div className="modal-flex">
           <div className="exercise-modal-body">
             <div className="position">
-              <p>text</p>
+              <div className="walkthrough-content">
+                <p>text</p>
+              </div>
               {pageNum > 1 ? (
                 <img
                   className="page-left page-arrow"

@@ -67,6 +67,17 @@ p {
   cursor: default;
 }
 
+#walkthrough {
+  max-width: 50rem;
+}
+
+.walkthrough-content {
+  width: calc(100% - 5em);
+  position: relative;
+  left: 2.5em;
+  height: 30em;
+}
+
 .walkthrough-img {
   position: relative;
   left: 1.5em;
