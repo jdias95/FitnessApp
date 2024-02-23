@@ -75,7 +75,14 @@ p {
   width: calc(100% - 5em);
   position: relative;
   left: 2.5em;
-  height: 30em;
+  max-height: calc(100vh - 9.5em);
+  overflow: auto;
+  height: 40em;
+}
+
+#walkthrough-list li {
+  list-style: circle;
+  line-height: 1.5;
 }
 
 .walkthrough-img {
@@ -964,6 +971,7 @@ li {
 
   .nav .name {
     left: calc(2em + 30px);
+    text-align: center;
   }
 
   .background-container {

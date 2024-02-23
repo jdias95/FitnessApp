@@ -218,7 +218,7 @@ const ProfilePage = (props) => {
               ) : null}
               {infoBool ? (
                 <div className="flex spec">
-                  <label>Daily Calories Burned:</label>
+                  <label>Daily Calories Expenditure:</label>
                   <p className="item">
                     {Math.floor(
                       caloriesBurned(
