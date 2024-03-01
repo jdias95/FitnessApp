@@ -608,6 +608,32 @@ app.get("/api/get/tracked-exercises/:userId", (req, res) => {
   });
 });
 
+app.put("/api/update/tracked-exercise/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const name = req.body.name;
+  const newName = req.body.newName;
+  const sqlUpdate =
+    "UPDATE tracked_exercises SET name = ? WHERE user_id = ? AND name = ?";
+  const sqlUpdate2 =
+    "UPDATE tracked_exercises_order SET name = ? WHERE user_id = ? AND name = ?";
+
+  db.query(sqlUpdate, [newName, userId, name], (err1, result1) => {
+    if (err1) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error updating tracked exercise name:", err1);
+    } else {
+      db.query(sqlUpdate2, [newName, userId, name], (err2, result2) => {
+        if (err2) {
+          res.status(500).json({ error: "Internal Server Error" });
+          console.error("Error updating tracked exercise order name:", err2);
+        } else {
+          res.status(200).json({ result1, result2 });
+        }
+      });
+    }
+  });
+});
+
 app.delete("/api/delete/tracked-exercise/:id", (req, res) => {
   const id = req.params.id;
   const sqlDelete = "DELETE FROM tracked_exercises WHERE id = ?";

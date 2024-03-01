@@ -171,6 +171,7 @@ const ExerciseFormModal = (props) => {
                       sortOrder: [
                         {
                           id: response3.data.insertId,
+                          user_id: loginStatus.id,
                           name: nameReg,
                           sort_order: response3.data.insertId,
                         },
@@ -211,6 +212,7 @@ const ExerciseFormModal = (props) => {
                         ...existingTrackedExercises,
                         {
                           id: response3.data.insertId,
+                          user_id: loginStatus.id,
                           name: nameReg,
                           sort_order: response3.data.insertId,
                         },

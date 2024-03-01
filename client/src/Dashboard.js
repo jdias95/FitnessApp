@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Axios from "axios";
 import StarterRoutinesModal from "./StarterRoutinesModal";
+import UpdateTrackedExerciseNameModal from "./UpdateTrackedExerciseNameModal";
 
 const Dashboard = (props) => {
   const navigate = useNavigate();
@@ -59,6 +60,10 @@ const Dashboard = (props) => {
   const [showDeleteExerciseModal, setShowDeleteExerciseModal] = useState(false);
   const [showDeleteTrackedExerciseModal, setShowDeleteTrackedExerciseModal] =
     useState(false);
+  const [
+    showUpdateTrackedExerciseNameModal,
+    setShowUpdateTrackedExerciseNameModal,
+  ] = useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
   const [showStatisticsModal, setShowStatisticsModal] = useState(false);
   const [showStarterRoutinesModal, setShowStarterRoutinesModal] =
@@ -109,6 +114,9 @@ const Dashboard = (props) => {
         break;
       case "deleteTrackedExercise":
         setShowDeleteTrackedExerciseModal(isOpen);
+        break;
+      case "updateTrackedExerciseName":
+        setShowUpdateTrackedExerciseNameModal(isOpen);
         break;
       case "exerciseStatistics":
         setShowStatisticsModal(isOpen);
@@ -949,7 +957,9 @@ const Dashboard = (props) => {
                                   )}
                                 </div>
                                 <div className="flex">
-                                  {trackedExercises[exercise.name].find(
+                                  {console.log(trackedExercises)}
+                                  {trackedExercises[exercise.name] &&
+                                  trackedExercises[exercise.name].find(
                                     (exercise) => exercise.weight
                                   ) ? (
                                     <img
@@ -972,6 +982,20 @@ const Dashboard = (props) => {
                                       }}
                                     />
                                   ) : null}
+                                  <img
+                                    src={process.env.PUBLIC_URL + "/edit.png"}
+                                    className="img edit"
+                                    alt="edit name"
+                                    onClick={() => {
+                                      setSelectedExercise(
+                                        trackedExercises[exercise.name][0].name
+                                      );
+                                      toggleModal(
+                                        "updateTrackedExerciseName",
+                                        true
+                                      );
+                                    }}
+                                  />
                                   <img
                                     {...provided.dragHandleProps}
                                     className="img sort"
@@ -1185,6 +1209,17 @@ const Dashboard = (props) => {
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
           trackedExercises={trackedExercises}
+          apiURL={apiURL}
+        />
+      )}
+
+      {showUpdateTrackedExerciseNameModal && selectedExercise && (
+        <UpdateTrackedExerciseNameModal
+          onClose={() => {
+            toggleModal("updateTrackedExerciseName", false);
+          }}
+          loginStatus={loginStatus}
+          selectedExercise={selectedExercise}
           apiURL={apiURL}
         />
       )}

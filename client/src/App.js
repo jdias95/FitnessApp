@@ -294,6 +294,7 @@ function App() {
                   response.data.forEach((exerciseType) => {
                     const exercise = {
                       id: exerciseType.id,
+                      user_id: exerciseType.user_id,
                       name: exerciseType.name,
                       sort_order: exerciseType.sort_order,
                     };
