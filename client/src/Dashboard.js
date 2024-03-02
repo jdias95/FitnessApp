@@ -957,7 +957,6 @@ const Dashboard = (props) => {
                                   )}
                                 </div>
                                 <div className="flex">
-                                  {console.log(trackedExercises)}
                                   {trackedExercises[exercise.name] &&
                                   trackedExercises[exercise.name].find(
                                     (exercise) => exercise.weight
@@ -1220,6 +1219,8 @@ const Dashboard = (props) => {
           }}
           loginStatus={loginStatus}
           selectedExercise={selectedExercise}
+          trackedExercises={trackedExercises}
+          setTrackedExercises={setTrackedExercises}
           apiURL={apiURL}
         />
       )}
