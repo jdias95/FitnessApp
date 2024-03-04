@@ -122,14 +122,21 @@ const WalkthroughModal = (props) => {
                     icon will reveal your progress in both working weight and
                     volume (sets x reps x weight). This insight can assist you
                     in evaluating the effectiveness of your routines and guide
-                    any necessary adjustments. Additionally, these lists can be
-                    sorted (
+                    any necessary adjustments. These lists can be sorted (
                     <img
                       id="edit"
                       alt="sort"
                       src={process.env.PUBLIC_URL + "/sort-list.png"}
                     />
-                    ) for your convenience.
+                    ) and the names can be editted (
+                    <img
+                      id="edit"
+                      alt="edit"
+                      src={process.env.PUBLIC_URL + "/edit.png"}
+                    />
+                    ) for your convenience. Be aware that if you name a list to
+                    be the same as another, the two lists will merge.{" "}
+                    <strong>This cannot be undone.</strong>
                   </p>
                 ) : null}
               </div>

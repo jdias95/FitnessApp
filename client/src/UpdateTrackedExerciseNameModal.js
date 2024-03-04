@@ -11,22 +11,19 @@ const UpdateTrackedExerciseNameModal = (props) => {
     apiURL,
   } = props;
   const [nameReg, setNameReg] = useState(selectedExercise);
+  const sortOrderCheck =
+    trackedExercises.sortOrder.find((exercise) => exercise.name === nameReg) ??
+    "";
 
   const updateTrackedExerciseName = () => {
     const updatedTrackedExercises = { ...trackedExercises };
     const updatedSortOrder = [...trackedExercises.sortOrder];
-    const sortOrderCheck =
-      trackedExercises.sortOrder.find(
-        (exercise) => exercise.name === nameReg
-      ) ?? "";
 
     const selectedExerciseValue = updatedTrackedExercises[selectedExercise].map(
       (exercise) => {
         return { ...exercise, name: nameReg };
       }
     );
-
-    delete updatedTrackedExercises[selectedExercise];
 
     updatedTrackedExercises[nameReg] = selectedExerciseValue;
 
@@ -40,14 +37,16 @@ const UpdateTrackedExerciseNameModal = (props) => {
 
     updatedTrackedExercises.sortOrder = updatedSortOrder;
 
-    setTrackedExercises(updatedTrackedExercises);
-
     if (sortOrderCheck) {
       const newUpdatedSortOrder = updatedSortOrder.filter(
         (exercise) => exercise !== sortOrderCheck
       );
 
       updatedTrackedExercises.sortOrder = newUpdatedSortOrder;
+
+      updatedTrackedExercises[nameReg] = trackedExercises[nameReg]
+        .concat(updatedTrackedExercises[nameReg])
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
 
       setTrackedExercises(updatedTrackedExercises);
 
@@ -57,6 +56,10 @@ const UpdateTrackedExerciseNameModal = (props) => {
         console.error(error);
       });
     }
+
+    delete updatedTrackedExercises[selectedExercise];
+
+    setTrackedExercises(updatedTrackedExercises);
 
     Axios.put(`${apiURL}/api/update/tracked-exercise/${loginStatus.id}`, {
       name: selectedExercise,
@@ -75,13 +78,6 @@ const UpdateTrackedExerciseNameModal = (props) => {
       <div className="modal-content">
         <div className="modal-flex">
           <div className="modal-body">
-            {console.log(
-              trackedExercises.sortOrder.find(
-                (exercise) => exercise.name === nameReg
-              )
-                ? true
-                : false
-            )}
             <div className="flex">
               <label className="flex-input">Name: </label>
               <input

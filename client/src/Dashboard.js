@@ -1212,18 +1212,19 @@ const Dashboard = (props) => {
         />
       )}
 
-      {showUpdateTrackedExerciseNameModal && selectedExercise && (
-        <UpdateTrackedExerciseNameModal
-          onClose={() => {
-            toggleModal("updateTrackedExerciseName", false);
-          }}
-          loginStatus={loginStatus}
-          selectedExercise={selectedExercise}
-          trackedExercises={trackedExercises}
-          setTrackedExercises={setTrackedExercises}
-          apiURL={apiURL}
-        />
-      )}
+      {showUpdateTrackedExerciseNameModal &&
+        (selectedExercise || selectedExercise === "") && (
+          <UpdateTrackedExerciseNameModal
+            onClose={() => {
+              toggleModal("updateTrackedExerciseName", false);
+            }}
+            loginStatus={loginStatus}
+            selectedExercise={selectedExercise}
+            trackedExercises={trackedExercises}
+            setTrackedExercises={setTrackedExercises}
+            apiURL={apiURL}
+          />
+        )}
 
       {showNotesModal && selectedExercise && (
         <NotesModal
