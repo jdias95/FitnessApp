@@ -489,7 +489,8 @@ a {
 }
 
 .dashboard h3 {
-  margin: 1rem 0;
+  margin: 0.8rem 0;
+  padding-bottom: 0.2em;
 }
 
 .title {

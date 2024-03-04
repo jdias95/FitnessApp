@@ -136,7 +136,7 @@ const WalkthroughModal = (props) => {
                     />
                     ) for your convenience. Be aware that if you name a list to
                     be the same as another, the two lists will merge.{" "}
-                    <strong>This cannot be undone.</strong>
+                    <strong>THIS CANNOT BE UNDONE.</strong>
                   </p>
                 ) : null}
               </div>
