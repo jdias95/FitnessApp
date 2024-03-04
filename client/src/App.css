@@ -80,6 +80,10 @@ p {
   height: 40em;
 }
 
+.walkthrough-content h2 {
+  text-align: center;
+}
+
 #walkthrough-list li {
   list-style: circle;
   line-height: 1.5;
