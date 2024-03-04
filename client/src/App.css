@@ -490,7 +490,7 @@ a {
 
 .dashboard h3 {
   margin: 0.8rem 0;
-  padding-bottom: 0.2em;
+  padding-bottom: 0.4em;
 }
 
 .title {
@@ -933,12 +933,17 @@ li {
     border-radius: 0;
   }
 
-  .modal-button {
+  .modal-body .modal-button {
     min-width: 4rem;
+    padding: 0.1rem;
   }
 
   .modal-content {
     font-size: 0.8rem;
+  }
+
+  #wider {
+    width: 10em;
   }
 
   .edit {
