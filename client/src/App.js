@@ -374,7 +374,15 @@ function App() {
       Axios.get(`${apiURL}/api/get/weight/${loginStatus.id}`)
         .then((response) => {
           setPreviousWeight(response.data[response.data.length - 1]);
-          setWeightData(response.data);
+          if (userProfile && userProfile.measurement_type !== "imperial") {
+            const convertedWeightData = response.data.map((item) => ({
+              ...item,
+              weight: defaultConvertWeight(item.weight),
+            }));
+            setWeightData(convertedWeightData);
+          } else {
+            setWeightData(response.data);
+          }
         })
         .catch((error) => {
           console.error("Error fetching weight data:", error);
