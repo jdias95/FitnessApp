@@ -21,7 +21,7 @@ app.use(express.static("public", { maxAge: 26 * 7 * 24 * 60 * 60 * 1000 }));
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [process.env.CORS_ORIGIN, process.env.CORS_ORIGIN_2],
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
@@ -36,10 +36,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: new MySQLStore({
-      host: "localhost",
-      user: "root",
-      password: "password",
-      database: "fitnessapp",
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
     }),
     cookie: {
       expires: 10000000000,
@@ -48,19 +48,19 @@ app.use(
 );
 
 const db = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "fitnessapp",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
 const sendEmail = ({ OTP, recipient_email, email_type }) => {
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 587,
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT),
       auth: {
-        user: "dias.joshua7@gmail.com",
+        user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
       },
     });
@@ -68,7 +68,7 @@ const sendEmail = ({ OTP, recipient_email, email_type }) => {
     const mail_configs =
       email_type === "recovery"
         ? {
-            from: "wegojim315@gmail.com",
+            from: process.env.RECOVERY_EMAIL_SENDER,
             to: recipient_email,
             subject: "Reset Password",
             html: `<!DOCTYPE html>
