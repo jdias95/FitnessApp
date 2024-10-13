@@ -68,7 +68,7 @@ const sendEmail = ({ OTP, recipient_email, email_type }) => {
     const mail_configs =
       email_type === "recovery"
         ? {
-            from: process.env.RECOVERY_EMAIL_SENDER,
+            from: process.env.EMAIL_SENDER,
             to: recipient_email,
             subject: "Reset Password",
             html: `<!DOCTYPE html>
@@ -83,7 +83,7 @@ const sendEmail = ({ OTP, recipient_email, email_type }) => {
           }
         : email_type === "welcome"
         ? {
-            from: "wegojim315@gmail.com",
+            from: process.env.EMAIL_SENDER,
             to: recipient_email,
             subject: "Welcome!",
             html: `<!DOCTYPE html>
@@ -96,7 +96,7 @@ const sendEmail = ({ OTP, recipient_email, email_type }) => {
               </html>`,
           }
         : {
-            from: "wegojim315@gmail.com",
+            from: process.env.EMAIL_SENDER,
             to: recipient_email,
             subject: "Password Successfully Reset",
             html: `<!DOCTYPE html>
