@@ -11,7 +11,7 @@ const DeleteTrackedExerciseModal = (props) => {
   } = props;
 
   const deleteExercise = (id) => {
-    Axios.delete(`${apiURL}/api/delete/tracked-exercise/${id}`)
+    Axios.delete(`${apiURL}/delete/tracked-exercise/${id}`)
       .then(() => {
         setTrackedExercises((prevTrackedExercises) => {
           const updatedTrackedExercises = [
@@ -31,7 +31,7 @@ const DeleteTrackedExerciseModal = (props) => {
             delete updatedTrackedExercisesObj[selectedExercise.name];
 
             Axios.delete(
-              `${apiURL}/api/delete/tracked-exercise-order/${
+              `${apiURL}/delete/tracked-exercise-order/${
                 trackedExercises.sortOrder.find(
                   (exercise) => exercise.name === selectedExercise.name
                 ).id

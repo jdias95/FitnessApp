@@ -71,7 +71,7 @@ const StarterRoutinesModal = (props) => {
 
     Promise.all(
       routineData.map((routine) => {
-        return Axios.post(`${apiURL}/api/insert/routine`, {
+        return Axios.post(`${apiURL}/insert/routine`, {
           userId: routine.userId,
           name: routine.name,
         }).then((response) => response.data.insertId);
@@ -86,7 +86,7 @@ const StarterRoutinesModal = (props) => {
 
         Promise.all(
           exerciseData.map((exercise, index) => {
-            return Axios.post(`${apiURL}/api/insert/exercise`, {
+            return Axios.post(`${apiURL}/insert/exercise`, {
               userId: exercise.userId,
               routineId:
                 index <= 3
@@ -107,7 +107,7 @@ const StarterRoutinesModal = (props) => {
         )
           .then((insertIds2) => {
             const newExercises = exerciseData.map((exercise, index) => {
-              Axios.put(`${apiURL}/api/update/exercise/${insertIds2[index]}`, {
+              Axios.put(`${apiURL}/update/exercise/${insertIds2[index]}`, {
                 userId: exercise.userId,
                 routineId:
                   index <= 3

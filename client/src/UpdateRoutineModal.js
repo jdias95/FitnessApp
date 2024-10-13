@@ -6,7 +6,7 @@ const UpdateRoutineModal = (props) => {
   const [nameReg, setNameReg] = useState(selectedRoutine.name);
 
   const updateRoutine = (id) => {
-    Axios.put(`${apiURL}/api/update/routine/${id}`, {
+    Axios.put(`${apiURL}/update/routine/${id}`, {
       name: nameReg,
     })
       .then(() => {

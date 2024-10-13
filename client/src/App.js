@@ -34,21 +34,12 @@ function App() {
   const [routineExercises, setRoutineExercises] = useState({});
   const [openMenus, setOpenMenus] = useState({});
   const [showWalkthroughModal, setShowWalkthroughModal] = useState(false);
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-  const day = String(currentDate.getDate()).padStart(2, "0");
-  const time = String(
-    `${String(currentDate.getHours()).padStart(2, "0")}:${String(
-      currentDate.getMinutes()
-    ).padStart(2, "0")}:${String(currentDate.getSeconds()).padStart(2, "0")}`
-  );
-  const formattedDate = `${year}-${month}-${day}T${time}`;
-  const applicationMode = "Development";
+  const formattedDate = new Date().toISOString().slice(0, -5);
+
   const apiURL =
-    applicationMode === "Development"
-      ? "http://localhost:3001"
-      : "https://api.wegojim.net";
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_PROD_API_URL
+      : process.env.REACT_APP_DEV_API_URL;
 
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
@@ -244,7 +235,7 @@ function App() {
   );
 
   useEffect(() => {
-    Axios.get(`${apiURL}/api/login`)
+    Axios.get(`${apiURL}/login`)
       .then((response) => {
         if (response.data.loggedIn === true) {
           setLoginStatus(response.data.user);
@@ -260,7 +251,7 @@ function App() {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.get(`${apiURL}/api/get/routines/${loginStatus.id}`)
+      Axios.get(`${apiURL}/get/routines/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
             setRoutines(response.data);
@@ -270,7 +261,7 @@ function App() {
           console.error("Error fetching routines:", error);
         });
 
-      Axios.get(`${apiURL}/api/get/tracked-exercises/${loginStatus.id}`)
+      Axios.get(`${apiURL}/get/tracked-exercises/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
             const groupedExercises = {};
@@ -286,9 +277,7 @@ function App() {
               groupedExercises[exerciseName].push(exercise);
             });
 
-            Axios.get(
-              `${apiURL}/api/get/tracked-exercise-order/${loginStatus.id}`
-            )
+            Axios.get(`${apiURL}/get/tracked-exercise-order/${loginStatus.id}`)
               .then((response) => {
                 if (response.data.length > 0) {
                   response.data.forEach((exerciseType) => {
@@ -314,7 +303,7 @@ function App() {
           console.error("Error fetching exercises:", error);
         });
 
-      Axios.get(`${apiURL}/api/get/exercises/${loginStatus.id}`)
+      Axios.get(`${apiURL}/get/exercises/${loginStatus.id}`)
         .then((response) => {
           if (response.data.length > 0) {
             setExercises(response.data);
@@ -324,7 +313,7 @@ function App() {
           console.error("Error fetching exercises:", error);
         });
 
-      Axios.get(`${apiURL}/api/get/profile/${loginStatus.id}`)
+      Axios.get(`${apiURL}/get/profile/${loginStatus.id}`)
         .then((response) => {
           setUserProfile(response.data);
         })
@@ -341,11 +330,11 @@ function App() {
               targetWeight: 0,
             };
 
-            Axios.post(`${apiURL}/api/insert/profile`, {
+            Axios.post(`${apiURL}/insert/profile`, {
               userId: loginStatus.id,
               ...newProfile,
             }).then(() => {
-              Axios.get(`${apiURL}/api/get/profile/${loginStatus.id}`)
+              Axios.get(`${apiURL}/get/profile/${loginStatus.id}`)
                 .then((response) => {
                   setUserProfile(response.data);
                 })
@@ -371,7 +360,7 @@ function App() {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.get(`${apiURL}/api/get/weight/${loginStatus.id}`)
+      Axios.get(`${apiURL}/get/weight/${loginStatus.id}`)
         .then((response) => {
           setPreviousWeight(response.data[response.data.length - 1]);
           if (userProfile && userProfile.measurement_type !== "imperial") {

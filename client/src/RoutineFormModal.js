@@ -6,7 +6,7 @@ const RoutineFormModal = (props) => {
   const [nameReg, setNameReg] = useState("");
 
   const createRoutine = () => {
-    Axios.post(`${apiURL}/api/insert/routine`, {
+    Axios.post(`${apiURL}/insert/routine`, {
       userId: loginStatus.id,
       name: nameReg,
     })

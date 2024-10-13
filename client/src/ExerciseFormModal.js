@@ -29,7 +29,7 @@ const ExerciseFormModal = (props) => {
   const [notesReg, setNotesReg] = useState("");
 
   const createExercise = () => {
-    Axios.post(`${apiURL}/api/insert/exercise`, {
+    Axios.post(`${apiURL}/insert/exercise`, {
       userId: loginStatus.id,
       routineId: selectedRoutine.id,
       name: nameReg,
@@ -45,7 +45,7 @@ const ExerciseFormModal = (props) => {
       .then((response) => {
         const newExerciseId = response.data.insertId;
 
-        Axios.put(`${apiURL}/api/update/exercise/${newExerciseId}`, {
+        Axios.put(`${apiURL}/update/exercise/${newExerciseId}`, {
           name: nameReg,
           repsLow: repsLowReg === "" ? 1 : repsLowReg,
           repsHigh:
@@ -88,7 +88,7 @@ const ExerciseFormModal = (props) => {
         }));
 
         if (trackReg) {
-          Axios.post(`${apiURL}/api/insert/tracked-exercise`, {
+          Axios.post(`${apiURL}/insert/tracked-exercise`, {
             userId: loginStatus.id,
             exerciseId: response.data.insertId,
             name: nameReg,
@@ -150,14 +150,14 @@ const ExerciseFormModal = (props) => {
 
               if (!trackedExercises.sortOrder) {
                 Axios.post(
-                  `${apiURL}/api/insert/tracked-exercise-order/${loginStatus.id}`,
+                  `${apiURL}/insert/tracked-exercise-order/${loginStatus.id}`,
                   {
                     name: nameReg,
                   }
                 )
                   .then((response3) => {
                     Axios.put(
-                      `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
+                      `${apiURL}/update/tracked-exercise-order/${response3.data.insertId}`,
                       {
                         name: nameReg,
                         sortOrder: response3.data.insertId,
@@ -187,14 +187,14 @@ const ExerciseFormModal = (props) => {
                 )
               ) {
                 Axios.post(
-                  `${apiURL}/api/insert/tracked-exercise-order/${loginStatus.id}`,
+                  `${apiURL}/insert/tracked-exercise-order/${loginStatus.id}`,
                   {
                     name: nameReg,
                   }
                 )
                   .then((response3) => {
                     Axios.put(
-                      `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
+                      `${apiURL}/update/tracked-exercise-order/${response3.data.insertId}`,
                       {
                         name: nameReg,
                         sortOrder: response3.data.insertId,

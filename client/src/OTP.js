@@ -15,7 +15,7 @@ const OTPClass = (props) => {
     setMessage("");
 
     if (disable) return;
-    Axios.post(`${apiURL}/api/send-recovery-email`, {
+    Axios.post(`${apiURL}/send-recovery-email`, {
       OTP: OTP,
       recipient_email: email,
     })

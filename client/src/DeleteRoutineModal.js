@@ -5,7 +5,7 @@ const DeleteRoutineModal = (props) => {
   const { onClose, setRoutines, routines, selectedRoutine, apiURL } = props;
 
   const deleteRoutine = (id) => {
-    Axios.delete(`${apiURL}/api/delete/routine/${id}`)
+    Axios.delete(`${apiURL}/delete/routine/${id}`)
       .then(() => {
         const updatedRoutines = routines.filter((routine) => routine.id !== id);
         setRoutines(updatedRoutines);

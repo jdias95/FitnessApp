@@ -27,7 +27,7 @@ const ResetPassword = (props) => {
 
     setMessage("");
 
-    Axios.put(`${apiURL}/api/reset-password`, {
+    Axios.put(`${apiURL}/reset-password`, {
       email: email,
       password: password,
     })

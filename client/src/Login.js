@@ -12,7 +12,7 @@ const Login = (props) => {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.delete(`${apiURL}/api/logout`).then((response) => {
+      Axios.delete(`${apiURL}/logout`).then((response) => {
         if (response.status === 200) {
           setLoginStatus("");
           localStorage.clear();
@@ -40,7 +40,7 @@ const Login = (props) => {
       return;
     }
 
-    Axios.post(`${apiURL}/api/login`, {
+    Axios.post(`${apiURL}/login`, {
       email: email,
       password: password,
     })
@@ -80,7 +80,7 @@ const Login = (props) => {
       const OTP = Math.floor(Math.random() * 9000 + 1000);
       setOTP(OTP);
 
-      Axios.post(`${apiURL}/api/send-email`, {
+      Axios.post(`${apiURL}/send-email`, {
         OTP: OTP,
         recipient_email: email,
         email_type: "recovery",

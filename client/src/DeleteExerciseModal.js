@@ -11,7 +11,7 @@ const DeleteExerciseModal = (props) => {
   } = props;
 
   const deleteExercise = (id) => {
-    Axios.delete(`${apiURL}/api/delete/exercise/${id}`)
+    Axios.delete(`${apiURL}/delete/exercise/${id}`)
       .then(() => {
         setRoutineExercises((prevRoutineExercises) => {
           const updatedRoutineExercises = [

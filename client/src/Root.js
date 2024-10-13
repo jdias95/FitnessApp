@@ -8,7 +8,7 @@ const Root = (props) => {
   const location = useLocation();
 
   const logout = () => {
-    Axios.delete(`${apiURL}/api/logout`).then((response) => {
+    Axios.delete(`${apiURL}/logout`).then((response) => {
       if (response.status === 200) {
         setLoginStatus("");
         localStorage.clear();

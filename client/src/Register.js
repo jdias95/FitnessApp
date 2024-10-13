@@ -13,7 +13,7 @@ const Register = (props) => {
 
   useEffect(() => {
     if (loginStatus) {
-      Axios.delete(`${apiURL}/api/logout`).then((response) => {
+      Axios.delete(`${apiURL}/logout`).then((response) => {
         if (response.status === 200) {
           setLoginStatus("");
           localStorage.clear();
@@ -49,7 +49,7 @@ const Register = (props) => {
 
     setError("");
 
-    Axios.post(`${apiURL}/api/register`, {
+    Axios.post(`${apiURL}/register`, {
       email: emailReg,
       password: passwordReg,
       firstName: firstNameReg,
@@ -60,7 +60,7 @@ const Register = (props) => {
           return;
         }
 
-        Axios.post(`${apiURL}/api/send-email`, {
+        Axios.post(`${apiURL}/send-email`, {
           OTP: null,
           recipient_email: emailReg,
           email_type: "welcome",

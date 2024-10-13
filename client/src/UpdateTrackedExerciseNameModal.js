@@ -51,7 +51,7 @@ const UpdateTrackedExerciseNameModal = (props) => {
       setTrackedExercises(updatedTrackedExercises);
 
       Axios.delete(
-        `${apiURL}/api/delete/tracked-exercise-order/${sortOrderCheck.id}`
+        `${apiURL}/delete/tracked-exercise-order/${sortOrderCheck.id}`
       ).catch((error) => {
         console.error(error);
       });
@@ -61,7 +61,7 @@ const UpdateTrackedExerciseNameModal = (props) => {
 
     setTrackedExercises(updatedTrackedExercises);
 
-    Axios.put(`${apiURL}/api/update/tracked-exercise/${loginStatus.id}`, {
+    Axios.put(`${apiURL}/update/tracked-exercise/${loginStatus.id}`, {
       name: selectedExercise,
       newName: nameReg,
     })
@@ -93,7 +93,11 @@ const UpdateTrackedExerciseNameModal = (props) => {
             <span className="modal-button-container">
               <button
                 className="modal-button"
-                onClick={() => updateTrackedExerciseName()}
+                onClick={() =>
+                  selectedExercise !== nameReg
+                    ? updateTrackedExerciseName()
+                    : onClose()
+                }
               >
                 Confirm
               </button>

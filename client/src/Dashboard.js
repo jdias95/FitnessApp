@@ -480,7 +480,7 @@ const Dashboard = (props) => {
     if (listType === "routineExercises") {
       Promise.all(
         sortableList.map((exercise, index) => {
-          return Axios.put(`${apiURL}/api/update/exercise/${exercise.id}`, {
+          return Axios.put(`${apiURL}/update/exercise/${exercise.id}`, {
             name: exercise.name,
             repsLow: exercise.reps_low,
             repsHigh: exercise.reps_high,
@@ -502,7 +502,7 @@ const Dashboard = (props) => {
       Promise.all(
         sortableList.map((exercise, index) => {
           return Axios.put(
-            `${apiURL}/api/update/tracked-exercise-order/${exercise.id}`,
+            `${apiURL}/update/tracked-exercise-order/${exercise.id}`,
             {
               name: exercise.name,
               sortOrder: sortOrder[index],

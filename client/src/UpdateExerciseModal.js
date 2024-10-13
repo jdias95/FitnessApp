@@ -32,7 +32,7 @@ const UpdateExerciseModal = (props) => {
   const sortOrder = selectedExercise.sort_order;
 
   const updateExercise = (id) => {
-    Axios.put(`${apiURL}/api/update/exercise/${id}`, {
+    Axios.put(`${apiURL}/update/exercise/${id}`, {
       name: nameReg,
       repsLow: repsLowReg === "" ? 1 : repsLowReg,
       repsHigh:
@@ -75,7 +75,7 @@ const UpdateExerciseModal = (props) => {
           }
 
           if (trackReg) {
-            Axios.post(`${apiURL}/api/insert/tracked-exercise`, {
+            Axios.post(`${apiURL}/insert/tracked-exercise`, {
               userId: loginStatus.id,
               exerciseId: id,
               name: nameReg,
@@ -141,14 +141,14 @@ const UpdateExerciseModal = (props) => {
 
             if (!trackedExercises.sortOrder) {
               Axios.post(
-                `${apiURL}/api/insert/tracked-exercise-order/${loginStatus.id}`,
+                `${apiURL}/insert/tracked-exercise-order/${loginStatus.id}`,
                 {
                   name: nameReg,
                 }
               )
                 .then((response3) => {
                   Axios.put(
-                    `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
+                    `${apiURL}/update/tracked-exercise-order/${response3.data.insertId}`,
                     {
                       name: nameReg,
                       sortOrder: response3.data.insertId,
@@ -179,14 +179,14 @@ const UpdateExerciseModal = (props) => {
               )
             ) {
               Axios.post(
-                `${apiURL}/api/insert/tracked-exercise-order/${loginStatus.id}`,
+                `${apiURL}/insert/tracked-exercise-order/${loginStatus.id}`,
                 {
                   name: nameReg,
                 }
               )
                 .then((response3) => {
                   Axios.put(
-                    `${apiURL}/api/update/tracked-exercise-order/${response3.data.insertId}`,
+                    `${apiURL}/update/tracked-exercise-order/${response3.data.insertId}`,
                     {
                       name: nameReg,
                       sortOrder: response3.data.insertId,
