@@ -16,7 +16,7 @@
 
 .App {
   font-family: "Open Sans", sans-serif;
-  background-color: #1d2a35;
+  background-color: #13171c;
   color: rgba(255, 255, 255, 0.87);
   margin: 0;
   padding: 4rem 0 2rem 0;
@@ -41,7 +41,7 @@ p {
   width: 100vw;
   height: 4rem;
   top: 0;
-  background-color: #38444d;
+  background-color: #1c2432;
   padding-right: 1rem;
   right: 0rem;
 }
@@ -153,7 +153,7 @@ button:hover {
   height: 100%;
   margin: 1rem 1.5%;
   padding: 1%;
-  background-color: #38444d;
+  background-color: #1c2432;
 }
 
 .profile {
@@ -372,12 +372,12 @@ button:hover {
 }
 
 .exercise-graph-selector:hover {
-  background-color: #38444d;
+  background-color: #1c2432;
   cursor: pointer;
 }
 
 #exercise-graph-selector-clicked {
-  background-color: #38444d;
+  background-color: #1c2432;
 }
 
 .selected-graph {
@@ -390,7 +390,7 @@ button:hover {
   padding: 1rem;
   height: 7rem;
   overflow-y: auto;
-  background-color: #1d2a35;
+  background-color: #13171c;
 }
 
 .weight-list ul li {
@@ -463,7 +463,7 @@ a {
 }
 
 .profile h2 {
-  border-bottom: 2px solid #1d2a35;
+  border-bottom: 2px solid #13171c;
   padding: 1rem 0;
   margin: 0;
 }
@@ -498,12 +498,12 @@ a {
 }
 
 .title {
-  border-bottom: 2px solid #1d2a35;
+  border-bottom: 2px solid #13171c;
   height: 5rem;
 }
 
 .list-title-card {
-  border-bottom: 2px solid #1d2a35;
+  border-bottom: 2px solid #13171c;
 }
 
 .list-title-card h3:hover {
@@ -642,7 +642,7 @@ a {
 }
 
 .dropdown-menu {
-  background-color: #1d2a35;
+  background-color: #13171c;
 }
 
 .tracked-dropdown {
@@ -786,7 +786,7 @@ li {
 
 .modal-content {
   overflow: auto;
-  background-color: #1d2a35;
+  background-color: #13171c;
   max-height: 100vh;
   max-width: 40rem;
   width: 100%;
