@@ -398,7 +398,6 @@ function App() {
   );
 
   useEffect(() => {
-    console.log(userProfile);
     fetchLoginStatus(apiURL, setLoginStatus);
   }, [setLoginStatus, apiURL]);
 
