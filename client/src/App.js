@@ -250,137 +250,119 @@ function App() {
   }, [setLoginStatus, apiURL]);
 
   useEffect(() => {
-    if (loginStatus) {
-      Axios.get(`${apiURL}/get/routines/${loginStatus.id}`)
-        .then((response) => {
-          if (response.data.length > 0) {
-            setRoutines(response.data);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching routines:", error);
-        });
-
-      Axios.get(`${apiURL}/get/tracked-exercises/${loginStatus.id}`)
-        .then((response) => {
-          if (response.data.length > 0) {
-            const groupedExercises = {};
-            let trackedExerciseOrder = [];
-
-            response.data.forEach((exercise) => {
-              const exerciseName = exercise.name;
-
-              if (!groupedExercises[exerciseName]) {
-                groupedExercises[exerciseName] = [];
-              }
-
-              groupedExercises[exerciseName].push(exercise);
-            });
-
-            Axios.get(`${apiURL}/get/tracked-exercise-order/${loginStatus.id}`)
-              .then((response) => {
-                if (response.data.length > 0) {
-                  response.data.forEach((exerciseType) => {
-                    const exercise = {
-                      id: exerciseType.id,
-                      user_id: exerciseType.user_id,
-                      name: exerciseType.name,
-                      sort_order: exerciseType.sort_order,
-                    };
-                    trackedExerciseOrder.push(exercise);
-                  });
-                  groupedExercises["sortOrder"] = trackedExerciseOrder;
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-
-            setTrackedExercises(groupedExercises);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching exercises:", error);
-        });
-
-      Axios.get(`${apiURL}/get/exercises/${loginStatus.id}`)
-        .then((response) => {
-          if (response.data.length > 0) {
-            setExercises(response.data);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching exercises:", error);
-        });
-
-      Axios.get(`${apiURL}/get/profile/${loginStatus.id}`)
-        .then((response) => {
-          setUserProfile(response.data);
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 404) {
-            const newProfile = {
-              weight: 0,
-              height: 0,
-              age: 0,
-              activityLevel: "",
-              gender: "",
-              measurementType: "imperial",
-              weightGoal: 0,
-              targetWeight: 0,
-            };
-
-            Axios.post(`${apiURL}/insert/profile`, {
-              userId: loginStatus.id,
-              ...newProfile,
-            }).then(() => {
-              Axios.get(`${apiURL}/get/profile/${loginStatus.id}`)
-                .then((response) => {
-                  setUserProfile(response.data);
-                })
-                .catch((error) => {
-                  console.error(
-                    "Error fetching newly created profile data:",
-                    error
-                  );
-                });
-            });
-          } else {
-            console.error("Error fetching profile data:", error);
-          }
-          console.log(error);
-        });
-    } else {
+    if (!loginStatus) {
+      // Reset states when there's no login
       setUserProfile(null);
       setRoutines([]);
       setExercises([]);
       setTrackedExercises({});
+      setPreviousWeight({});
+      setWeightData([]);
+      return;
     }
-  }, [loginStatus, apiURL]);
 
-  useEffect(() => {
-    if (loginStatus) {
-      Axios.get(`${apiURL}/get/weight/${loginStatus.id}`)
-        .then((response) => {
-          setPreviousWeight(response.data[response.data.length - 1]);
-          if (userProfile && userProfile.measurement_type !== "imperial") {
-            const convertedWeightData = response.data.map((item) => ({
+    // Helper function for error handling
+    const handleError = (error, message) => {
+      console.error(message, error);
+    };
+
+    const fetchData = async () => {
+      try {
+        // Run multiple API calls concurrently
+        const [
+          routinesResponse,
+          trackedExercisesResponse,
+          exerciseOrderResponse,
+          exercisesResponse,
+          profileResponse,
+          weightResponse,
+        ] = await Promise.all([
+          Axios.get(`${apiURL}/get/routines/${loginStatus.id}`),
+          Axios.get(`${apiURL}/get/tracked-exercises/${loginStatus.id}`),
+          Axios.get(`${apiURL}/get/tracked-exercise-order/${loginStatus.id}`),
+          Axios.get(`${apiURL}/get/exercises/${loginStatus.id}`),
+          Axios.get(`${apiURL}/get/profile/${loginStatus.id}`),
+          Axios.get(`${apiURL}/get/weight/${loginStatus.id}`),
+        ]);
+
+        // Handle routines
+        if (routinesResponse.data.length > 0) {
+          setRoutines(routinesResponse.data);
+        }
+
+        // Handle tracked exercises and order
+        if (trackedExercisesResponse.data.length > 0) {
+          const groupedExercises = trackedExercisesResponse.data.reduce(
+            (acc, exercise) => {
+              const exerciseName = exercise.name;
+              if (!acc[exerciseName]) acc[exerciseName] = [];
+              acc[exerciseName].push(exercise);
+              return acc;
+            },
+            {}
+          );
+
+          if (exerciseOrderResponse.data.length > 0) {
+            groupedExercises["sortOrder"] = exerciseOrderResponse.data;
+          }
+
+          setTrackedExercises(groupedExercises);
+        }
+
+        // Handle exercises
+        if (exercisesResponse.data.length > 0) {
+          setExercises(exercisesResponse.data);
+        }
+
+        // Handle profile
+        if (profileResponse.data) {
+          setUserProfile(profileResponse.data);
+        } else {
+          const newProfile = {
+            weight: 0,
+            height: 0,
+            age: 0,
+            activityLevel: "",
+            gender: "",
+            measurementType: "imperial",
+            weightGoal: 0,
+            targetWeight: 0,
+          };
+
+          await Axios.post(`${apiURL}/insert/profile`, {
+            userId: loginStatus.id,
+            ...newProfile,
+          });
+
+          const updatedProfile = await Axios.get(
+            `${apiURL}/get/profile/${loginStatus.id}`
+          );
+          setUserProfile(updatedProfile.data);
+        }
+
+        // Handle weight data
+        if (weightResponse.data.length > 0) {
+          const latestWeight =
+            weightResponse.data[weightResponse.data.length - 1];
+          setPreviousWeight(latestWeight);
+
+          if (userProfile?.measurement_type !== "imperial") {
+            const convertedWeightData = weightResponse.data.map((item) => ({
               ...item,
               weight: defaultConvertWeight(item.weight),
             }));
             setWeightData(convertedWeightData);
           } else {
-            setWeightData(response.data);
+            setWeightData(weightResponse.data);
           }
-        })
-        .catch((error) => {
-          console.error("Error fetching weight data:", error);
-        });
-    } else {
-      setPreviousWeight({});
-      setWeightData([]);
-    }
-  }, [loginStatus, setPreviousWeight, userProfile, apiURL]);
+        }
+      } catch (error) {
+        handleError(error, "Error fetching data");
+      }
+    };
+
+    fetchData();
+  }, [loginStatus, apiURL, userProfile?.measurement_type]);
 
   return (
     <div className="App">
