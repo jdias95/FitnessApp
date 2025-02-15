@@ -122,7 +122,7 @@ const Login = (props) => {
                 setPassword(e.target.value);
               }}
             />
-            <button className="link" onClick={navigateToOTP}>
+            <button id="link" onClick={navigateToOTP}>
               Forgot Password?
             </button>
           </div>

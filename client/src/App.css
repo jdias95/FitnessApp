@@ -138,11 +138,6 @@ p {
   transition: content 0.3s;
 }
 
-button:hover {
-  background-color: #868686;
-  cursor: pointer;
-}
-
 .div-container {
   display: flex;
 }
@@ -202,21 +197,23 @@ button:hover {
   margin-top: auto;
 }
 
-.link {
+#link {
   background: none;
   border: none;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.87);
   font-size: 12px;
+  background-color: transparent;
+  box-shadow: none;
 }
 
-.link:hover {
+#link:hover {
   cursor: pointer;
   color: rgba(172, 237, 255, 0.87);
   background: none;
 }
 
-#need-help {
+.App .need-help {
   padding: 0;
   margin: 0.5rem 0 0 0;
   text-align: left;
@@ -355,6 +352,10 @@ button:hover {
 .time-selection-container {
   text-align: right;
   margin: 0.5rem 1rem 0 0;
+}
+
+#time-selection {
+  width: 7em;
 }
 
 .stats {
@@ -693,7 +694,7 @@ a {
 }
 
 #wide {
-  width: 4rem;
+  width: 3rem;
 }
 
 #wider {
@@ -817,10 +818,43 @@ li {
 }
 
 .App button {
-  padding: 0.3rem;
-  cursor: pointer;
   margin: 0.5rem 0.1rem;
   min-width: 5rem;
+  appearance: none;
+  background-color: #fafbfc;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
+    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292e;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.App button:hover {
+  background-color: #b4b5b6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+  cursor: pointer;
+}
+
+.App select,
+.App input {
+  border: 1px solid #e8eaed;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 1px 3px -2px #9098a9;
+  padding: 0.15em 0.3em;
 }
 
 .flex-input {

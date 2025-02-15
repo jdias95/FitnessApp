@@ -858,8 +858,8 @@ const Dashboard = (props) => {
             })}
           </ul>
           <button
-            className="link"
-            id="need-help"
+            id="link"
+            className="need-help"
             onClick={() => toggleModal("starterRoutines", true)}
           >
             Need help?

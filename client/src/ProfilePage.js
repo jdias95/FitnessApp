@@ -228,14 +228,15 @@ const ProfilePage = (props) => {
                         activityLevelPoints[userProfile.activity_level],
                         userProfile.gender
                       )
-                    )}
+                    )}{" "}
+                    kcal
                   </p>
                 </div>
               ) : null}
               {calorieBudget && userProfile.weight_goal ? (
                 <div className="flex spec">
                   <label>Daily Calorie Budget: </label>
-                  <p className="item">{calorieBudget}</p>
+                  <p className="item">{calorieBudget} kcal</p>
                 </div>
               ) : null}
             </div>

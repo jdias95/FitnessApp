@@ -263,7 +263,7 @@ const ProfileForm = (props) => {
                           setWeightReg(safeParseFloat(e.target.value));
                         }}
                       />
-                      <p>lbs</p>
+                      <p>&nbsp;lbs</p>
                     </div>
                   </div>
                   <div className="flex spec">
@@ -271,7 +271,7 @@ const ProfileForm = (props) => {
                     <div className="flex">
                       <input
                         type="number"
-                        id="wide"
+                        id="narrow"
                         placeholder="0"
                         min="0"
                         max="10"
@@ -290,10 +290,10 @@ const ProfileForm = (props) => {
                           setHeightReg(newHeight);
                         }}
                       />
-                      <label>ft </label>
+                      <label>&nbsp;ft&nbsp;</label>
                       <input
                         type="number"
-                        id="wide"
+                        id="narrow"
                         placeholder="0"
                         min="0"
                         max="12"
@@ -312,7 +312,7 @@ const ProfileForm = (props) => {
                           setHeightReg(newHeight);
                         }}
                       />
-                      <label>in</label>
+                      <label>&nbsp;in</label>
                     </div>
                   </div>
                 </div>
@@ -338,7 +338,7 @@ const ProfileForm = (props) => {
                           );
                         }}
                       />
-                      <label>kgs</label>
+                      <label>&nbsp;kgs</label>
                     </div>
                   </div>
                   <div className="flex spec">
@@ -361,7 +361,7 @@ const ProfileForm = (props) => {
                           setHeightReg(newHeight);
                         }}
                       />
-                      <label>cm</label>
+                      <label>&nbsp;cm</label>
                     </div>
                   </div>
                 </div>
@@ -486,12 +486,12 @@ const ProfileForm = (props) => {
                               );
                             }}
                           />
-                          <p>lbs</p>
+                          <p>&nbsp;lbs</p>
                         </div>
                       ) : (
                         <div className="flex">
                           <input type="number" value="" id="wide" disabled />
-                          <p>lbs</p>
+                          <p>&nbsp;lbs</p>
                         </div>
                       )}
                     </div>
@@ -518,12 +518,12 @@ const ProfileForm = (props) => {
                               );
                             }}
                           />
-                          <p>kgs</p>
+                          <p>&nbsp;kgs</p>
                         </div>
                       ) : (
                         <div className="flex">
                           <input type="number" value="" id="wide" disabled />
-                          <p>kgs</p>
+                          <p>&nbsp;kgs</p>
                         </div>
                       )}
                     </div>
