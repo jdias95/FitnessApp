@@ -413,6 +413,7 @@ p {
   list-style: none;
   padding: 1rem;
   min-height: 10em;
+  max-height: 35em;
   height: 100%;
   margin: 0;
   overflow-y: auto;
@@ -970,6 +971,7 @@ li {
 
   .weight-list ul {
     margin: 1em 0;
+    max-height: 10em;
   }
 
   .row {
