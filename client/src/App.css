@@ -446,6 +446,10 @@ p {
   transition: content 0.3s;
 }
 
+.x {
+  margin-left: 0.2em;
+}
+
 .x:hover {
   cursor: pointer;
   content: url("../public/x-hover.png");
@@ -460,11 +464,6 @@ p {
 
 .sort:hover {
   cursor: grab;
-}
-
-.form input {
-  margin: 0.5rem 0;
-  width: 16rem;
 }
 
 .form #input {
@@ -685,6 +684,14 @@ a {
   padding-bottom: 1rem;
 }
 
+.tracked {
+  margin-left: 0.5em;
+}
+
+.routine {
+  margin-right: 0.5em;
+}
+
 .dropdown-menu button {
   height: 1.5rem;
   width: 4rem;
@@ -708,9 +715,8 @@ a {
 .exercise-modal-body {
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+  padding: 1.5rem;
   width: 100%;
-  max-width: calc(100% - 3rem);
 }
 
 .exercise-modal-body #name {
@@ -772,6 +778,12 @@ li {
 .dropdown-menu li .exercise-container {
   overflow-x: auto;
   overflow-y: hidden;
+  flex-direction: row;
+}
+
+.exercise-container {
+  width: 100%;
+  display: flex;
 }
 
 .weight,
@@ -847,7 +859,7 @@ li {
 }
 
 .App button {
-  margin: 0.5rem 0.1rem;
+  margin: 1rem 0.1rem;
   min-width: 5rem;
   appearance: none;
   background-color: #fafbfc;
@@ -883,7 +895,15 @@ li {
   border-radius: 5px;
   background: #fff;
   box-shadow: 0 1px 3px -2px #9098a9;
-  padding: 0.15em 0.3em;
+}
+
+.App input {
+  padding: 0.3em 0.2em;
+}
+
+.form input {
+  margin: 0.5rem 0;
+  width: 16rem;
 }
 
 .flex-input {
@@ -929,6 +949,18 @@ li {
 
   .weight-graph-container {
     display: block;
+  }
+
+  .exercise-container {
+    flex-direction: column;
+  }
+
+  .routine {
+    margin-right: 1em;
+  }
+
+  .tracked {
+    margin-left: 1em;
   }
 
   #graph-container,
@@ -1086,6 +1118,6 @@ li {
 
   .exercise-modal-body,
   .modal-body {
-    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    padding: 0.5rem 1rem 0.5em 1.5em;
   }
 }

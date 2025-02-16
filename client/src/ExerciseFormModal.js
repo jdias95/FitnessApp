@@ -262,7 +262,7 @@ const ExerciseFormModal = (props) => {
           <div className="modal-flex">
             <div className="exercise-modal-body">
               <div>
-                <label>Name: </label>
+                <label>Name:&nbsp;</label>
                 <input
                   type="text"
                   id="name"
@@ -294,7 +294,7 @@ const ExerciseFormModal = (props) => {
                     </p>
                   </div>
                 )}
-                <label className="flex-input">Sets: </label>
+                <label className="flex-input">Sets:&nbsp;</label>
                 <input
                   type="number"
                   id="narrow"
@@ -328,7 +328,7 @@ const ExerciseFormModal = (props) => {
                     </p>
                   </div>
                 )}
-                <label className="flex-input">Rep-range: </label>
+                <label className="flex-input">Rep-range:&nbsp;</label>
                 <input
                   type="number"
                   id="narrow"
@@ -341,7 +341,7 @@ const ExerciseFormModal = (props) => {
                     setRepsLowReg(safeParseInt(e.target.value));
                   }}
                 />
-                <p>-</p>
+                <p>&nbsp;-&nbsp;</p>
                 <input
                   type="number"
                   id="narrow"
@@ -375,7 +375,7 @@ const ExerciseFormModal = (props) => {
                     </p>
                   </div>
                 )}
-                <label className="flex-input">Weight: </label>
+                <label className="flex-input">Weight:&nbsp;</label>
                 {userProfile.measurement_type !== "metric" ? (
                   <div>
                     <input
@@ -391,7 +391,7 @@ const ExerciseFormModal = (props) => {
                         setWeightReg(safeParseFloat(e.target.value));
                       }}
                     />
-                    <label>lbs</label>
+                    <label>&nbsp;lbs</label>
                   </div>
                 ) : (
                   <div>
@@ -410,13 +410,13 @@ const ExerciseFormModal = (props) => {
                         );
                       }}
                     />
-                    <label>kgs</label>
+                    <label>&nbsp;kgs</label>
                   </div>
                 )}
               </div>
               <div className="flex">
                 <label id="notes" className="flex-input">
-                  Notes:
+                  Notes:&nbsp;
                 </label>
                 <textarea
                   rows="4"
@@ -449,7 +449,7 @@ const ExerciseFormModal = (props) => {
                     </p>
                   </div>
                 )}
-                <label className="flex-input">Track Progress?: </label>
+                <label className="flex-input">Track Progress?:&nbsp;</label>
                 <input
                   type="checkbox"
                   id="checkbox"
@@ -481,7 +481,9 @@ const ExerciseFormModal = (props) => {
                     </p>
                   </div>
                 )}
-                <label className="flex-input">Bodyweight Comparison?: </label>
+                <label className="flex-input">
+                  Bodyweight Comparison?:&nbsp;
+                </label>
                 <input
                   type="checkbox"
                   id="checkbox"

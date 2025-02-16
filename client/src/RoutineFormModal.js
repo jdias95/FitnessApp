@@ -35,7 +35,7 @@ const RoutineFormModal = (props) => {
         <div className="modal-flex">
           <div className="modal-body">
             <div className="flex">
-              <label className="flex-input">Name: </label>
+              <label className="flex-input">Name:&nbsp;</label>
               <input
                 type="text"
                 id="wider"
