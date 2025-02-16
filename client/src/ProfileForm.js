@@ -372,7 +372,7 @@ const ProfileForm = (props) => {
                   <div className="flex">
                     <input
                       type="number"
-                      id="wide"
+                      id="narrow"
                       placeholder="0"
                       min="0"
                       max="100"

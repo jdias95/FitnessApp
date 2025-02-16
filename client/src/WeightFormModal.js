@@ -144,7 +144,7 @@ const WeightFormModal = (props) => {
                       setWeightReg(safeParseFloat(e.target.value));
                     }}
                   />
-                  <label>lbs</label>
+                  <label>&nbsp;lbs</label>
                 </div>
               ) : (
                 <div>
@@ -163,7 +163,7 @@ const WeightFormModal = (props) => {
                       );
                     }}
                   />
-                  <label>kgs</label>
+                  <label>&nbsp;kgs</label>
                 </div>
               )}
               <span className="modal-button-container">

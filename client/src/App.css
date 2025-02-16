@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -21,10 +29,10 @@
   margin: 0;
   padding: 4rem 0 2rem 0;
   min-height: calc(100vh - 6rem);
-  width: 100vw;
+  width: 100%;
   position: absolute;
   top: 0;
-  height: auto;
+  height: 100vh;
   overflow-x: hidden;
 }
 
@@ -36,14 +44,13 @@ p {
   position: fixed;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   z-index: 200;
-  width: 100vw;
+  width: calc(100% - 10px);
   height: 4rem;
   top: 0;
   background-color: #1c2432;
   padding-right: 1rem;
-  right: 0rem;
+  left: 0rem;
 }
 
 .nav .name {
@@ -144,10 +151,10 @@ p {
 
 .container {
   border-radius: 1rem;
-  width: 28.2%;
+  width: calc(100% - 2em);
   height: 100%;
-  margin: 1rem 1.5%;
-  padding: 1%;
+  margin: 1rem 1em;
+  padding: 1em 2em;
   background-color: #1c2432;
 }
 
@@ -362,8 +369,19 @@ p {
   padding-right: 0.1em;
 }
 
+.weight-graph-container {
+  justify-content: space-between;
+  padding: 0.5em 0;
+  height: 100%;
+}
+
+#graph-container {
+  width: 49%;
+}
+
 .weightGraph,
 .exerciseGraph {
+  padding: 0.5em 0;
   width: 99%;
   margin: 0 auto;
 }
@@ -386,10 +404,17 @@ p {
   width: 2em;
 }
 
+.weight-list {
+  width: 49%;
+  align-self: stretch;
+}
+
 .weight-list ul {
   list-style: none;
   padding: 1rem;
-  height: 7rem;
+  min-height: 10em;
+  height: 100%;
+  margin: 0;
   overflow-y: auto;
   background-color: #13171c;
 }
@@ -481,6 +506,11 @@ a {
 .flex-center {
   display: flex;
   justify-content: center;
+}
+
+.dashboard-container {
+  width: 100%;
+  flex-direction: column;
 }
 
 .dashboard {
@@ -607,13 +637,13 @@ a {
 }
 
 #working-weight {
-  top: -110%;
+  top: -150%;
   z-index: 100;
   left: 3em;
 }
 
 #volume {
-  top: -160%;
+  top: -200%;
   z-index: 100;
   left: 3em;
 }
@@ -694,7 +724,7 @@ a {
 }
 
 #wide {
-  width: 3rem;
+  width: 4.5rem;
 }
 
 #wider {
@@ -702,7 +732,7 @@ a {
 }
 
 #narrow {
-  width: 2.5rem;
+  width: 3rem;
 }
 
 .exercise-modal-body p {
@@ -894,12 +924,28 @@ li {
     width: 5px;
   }
 
+  .nav {
+    width: calc(100% - 5px);
+  }
+
+  .weight-graph-container {
+    display: block;
+  }
+
+  #graph-container,
+  .weight-list {
+    width: 100%;
+  }
+
+  .weight-list ul {
+    margin: 1em 0;
+  }
+
   .row {
     flex-direction: column;
   }
 
   .container {
-    width: calc(97% - 2.2em);
     padding: 1em;
   }
 
@@ -937,6 +983,10 @@ li {
 @media (max-width: 800px) {
   ::-webkit-scrollbar {
     width: 2px;
+  }
+
+  .nav {
+    width: calc(100% - 2px);
   }
 
   .App {
