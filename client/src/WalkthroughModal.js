@@ -39,7 +39,7 @@ const WalkthroughModal = (props) => {
                   </div>
                 ) : pageNum === 2 ? (
                   <div>
-                    <h2>Weight</h2>
+                    <h2>Body Weight</h2>
                     <p>
                       <br />
                       When you navigate to the dashboard, you'll discover the
@@ -106,7 +106,7 @@ const WalkthroughModal = (props) => {
                   </div>
                 ) : pageNum === 4 ? (
                   <div>
-                    <h2>Track Progress</h2>
+                    <h2>Exercise Progress</h2>
                     <p>
                       <br />
                       The final section is your dedicated space for monitoring

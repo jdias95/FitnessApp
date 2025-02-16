@@ -27,7 +27,7 @@ html {
   background-color: #13171c;
   color: rgba(255, 255, 255, 0.87);
   margin: 0;
-  padding: 4rem 0 2rem 0;
+  padding: 4rem 0 00;
   min-height: calc(100vh - 6rem);
   width: 100%;
   position: absolute;
@@ -183,9 +183,9 @@ p {
   width: 30%;
   position: absolute;
   left: 50%;
-  top: calc(50% - 4rem);
+  top: calc(50% - 2em);
   transform: translate(-50%, -50%);
-  height: 20em;
+  height: 25em;
   max-height: 70%;
   min-height: auto;
   display: flex;
@@ -483,7 +483,6 @@ a {
 
 .profile .spec {
   justify-content: space-between;
-  width: 50%;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   height: 3.5rem;
 }
