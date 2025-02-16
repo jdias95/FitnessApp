@@ -27,7 +27,7 @@ html {
   background-color: #13171c;
   color: rgba(255, 255, 255, 0.87);
   margin: 0;
-  padding: 4em 0 3em 0;
+  padding: 4em 0;
   min-height: calc(100vh - 6rem);
   width: 100%;
   position: absolute;
@@ -105,7 +105,7 @@ p {
 
 .walkthrough-img:hover {
   cursor: pointer;
-  content: url("../public/walkthrough-hover.png");
+  content: url("../../public/walkthrough-hover.png");
   transition: content 0.3s;
 }
 
@@ -131,7 +131,7 @@ p {
 
 .page-left:hover {
   cursor: pointer;
-  content: url("../public/page-left-hovered.png");
+  content: url("../../public/page-left-hovered.png");
   transition: content 0.3s;
 }
 
@@ -141,7 +141,7 @@ p {
 
 .page-right:hover {
   cursor: pointer;
-  content: url("../public/page-right-hovered.png");
+  content: url("../../public/page-right-hovered.png");
   transition: content 0.3s;
 }
 
@@ -287,8 +287,8 @@ p {
   max-height: calc(100vh - 4rem);
   position: absolute;
   bottom: 0;
-  background-image: url("../public/background_cropped.webp"),
-    url("../public/background_cropped.jpg");
+  background-image: url("../../public/background_cropped.webp"),
+    url("../../public/background_cropped.jpg");
   background-size: cover;
   background-position: 18% center;
   display: flex;
@@ -443,7 +443,7 @@ p {
 
 .delete:hover {
   cursor: pointer;
-  content: url("../public/delete-hover.png");
+  content: url("../../public/delete-hover.png");
   transition: content 0.3s;
 }
 
@@ -453,13 +453,13 @@ p {
 
 .x:hover {
   cursor: pointer;
-  content: url("../public/x-hover.png");
+  content: url("../../public/x-hover.png");
   transition: content 0.3s;
 }
 
 .edit:hover {
   cursor: pointer;
-  content: url("../public/edit-hover.png");
+  content: url("../../public/edit-hover.png");
   transition: content 0.3s;
 }
 
@@ -546,11 +546,11 @@ a {
 }
 
 .workout-list-clickable:hover .up-arrow {
-  content: url("../public/double-up-arrow.png");
+  content: url("../../public/double-up-arrow.png");
 }
 
 .workout-list-clickable:hover .down-arrow {
-  content: url("../public/double-down-arrow.png");
+  content: url("../../public/double-down-arrow.png");
 }
 
 .tracked-clickable {
@@ -558,11 +558,11 @@ a {
 }
 
 .tracked-clickable:hover .up-arrow {
-  content: url("../public/double-up-arrow.png");
+  content: url("../../public/double-up-arrow.png");
 }
 
 .tracked-clickable:hover .down-arrow {
-  content: url("../public/double-down-arrow.png");
+  content: url("../../public/double-down-arrow.png");
 }
 
 .shift-left {
@@ -583,7 +583,7 @@ a {
 .tooltip-png:hover,
 .tooltip-png2:hover {
   cursor: pointer;
-  content: url("../public/tooltip-hover.png");
+  content: url("../../public/tooltip-hover.png");
   transition: content 0.3s;
 }
 
@@ -716,7 +716,7 @@ a {
 .exercise-modal-body {
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: 1rem;
   width: 100%;
 }
 
@@ -745,7 +745,7 @@ a {
 }
 
 .exercise-modal-body div {
-  margin: 0.3rem 0;
+  margin: 0.3rem;
   word-wrap: break-word;
 }
 
@@ -754,6 +754,10 @@ a {
   justify-content: flex-end;
   align-items: center;
   height: 100%;
+}
+
+.mr-1 {
+  margin-right: 1em;
 }
 
 .unordered-list {
@@ -928,13 +932,13 @@ li {
 
 .notes:hover {
   cursor: pointer;
-  content: url("../public/notepad-hover.png");
+  content: url("../../public/notepad-hover.png");
   transition: content 0.3s;
 }
 
 .stats:hover {
   cursor: pointer;
-  content: url("../public/linegraph-hover.png");
+  content: url("../../public/linegraph-hover.png");
   transition: content 0.3s;
 }
 

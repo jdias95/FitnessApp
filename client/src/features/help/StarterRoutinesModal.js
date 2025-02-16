@@ -1,5 +1,6 @@
 import React from "react";
 import Axios from "axios";
+import Modal from "../../components/Modal";
 
 const StarterRoutinesModal = (props) => {
   const {
@@ -158,33 +159,22 @@ const StarterRoutinesModal = (props) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-flex">
-          <div className="exercise-modal-body">
-            <p>
-              Feeling unsure about where to start? Click 'Confirm' to generate
-              three simple full-body workout routines as a guide. Feel free to
-              customize them based on your preferences!
-            </p>
-            <span className="modal-button-container">
-              <button
-                className="modal-button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  createRoutines();
-                }}
-              >
-                Confirm
-              </button>
-              <button className="modal-button" onClick={onClose}>
-                Cancel
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal
+      isOpen={true}
+      hasHeader={false}
+      onClose={onClose}
+      onConfirm={(e) => {
+        e.preventDefault();
+        createRoutines();
+      }}
+      isLarge={true}
+    >
+      <p>
+        Feeling unsure about where to start? Click 'Confirm' to generate three
+        simple full-body workout routines as a guide. Feel free to customize
+        them based on your preferences!
+      </p>
+    </Modal>
   );
 };
 

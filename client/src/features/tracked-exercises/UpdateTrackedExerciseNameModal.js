@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import Modal from "../../components/Modal";
 
 const UpdateTrackedExerciseNameModal = (props) => {
   const {
@@ -74,41 +75,28 @@ const UpdateTrackedExerciseNameModal = (props) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-flex">
-          <div className="modal-body">
-            <div className="flex">
-              <label className="flex-input">Name:&nbsp;</label>
-              <input
-                type="text"
-                id="wider"
-                maxLength="45"
-                value={nameReg}
-                onChange={(e) => {
-                  setNameReg(e.target.value);
-                }}
-              />
-            </div>
-            <span className="modal-button-container">
-              <button
-                className="modal-button"
-                onClick={() =>
-                  selectedExercise !== nameReg
-                    ? updateTrackedExerciseName()
-                    : onClose()
-                }
-              >
-                Confirm
-              </button>
-              <button className="modal-button" onClick={onClose}>
-                Cancel
-              </button>
-            </span>
-          </div>
-        </div>
+    <Modal
+      isOpen={true}
+      hasHeader={false}
+      onClose={onClose}
+      onConfirm={() =>
+        selectedExercise !== nameReg ? updateTrackedExerciseName() : onClose()
+      }
+      isLarge={false}
+    >
+      <div className="flex">
+        <label className="flex-input">Name:&nbsp;</label>
+        <input
+          type="text"
+          id="wider"
+          maxLength="45"
+          value={nameReg}
+          onChange={(e) => {
+            setNameReg(e.target.value);
+          }}
+        />
       </div>
-    </div>
+    </Modal>
   );
 };
 

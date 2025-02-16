@@ -6,20 +6,20 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import NavbarLoggedIn from "./NavbarLoggedIn";
-import NavbarLoggedOut from "./NavbarLoggedOut";
-import Dashboard from "./Dashboard";
-import Register from "./Register";
-import Login from "./Login";
-import Root from "./Root";
-import ProfilePage from "./ProfilePage";
-import ProfileForm from "./ProfileForm";
-import Home from "./Home";
-import "./App.css";
+import NavbarLoggedIn from "./components/navigation/NavbarLoggedIn";
+import NavbarLoggedOut from "./components/navigation/NavbarLoggedOut";
+import Dashboard from "./features/dashboard/Dashboard";
+import Register from "./features/auth/Register";
+import Login from "./features/auth/Login";
+import Root from "./components/navigation/Root";
+import ProfilePage from "./features/profile/ProfilePage";
+import ProfileForm from "./features/profile/ProfileForm";
+import Home from "./pages/Home";
+import "./styles/App.css";
 import Axios from "axios";
-import OTPClass from "./OTP";
-import ResetPassword from "./ResetPassword";
-import WalkthroughModal from "./WalkthroughModal";
+import OTPClass from "./features/auth/OTP";
+import ResetPassword from "./features/auth/ResetPassword";
+import WalkthroughModal from "./features/help/WalkthroughModal";
 
 function App() {
   const [email, setEmail] = useState("");

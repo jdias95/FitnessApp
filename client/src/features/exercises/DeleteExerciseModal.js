@@ -1,5 +1,6 @@
 import React from "react";
 import Axios from "axios";
+import Modal from "../../components/Modal";
 
 const DeleteExerciseModal = (props) => {
   const {
@@ -38,26 +39,15 @@ const DeleteExerciseModal = (props) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-flex">
-          <div className="modal-body">
-            <p>Are you sure you want to delete {selectedExercise.name}?</p>
-            <span className="modal-button-container">
-              <button
-                className="modal-button"
-                onClick={() => deleteExercise(selectedExercise.id)}
-              >
-                Confirm
-              </button>
-              <button className="modal-button" onClick={onClose}>
-                Cancel
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal
+      isOpen={true}
+      hasHeader={false}
+      onClose={onClose}
+      onConfirm={() => deleteExercise(selectedExercise.id)}
+      isLarge={false}
+    >
+      <p>Are you sure you want to delete {selectedExercise.name}?</p>
+    </Modal>
   );
 };
 

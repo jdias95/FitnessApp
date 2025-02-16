@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useMemo } from "react";
-import RoutineFormModal from "./RoutineFormModal";
-import WeightFormModal from "./WeightFormModal";
-import DeleteRoutineModal from "./DeleteRoutineModal";
-import UpdateRoutineModal from "./UpdateRoutineModal";
-import ExerciseFormModal from "./ExerciseFormModal";
-import UpdateExerciseModal from "./UpdateExerciseModal";
-import DeleteExerciseModal from "./DeleteExerciseModal";
-import DeleteTrackedExerciseModal from "./DeleteTrackedExerciseModal";
-import NotesModal from "./NotesModal";
+import RoutineFormModal from "../routines/RoutineFormModal";
+import WeightFormModal from "../profile/WeightFormModal";
+import DeleteRoutineModal from "../routines/DeleteRoutineModal";
+import UpdateRoutineModal from "../routines/UpdateRoutineModal";
+import ExerciseFormModal from "../exercises/ExerciseFormModal";
+import UpdateExerciseModal from "../exercises/UpdateExerciseModal";
+import DeleteExerciseModal from "../exercises/DeleteExerciseModal";
+import DeleteTrackedExerciseModal from "../tracked-exercises/DeleteTrackedExerciseModal";
+import NotesModal from "../exercises/NotesModal";
 import * as d3 from "d3";
 import moment from "moment";
-import StatisticsModal from "./StatisticsModal";
+import StatisticsModal from "../tracked-exercises/StatisticsModal";
 import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Axios from "axios";
-import StarterRoutinesModal from "./StarterRoutinesModal";
-import UpdateTrackedExerciseNameModal from "./UpdateTrackedExerciseNameModal";
+import StarterRoutinesModal from "../help/StarterRoutinesModal";
+import UpdateTrackedExerciseNameModal from "../tracked-exercises/UpdateTrackedExerciseNameModal";
 
 const Dashboard = (props) => {
   const navigate = useNavigate();

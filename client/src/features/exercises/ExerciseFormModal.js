@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import Modal from "../../components/Modal";
 
 const ExerciseFormModal = (props) => {
   const {
@@ -253,262 +254,248 @@ const ExerciseFormModal = (props) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h1>Add Exercise</h1>
-        </div>
-        {userProfile && (
-          <div className="modal-flex">
-            <div className="exercise-modal-body">
-              <div>
-                <label>Name:&nbsp;</label>
-                <input
-                  type="text"
-                  id="name"
-                  placeholder="Ex: Bench Press"
-                  maxLength="45"
-                  value={nameReg}
-                  onChange={(e) => {
-                    setNameReg(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="flex shift-left">
-                <img
-                  className="tooltip-png2"
-                  src={process.env.PUBLIC_URL + "/tooltip.png"}
-                  onMouseOver={() => {
-                    setShowInfo("sets");
-                  }}
-                  onMouseOut={() => {
-                    setShowInfo("");
-                  }}
-                  alt="tooltip"
-                />
-                {showInfo === "sets" && (
-                  <div className="tooltip tooltip-exercise" id="sets">
-                    <p>
-                      A set refers to a group of repetitions (or reps) of an
-                      exercise.
-                    </p>
-                  </div>
-                )}
-                <label className="flex-input">Sets:&nbsp;</label>
-                <input
-                  type="number"
-                  id="narrow"
-                  placeholder="1"
-                  min="1"
-                  max="99"
-                  maxLength="2"
-                  value={!setsReg ? "" : setsReg}
-                  onChange={(e) => {
-                    setSetsReg(safeParseInt(e.target.value));
-                  }}
-                />
-              </div>
-              <div className="flex shift-left">
-                <img
-                  className="tooltip-png2"
-                  src={process.env.PUBLIC_URL + "/tooltip.png"}
-                  onMouseOver={() => {
-                    setShowInfo("reps");
-                  }}
-                  onMouseOut={() => {
-                    setShowInfo("");
-                  }}
-                  alt="tooltip"
-                />
-                {showInfo === "reps" && (
-                  <div className="tooltip tooltip-exercise" id="reps">
-                    <p>
-                      A rep refers to a repetition of an exercise. The second
-                      input field can be left blank if you prefer.
-                    </p>
-                  </div>
-                )}
-                <label className="flex-input">Rep-range:&nbsp;</label>
-                <input
-                  type="number"
-                  id="narrow"
-                  placeholder="1"
-                  min="1"
-                  max="99"
-                  maxLength="2"
-                  value={!repsLowReg ? "" : repsLowReg}
-                  onChange={(e) => {
-                    setRepsLowReg(safeParseInt(e.target.value));
-                  }}
-                />
-                <p>&nbsp;-&nbsp;</p>
-                <input
-                  type="number"
-                  id="narrow"
-                  min="0"
-                  max="99"
-                  maxLength="2"
-                  value={!repsHighReg ? "" : repsHighReg}
-                  onChange={(e) => {
-                    setRepsHighReg(safeParseInt(e.target.value));
-                  }}
-                />
-              </div>
-              <div className="flex shift-left">
-                <img
-                  className="tooltip-png2"
-                  src={process.env.PUBLIC_URL + "/tooltip.png"}
-                  onMouseOver={() => {
-                    setShowInfo("weight");
-                  }}
-                  onMouseOut={() => {
-                    setShowInfo("");
-                  }}
-                  alt="tooltip"
-                />
-                {showInfo === "weight" && (
-                  <div className="tooltip tooltip-exercise" id="weight">
-                    <p>
-                      Weight refers to how much weight is added to an exercise.
-                      If there is no weight added (eg. Push Ups), then this can
-                      be left blank.
-                    </p>
-                  </div>
-                )}
-                <label className="flex-input">Weight:&nbsp;</label>
-                {userProfile.measurement_type !== "metric" ? (
-                  <div>
-                    <input
-                      type="number"
-                      id="wide"
-                      placeholder="0"
-                      step="0.1"
-                      min="0"
-                      max="1500"
-                      maxLength="4"
-                      value={!weightReg ? "" : weightReg}
-                      onChange={(e) => {
-                        setWeightReg(safeParseFloat(e.target.value));
-                      }}
-                    />
-                    <label>&nbsp;lbs</label>
-                  </div>
-                ) : (
-                  <div>
-                    <input
-                      type="number"
-                      id="wide"
-                      step="0.1"
-                      placeholder="0"
-                      min="0"
-                      max="750"
-                      maxLength="3"
-                      value={!weightReg ? "" : defaultConvertWeight(weightReg)}
-                      onChange={(e) => {
-                        setWeightReg(
-                          convertWeight(safeParseFloat(e.target.value))
-                        );
-                      }}
-                    />
-                    <label>&nbsp;kgs</label>
-                  </div>
-                )}
-              </div>
-              <div className="flex">
-                <label id="notes" className="flex-input">
-                  Notes:&nbsp;
-                </label>
-                <textarea
-                  rows="4"
-                  cols="30"
-                  maxLength="300"
-                  value={notesReg}
-                  onChange={(e) => {
-                    setNotesReg(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="flex shift-left">
-                <img
-                  className="tooltip-png2"
-                  src={process.env.PUBLIC_URL + "/tooltip.png"}
-                  onMouseOver={() => {
-                    setShowInfo("track");
-                  }}
-                  onMouseOut={() => {
-                    setShowInfo("");
-                  }}
-                  alt="tooltip"
-                />
-                {showInfo === "track" && (
-                  <div className="tooltip tooltip-exercise" id="track">
-                    <p>
-                      Selecting this will create a single entry under Track
-                      Progress with the information provided. The entry will
-                      show up in a list of the same name.
-                    </p>
-                  </div>
-                )}
-                <label className="flex-input">Track Progress?:&nbsp;</label>
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                  checked={trackReg}
-                  onChange={() => {
-                    setTrackReg(!trackReg);
-                  }}
-                />
-              </div>
-              <div className="flex shift-left">
-                <img
-                  className="tooltip-png2"
-                  src={process.env.PUBLIC_URL + "/tooltip.png"}
-                  onMouseOver={() => {
-                    setShowInfo("bw");
-                  }}
-                  onMouseOut={() => {
-                    setShowInfo("");
-                  }}
-                  alt="tooltip"
-                />
-                {showInfo === "bw" && (
-                  <div className="tooltip tooltip-exercise" id="bw">
-                    <p>
-                      Selecting this will add the proportion of weight lifted to
-                      your bodyweight when creating an entry under Track
-                      Progress. This is especially useful for the more essential
-                      compound lifts (eg. Bench Press, Squat, etc.).
-                    </p>
-                  </div>
-                )}
-                <label className="flex-input">
-                  Bodyweight Comparison?:&nbsp;
-                </label>
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                  checked={bwReg}
-                  disabled={!trackReg}
-                  onChange={() => {
-                    setBwReg(!bwReg);
-                  }}
-                />
-              </div>
-              <div className="flex-end">
-                <span className="modal-button-container">
-                  <button className="modal-button" onClick={createExercise}>
-                    Confirm
-                  </button>
-                  <button className="modal-button" onClick={onClose}>
-                    Cancel
-                  </button>
-                </span>
-              </div>
-            </div>
+    <Modal
+      isOpen={true}
+      hasHeader={true}
+      header="Add Exercise"
+      onClose={onClose}
+      onConfirm={createExercise}
+      isLarge={true}
+    >
+      {userProfile && (
+        <div>
+          <div>
+            <label>Name:&nbsp;</label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Ex: Bench Press"
+              maxLength="45"
+              value={nameReg}
+              onChange={(e) => {
+                setNameReg(e.target.value);
+              }}
+            />
           </div>
-        )}
-      </div>
-    </div>
+          <div className="flex shift-left">
+            <img
+              className="tooltip-png2"
+              src={process.env.PUBLIC_URL + "/tooltip.png"}
+              onMouseOver={() => {
+                setShowInfo("sets");
+              }}
+              onMouseOut={() => {
+                setShowInfo("");
+              }}
+              alt="tooltip"
+            />
+            {showInfo === "sets" && (
+              <div className="tooltip tooltip-exercise" id="sets">
+                <p>
+                  A set refers to a group of repetitions (or reps) of an
+                  exercise.
+                </p>
+              </div>
+            )}
+            <label className="flex-input">Sets:&nbsp;</label>
+            <input
+              type="number"
+              id="narrow"
+              placeholder="1"
+              min="1"
+              max="99"
+              maxLength="2"
+              value={!setsReg ? "" : setsReg}
+              onChange={(e) => {
+                setSetsReg(safeParseInt(e.target.value));
+              }}
+            />
+          </div>
+          <div className="flex shift-left">
+            <img
+              className="tooltip-png2"
+              src={process.env.PUBLIC_URL + "/tooltip.png"}
+              onMouseOver={() => {
+                setShowInfo("reps");
+              }}
+              onMouseOut={() => {
+                setShowInfo("");
+              }}
+              alt="tooltip"
+            />
+            {showInfo === "reps" && (
+              <div className="tooltip tooltip-exercise" id="reps">
+                <p>
+                  A rep refers to a repetition of an exercise. The second input
+                  field can be left blank if you prefer.
+                </p>
+              </div>
+            )}
+            <label className="flex-input">Rep-range:&nbsp;</label>
+            <input
+              type="number"
+              id="narrow"
+              placeholder="1"
+              min="1"
+              max="99"
+              maxLength="2"
+              value={!repsLowReg ? "" : repsLowReg}
+              onChange={(e) => {
+                setRepsLowReg(safeParseInt(e.target.value));
+              }}
+            />
+            <p>&nbsp;-&nbsp;</p>
+            <input
+              type="number"
+              id="narrow"
+              min="0"
+              max="99"
+              maxLength="2"
+              value={!repsHighReg ? "" : repsHighReg}
+              onChange={(e) => {
+                setRepsHighReg(safeParseInt(e.target.value));
+              }}
+            />
+          </div>
+          <div className="flex shift-left">
+            <img
+              className="tooltip-png2"
+              src={process.env.PUBLIC_URL + "/tooltip.png"}
+              onMouseOver={() => {
+                setShowInfo("weight");
+              }}
+              onMouseOut={() => {
+                setShowInfo("");
+              }}
+              alt="tooltip"
+            />
+            {showInfo === "weight" && (
+              <div className="tooltip tooltip-exercise" id="weight">
+                <p>
+                  Weight refers to how much weight is added to an exercise. If
+                  there is no weight added (eg. Push Ups), then this can be left
+                  blank.
+                </p>
+              </div>
+            )}
+            <label className="flex-input">Weight:&nbsp;</label>
+            {userProfile.measurement_type !== "metric" ? (
+              <div>
+                <input
+                  type="number"
+                  id="wide"
+                  placeholder="0"
+                  step="0.1"
+                  min="0"
+                  max="1500"
+                  maxLength="4"
+                  value={!weightReg ? "" : weightReg}
+                  onChange={(e) => {
+                    setWeightReg(safeParseFloat(e.target.value));
+                  }}
+                />
+                <label>&nbsp;lbs</label>
+              </div>
+            ) : (
+              <div>
+                <input
+                  type="number"
+                  id="wide"
+                  step="0.1"
+                  placeholder="0"
+                  min="0"
+                  max="750"
+                  maxLength="3"
+                  value={!weightReg ? "" : defaultConvertWeight(weightReg)}
+                  onChange={(e) => {
+                    setWeightReg(convertWeight(safeParseFloat(e.target.value)));
+                  }}
+                />
+                <label>&nbsp;kgs</label>
+              </div>
+            )}
+          </div>
+          <div className="flex">
+            <label id="notes" className="flex-input">
+              Notes:&nbsp;
+            </label>
+            <textarea
+              rows="4"
+              cols="30"
+              maxLength="300"
+              value={notesReg}
+              onChange={(e) => {
+                setNotesReg(e.target.value);
+              }}
+            />
+          </div>
+          <div className="flex shift-left">
+            <img
+              className="tooltip-png2"
+              src={process.env.PUBLIC_URL + "/tooltip.png"}
+              onMouseOver={() => {
+                setShowInfo("track");
+              }}
+              onMouseOut={() => {
+                setShowInfo("");
+              }}
+              alt="tooltip"
+            />
+            {showInfo === "track" && (
+              <div className="tooltip tooltip-exercise" id="track">
+                <p>
+                  Selecting this will create a single entry under Track Progress
+                  with the information provided. The entry will show up in a
+                  list of the same name.
+                </p>
+              </div>
+            )}
+            <label className="flex-input">Track Progress?:&nbsp;</label>
+            <input
+              type="checkbox"
+              id="checkbox"
+              checked={trackReg}
+              onChange={() => {
+                setTrackReg(!trackReg);
+              }}
+            />
+          </div>
+          <div className="flex shift-left">
+            <img
+              className="tooltip-png2"
+              src={process.env.PUBLIC_URL + "/tooltip.png"}
+              onMouseOver={() => {
+                setShowInfo("bw");
+              }}
+              onMouseOut={() => {
+                setShowInfo("");
+              }}
+              alt="tooltip"
+            />
+            {showInfo === "bw" && (
+              <div className="tooltip tooltip-exercise" id="bw">
+                <p>
+                  Selecting this will add the proportion of weight lifted to
+                  your bodyweight when creating an entry under Track Progress.
+                  This is especially useful for the more essential compound
+                  lifts (eg. Bench Press, Squat, etc.).
+                </p>
+              </div>
+            )}
+            <label className="flex-input">Bodyweight Comparison?:&nbsp;</label>
+            <input
+              type="checkbox"
+              id="checkbox"
+              checked={bwReg}
+              disabled={!trackReg}
+              onChange={() => {
+                setBwReg(!bwReg);
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </Modal>
   );
 };
 

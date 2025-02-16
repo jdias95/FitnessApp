@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import * as d3 from "d3";
 import moment from "moment";
+import Modal from "../../components/Modal";
 
 const StatisticsModal = (props) => {
   const {
@@ -330,223 +331,209 @@ const StatisticsModal = (props) => {
   ]);
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-flex">
-          <div className="exercise-modal-body">
-            <div className="modal-header">
-              <h1>{selectedExercise.name}</h1>
-              {selectedExerciseList.length > 1 ? (
-                <select
-                  id="time-selection-tracked"
-                  name="timeSelectionTracked"
-                  value={timeSelectionTracked}
-                  onChange={(e) => {
-                    setTimeSelectionTracked(e.target.value);
-                  }}
-                >
-                  <option value="3 months">3 months</option>
-                  {exerciseTimeBTN >= 15552000000 ? (
-                    <option value="6 months">6 months</option>
-                  ) : (
-                    ""
+    <Modal
+      isOpen={true}
+      hasHeader={true}
+      header={selectedExercise.name}
+      onClose={onClose}
+      hasConfirm={false}
+      isLarge={true}
+    >
+      <div className="flex space-between">
+        <div>
+          <div className="flex shift-left">
+            <div className="tooltip-container">
+              <img
+                className="tooltip-png2"
+                src={process.env.PUBLIC_URL + "/tooltip.png"}
+                onMouseOver={() => {
+                  setShowInfo("working weight");
+                }}
+                onMouseOut={() => {
+                  setShowInfo("");
+                }}
+                alt="tooltip"
+              />
+            </div>
+            {showInfo === "working weight" && (
+              <div className="tooltip tooltip-exercise" id="working-weight">
+                <p>
+                  Working weight is the amount of weight lifted for a specific
+                  exercise during a workout routine.
+                </p>
+              </div>
+            )}
+            <div
+              className={
+                selectedExerciseList.length > 1
+                  ? "flex exercise-graph-selector"
+                  : "flex"
+              }
+              id={
+                graphSelection === "working weight" &&
+                selectedExerciseList.length > 1
+                  ? "exercise-graph-selector-clicked"
+                  : ""
+              }
+              onClick={() => {
+                setGraphSelection("working weight");
+              }}
+            >
+              <p>Working Weight:&nbsp;</p>
+              {userProfile.measurement_type !== "metric" ? (
+                <p>{selectedExercise.weight} lbs</p>
+              ) : (
+                <p>{defaultConvertWeight(selectedExercise.weight)} kgs</p>
+              )}
+              <div className="flex">
+                {renderPercentageDifference(
+                  workingWeightDifference,
+                  firstExercise.weight
+                )}
+              </div>
+            </div>
+            {graphSelection === "working weight" &&
+            selectedExerciseList.length > 1 ? (
+              <img
+                className="selected-graph"
+                alt="selected graph"
+                src={process.env.PUBLIC_URL + "/graph-indication.png"}
+              />
+            ) : null}
+          </div>
+          <div className="flex shift-left">
+            <div className="tooltip-container">
+              <img
+                className="tooltip-png2"
+                src={process.env.PUBLIC_URL + "/tooltip.png"}
+                onMouseOver={() => {
+                  setShowInfo("volume");
+                }}
+                onMouseOut={() => {
+                  setShowInfo("");
+                }}
+                alt="tooltip"
+              />
+            </div>
+            {showInfo === "volume" && (
+              <div className="tooltip tooltip-exercise" id="volume">
+                <p>
+                  Volume refers to the total amount of work performed in a
+                  workout. It is calculated by multiplying the number of sets,
+                  repetitions, and weight lifted for an exercise in a routine.
+                </p>
+              </div>
+            )}
+            <div
+              className={
+                selectedExerciseList.length > 1
+                  ? "flex exercise-graph-selector"
+                  : "flex"
+              }
+              id={
+                graphSelection === "volume" && selectedExerciseList.length > 1
+                  ? "exercise-graph-selector-clicked"
+                  : ""
+              }
+              onClick={() => {
+                setGraphSelection("volume");
+              }}
+            >
+              <p>Volume:&nbsp;</p>
+              {userProfile.measurement_type !== "metric" ? (
+                <p>
+                  {calcVolume(
+                    selectedExercise.weight,
+                    selectedExercise.sets,
+                    selectedExercise.reps_low
                   )}
-                  {exerciseTimeBTN >= 31104000000 ? (
-                    <option value="1 year">1 year</option>
-                  ) : (
-                    ""
+                  {selectedExercise.reps_high
+                    ? `-${calcVolume(
+                        selectedExercise.weight,
+                        selectedExercise.sets,
+                        selectedExercise.reps_high
+                      )}`
+                    : ""}
+                  {" lbs "}
+                </p>
+              ) : (
+                <p>
+                  {defaultConvertWeight(
+                    calcVolume(
+                      selectedExercise.weight,
+                      selectedExercise.sets,
+                      selectedExercise.reps_low
+                    )
                   )}
-                  {exerciseTimeBTN >= 8294400000 ? (
-                    <option value="All">All</option>
-                  ) : (
-                    ""
-                  )}
-                </select>
+                  {selectedExercise.reps_high
+                    ? `-${defaultConvertWeight(
+                        calcVolume(
+                          selectedExercise.weight,
+                          selectedExercise.sets,
+                          selectedExercise.reps_high
+                        )
+                      )}`
+                    : ""}
+                  {" kgs "}
+                </p>
+              )}
+              {firstVolume ? (
+                <div className="flex">
+                  {renderPercentageDifference(volumeDifference, firstVolume)}
+                </div>
               ) : (
                 ""
               )}
             </div>
-            <div className="flex space-between">
-              <div>
-                <div className="flex shift-left">
-                  <div className="tooltip-container">
-                    <img
-                      className="tooltip-png2"
-                      src={process.env.PUBLIC_URL + "/tooltip.png"}
-                      onMouseOver={() => {
-                        setShowInfo("working weight");
-                      }}
-                      onMouseOut={() => {
-                        setShowInfo("");
-                      }}
-                      alt="tooltip"
-                    />
-                  </div>
-                  {showInfo === "working weight" && (
-                    <div
-                      className="tooltip tooltip-exercise"
-                      id="working-weight"
-                    >
-                      <p>
-                        Working weight is the amount of weight lifted for a
-                        specific exercise during a workout routine.
-                      </p>
-                    </div>
-                  )}
-                  <div
-                    className={
-                      selectedExerciseList.length > 1
-                        ? "flex exercise-graph-selector"
-                        : "flex"
-                    }
-                    id={
-                      graphSelection === "working weight" &&
-                      selectedExerciseList.length > 1
-                        ? "exercise-graph-selector-clicked"
-                        : ""
-                    }
-                    onClick={() => {
-                      setGraphSelection("working weight");
-                    }}
-                  >
-                    <p>Working Weight:&nbsp;</p>
-                    {userProfile.measurement_type !== "metric" ? (
-                      <p>{selectedExercise.weight} lbs</p>
-                    ) : (
-                      <p>{defaultConvertWeight(selectedExercise.weight)} kgs</p>
-                    )}
-                    <div className="flex">
-                      {renderPercentageDifference(
-                        workingWeightDifference,
-                        firstExercise.weight
-                      )}
-                    </div>
-                  </div>
-                  {graphSelection === "working weight" &&
-                  selectedExerciseList.length > 1 ? (
-                    <img
-                      className="selected-graph"
-                      alt="selected graph"
-                      src={process.env.PUBLIC_URL + "/graph-indication.png"}
-                    />
-                  ) : null}
-                </div>
-                <div className="flex shift-left">
-                  <div className="tooltip-container">
-                    <img
-                      className="tooltip-png2"
-                      src={process.env.PUBLIC_URL + "/tooltip.png"}
-                      onMouseOver={() => {
-                        setShowInfo("volume");
-                      }}
-                      onMouseOut={() => {
-                        setShowInfo("");
-                      }}
-                      alt="tooltip"
-                    />
-                  </div>
-                  {showInfo === "volume" && (
-                    <div className="tooltip tooltip-exercise" id="volume">
-                      <p>
-                        Volume refers to the total amount of work performed in a
-                        workout. It is calculated by multiplying the number of
-                        sets, repetitions, and weight lifted for an exercise in
-                        a routine.
-                      </p>
-                    </div>
-                  )}
-                  <div
-                    className={
-                      selectedExerciseList.length > 1
-                        ? "flex exercise-graph-selector"
-                        : "flex"
-                    }
-                    id={
-                      graphSelection === "volume" &&
-                      selectedExerciseList.length > 1
-                        ? "exercise-graph-selector-clicked"
-                        : ""
-                    }
-                    onClick={() => {
-                      setGraphSelection("volume");
-                    }}
-                  >
-                    <p>Volume:&nbsp;</p>
-                    {userProfile.measurement_type !== "metric" ? (
-                      <p>
-                        {calcVolume(
-                          selectedExercise.weight,
-                          selectedExercise.sets,
-                          selectedExercise.reps_low
-                        )}
-                        {selectedExercise.reps_high
-                          ? `-${calcVolume(
-                              selectedExercise.weight,
-                              selectedExercise.sets,
-                              selectedExercise.reps_high
-                            )}`
-                          : ""}
-                        {" lbs "}
-                      </p>
-                    ) : (
-                      <p>
-                        {defaultConvertWeight(
-                          calcVolume(
-                            selectedExercise.weight,
-                            selectedExercise.sets,
-                            selectedExercise.reps_low
-                          )
-                        )}
-                        {selectedExercise.reps_high
-                          ? `-${defaultConvertWeight(
-                              calcVolume(
-                                selectedExercise.weight,
-                                selectedExercise.sets,
-                                selectedExercise.reps_high
-                              )
-                            )}`
-                          : ""}
-                        {" kgs "}
-                      </p>
-                    )}
-                    {firstVolume ? (
-                      <div className="flex">
-                        {renderPercentageDifference(
-                          volumeDifference,
-                          firstVolume
-                        )}
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  {graphSelection === "volume" &&
-                  selectedExerciseList.length > 1 ? (
-                    <img
-                      className="selected-graph"
-                      alt="selected graph"
-                      src={process.env.PUBLIC_URL + "/graph-indication.png"}
-                    />
-                  ) : null}
-                </div>
-              </div>
-            </div>
-            {selectedExerciseList.length > 1 ? (
-              <div className="exerciseGraph"></div>
-            ) : (
-              ""
-            )}
-            <div>
-              <span className="modal-button-container">
-                <button className="modal-button" onClick={onClose}>
-                  Close
-                </button>
-              </span>
-            </div>
+            {graphSelection === "volume" && selectedExerciseList.length > 1 ? (
+              <img
+                className="selected-graph"
+                alt="selected graph"
+                src={process.env.PUBLIC_URL + "/graph-indication.png"}
+              />
+            ) : null}
           </div>
         </div>
       </div>
-    </div>
+      {selectedExerciseList.length > 1 ? (
+        <div>
+          <div className="flex-center">
+            {selectedExerciseList.length > 1 ? (
+              <select
+                id="time-selection-tracked"
+                name="timeSelectionTracked"
+                value={timeSelectionTracked}
+                onChange={(e) => {
+                  setTimeSelectionTracked(e.target.value);
+                }}
+              >
+                <option value="3 months">3 months</option>
+                {exerciseTimeBTN >= 15552000000 ? (
+                  <option value="6 months">6 months</option>
+                ) : (
+                  ""
+                )}
+                {exerciseTimeBTN >= 31104000000 ? (
+                  <option value="1 year">1 year</option>
+                ) : (
+                  ""
+                )}
+                {exerciseTimeBTN >= 8294400000 ? (
+                  <option value="All">All</option>
+                ) : (
+                  ""
+                )}
+              </select>
+            ) : (
+              ""
+            )}
+          </div>
+          <div className="exerciseGraph"></div>
+        </div>
+      ) : (
+        ""
+      )}
+    </Modal>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import Modal from "../../components/Modal";
 
 const WeightFormModal = (props) => {
   const {
@@ -121,64 +122,50 @@ const WeightFormModal = (props) => {
   };
 
   return (
-    <div className="modal">
-      {userProfile && (
-        <div className="modal-content">
-          <div className="modal-header">
-            <h1>Weight</h1>
-          </div>
-          <div className="modal-flex">
-            <div className="modal-body">
-              {userProfile.measurement_type !== "metric" ? (
-                <div>
-                  <input
-                    type="number"
-                    step="0.1"
-                    id="wide"
-                    placeholder="0"
-                    min="0"
-                    max="1000"
-                    maxLength="4"
-                    value={weightReg}
-                    onChange={(e) => {
-                      setWeightReg(safeParseFloat(e.target.value));
-                    }}
-                  />
-                  <label>&nbsp;lbs</label>
-                </div>
-              ) : (
-                <div>
-                  <input
-                    type="number"
-                    step="0.1"
-                    id="wide"
-                    placeholder="0"
-                    min="0"
-                    max="500"
-                    maxLength="3"
-                    value={defaultConvertWeight(weightReg)}
-                    onChange={(e) => {
-                      setWeightReg(
-                        convertWeight(safeParseFloat(e.target.value))
-                      );
-                    }}
-                  />
-                  <label>&nbsp;kgs</label>
-                </div>
-              )}
-              <span className="modal-button-container">
-                <button className="modal-button" onClick={setWeight}>
-                  Confirm
-                </button>
-                <button className="modal-button" onClick={onClose}>
-                  Cancel
-                </button>
-              </span>
-            </div>
-          </div>
+    <Modal
+      isOpen={true}
+      hasHeader={true}
+      header="Add Weight"
+      onClose={onClose}
+      onConfirm={setWeight}
+      isLarge={false}
+    >
+      {userProfile && userProfile.measurement_type !== "metric" ? (
+        <div>
+          <input
+            type="number"
+            step="0.1"
+            id="wide"
+            placeholder="0"
+            min="0"
+            max="1000"
+            maxLength="4"
+            value={weightReg}
+            onChange={(e) => {
+              setWeightReg(safeParseFloat(e.target.value));
+            }}
+          />
+          <label>&nbsp;lbs</label>
+        </div>
+      ) : (
+        <div>
+          <input
+            type="number"
+            step="0.1"
+            id="wide"
+            placeholder="0"
+            min="0"
+            max="500"
+            maxLength="3"
+            value={defaultConvertWeight(weightReg)}
+            onChange={(e) => {
+              setWeightReg(convertWeight(safeParseFloat(e.target.value)));
+            }}
+          />
+          <label>&nbsp;kgs</label>
         </div>
       )}
-    </div>
+    </Modal>
   );
 };
 
