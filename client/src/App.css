@@ -969,8 +969,8 @@ li {
     width: 60%;
   }
 
-  .button-container {
-    margin: 0.5rem 0;
+  .profile {
+    width: 75%;
   }
 
   .login .button-container,
@@ -990,6 +990,16 @@ li {
 
   .App {
     font-size: 0.9em;
+  }
+
+  .profile {
+    width: 100%;
+  }
+
+  .login,
+  .register {
+    width: calc(100% - 2em);
+    left: calc(50% - 1em);
   }
 
   .tooltip-exercise {
