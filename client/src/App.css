@@ -726,7 +726,6 @@ a {
 
 .space-between {
   justify-content: space-between;
-  padding-left: 1em;
 }
 
 #wide {
@@ -1051,10 +1050,11 @@ li {
   .walkthrough-img {
     width: 30px;
     height: 30px;
+    left: 0.5em;
   }
 
   .nav .name {
-    left: calc(2em + 30px);
+    left: calc(2em + 10px);
     font-size: 1.4em;
   }
 
