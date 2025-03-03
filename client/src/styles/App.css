@@ -421,9 +421,15 @@ p {
 }
 
 .weight-list ul li {
-  padding: 0 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   width: 100%;
+}
+
+.underline {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.px-1 {
+  padding: 0 1rem;
 }
 
 .weight-list ul #dates {

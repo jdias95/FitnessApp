@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import RoutineFormModal from "../routines/RoutineFormModal";
-import WeightFormModal from "../profile/WeightFormModal";
+import WeightFormModal from "../weight/WeightFormModal";
+import DeleteWeightModal from "../weight/DeleteWeightModal";
 import DeleteRoutineModal from "../routines/DeleteRoutineModal";
 import UpdateRoutineModal from "../routines/UpdateRoutineModal";
 import ExerciseFormModal from "../exercises/ExerciseFormModal";
@@ -33,6 +34,7 @@ const Dashboard = (props) => {
     previousWeight,
     setPreviousWeight,
     formattedDate,
+    formatDate,
     routines,
     setRoutines,
     exercises,
@@ -52,27 +54,29 @@ const Dashboard = (props) => {
     apiURL,
   } = props;
   const [showRoutineModal, setShowRoutineModal] = useState(false);
+  const [selectedWeight, setSelectedWeight] = useState({});
   const [showWeightModal, setShowWeightModal] = useState(false);
+  const [showDeleteWeightModal, setShowDeleteWeightModal] = useState(false);
+  const [weightTimeBTN, setWeightTimeBTN] = useState(0);
+  const [timeSelection, setTimeSelection] = useState("1 month");
+  const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [showUpdateRoutineModal, setShowUpdateRoutineModal] = useState(false);
   const [showDeleteRoutineModal, setShowDeleteRoutineModal] = useState(false);
+  const [showStarterRoutinesModal, setShowStarterRoutinesModal] =
+    useState(false);
+  const [firstExercise, setFirstExercise] = useState({});
+  const [selectedExercise, setSelectedExercise] = useState({});
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [showUpdateExerciseModal, setShowUpdateExerciseModal] = useState(false);
   const [showDeleteExerciseModal, setShowDeleteExerciseModal] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
   const [showDeleteTrackedExerciseModal, setShowDeleteTrackedExerciseModal] =
     useState(false);
   const [
     showUpdateTrackedExerciseNameModal,
     setShowUpdateTrackedExerciseNameModal,
   ] = useState(false);
-  const [showNotesModal, setShowNotesModal] = useState(false);
   const [showStatisticsModal, setShowStatisticsModal] = useState(false);
-  const [showStarterRoutinesModal, setShowStarterRoutinesModal] =
-    useState(false);
-  const [selectedRoutine, setSelectedRoutine] = useState(null);
-  const [selectedExercise, setSelectedExercise] = useState({});
-  const [firstExercise, setFirstExercise] = useState({});
-  const [weightTimeBTN, setWeightTimeBTN] = useState(0);
-  const [timeSelection, setTimeSelection] = useState("1 month");
   const timeMultipliers = useMemo(() => {
     return {
       "1 month": 6,
@@ -90,6 +94,9 @@ const Dashboard = (props) => {
     switch (modalName) {
       case "weight":
         setShowWeightModal(isOpen);
+        break;
+      case "deleteWeight":
+        setShowDeleteWeightModal(isOpen);
         break;
       case "routine":
         setShowRoutineModal(isOpen);
@@ -633,7 +640,7 @@ const Dashboard = (props) => {
                     if (val.weight) {
                       return (
                         <div
-                          className="dashboard flex"
+                          className="dashboard flex underline px-1"
                           key={`${val.weight} | ${val.date}`}
                         >
                           {userProfile &&
@@ -642,11 +649,22 @@ const Dashboard = (props) => {
                           ) : (
                             <li>{val.weight} kgs</li>
                           )}
-                          <li id="dates">
-                            {parseInt(val.date.slice(5, 7))}/
-                            {parseInt(val.date.slice(8, 10))}/
-                            {val.date.slice(2, 4)}
-                          </li>
+                          <div className="flex">
+                            <li id="dates">
+                              {parseInt(val.date.slice(5, 7))}/
+                              {parseInt(val.date.slice(8, 10))}/
+                              {val.date.slice(2, 4)}
+                            </li>
+                            <img
+                              className="img x"
+                              src={process.env.PUBLIC_URL + "/x.png"}
+                              onClick={() => {
+                                setSelectedWeight(val);
+                                toggleModal("deleteWeight", true);
+                              }}
+                              alt="delete"
+                            />
+                          </div>
                         </div>
                       );
                     }
@@ -1108,6 +1126,18 @@ const Dashboard = (props) => {
         />
       )}
 
+      {showDeleteWeightModal && selectedWeight && (
+        <DeleteWeightModal
+          onClose={() => {
+            toggleModal("deleteWeight", false);
+          }}
+          formatDate={formatDate}
+          selectedWeight={selectedWeight}
+          setWeightData={setWeightData}
+          apiURL={apiURL}
+        />
+      )}
+
       {showRoutineModal && (
         <RoutineFormModal
           loginStatus={loginStatus}
@@ -1210,6 +1240,7 @@ const Dashboard = (props) => {
           onClose={() => {
             toggleModal("deleteTrackedExercise", false);
           }}
+          formatDate={formatDate}
           selectedExercise={selectedExercise}
           setTrackedExercises={setTrackedExercises}
           trackedExercises={trackedExercises}

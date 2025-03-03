@@ -36,6 +36,13 @@ function App() {
   const [showWalkthroughModal, setShowWalkthroughModal] = useState(false);
   const formattedDate = new Date().toISOString().slice(0, -5);
 
+  const formatDate = (date) =>
+    new Date(date).toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
   const apiURL =
     process.env.NODE_ENV === "production"
       ? process.env.REACT_APP_PROD_API_URL
@@ -340,6 +347,7 @@ function App() {
                 previousWeight={previousWeight}
                 setPreviousWeight={setPreviousWeight}
                 formattedDate={formattedDate}
+                formatDate={formatDate}
                 routines={routines}
                 setRoutines={setRoutines}
                 exercises={exercises}

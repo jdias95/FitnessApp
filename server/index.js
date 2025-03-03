@@ -434,7 +434,7 @@ app.post("/api/insert/weight", (req, res) => {
 
 app.get("/api/get/weight/:userId", (req, res) => {
   const userId = req.params.userId;
-  const sqlSelect = "SELECT * FROM weight_times WHERE user_id = ?";
+  const sqlSelect = "SELECT * FROM weight_times WHERE user_id = ? LIMIT 50";
 
   db.query(sqlSelect, [userId], (err, result) => {
     if (err) {
@@ -458,9 +458,23 @@ app.put("/api/update/weight/:userId", (req, res) => {
   db.query(sqlUpdate, [weight, userId, date], (err, result) => {
     if (err) {
       res.status(500).json({ error: "Internal Server Error" });
-      console.log(err);
+      console.log("Error updating weight:", err);
     } else {
       res.status(200).json(result);
+    }
+  });
+});
+
+app.delete("/api/delete/weight/:id", (req, res) => {
+  const id = req.params.id;
+  const sqlDelete = "DELETE FROM weight_times WHERE id = ?";
+
+  db.query(sqlDelete, id, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error deleting weight:", err);
+    } else {
+      res.status(204).send();
     }
   });
 });
@@ -543,7 +557,7 @@ app.put("/api/update/exercise/:id", (req, res) => {
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });
-        console.log(err);
+        console.log("Error updating exercise:", err);
       } else {
         res.status(200).json(result);
       }
@@ -584,7 +598,7 @@ app.post("/api/insert/tracked-exercise", (req, res) => {
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });
-        console.log(err);
+        console.log("Error tracking exercise:", err);
       } else {
         res.status(200).json(result);
       }
@@ -658,7 +672,7 @@ app.post("/api/insert/tracked-exercise-order/:userId", (req, res) => {
   db.query(sqlInsert, [userId, name, sortOrder], (err, result) => {
     if (err) {
       res.status(500).json({ error: "Internal Server Error" });
-      console.log(err);
+      console.log("Error creating tracked exercise order:", err);
     } else {
       res.status(200).json(result);
     }
@@ -674,7 +688,7 @@ app.put("/api/update/tracked-exercise-order/:id", (req, res) => {
   db.query(sqlUpdate, [name, sortOrder, id], (err, result) => {
     if (err) {
       res.status(500).json({ error: "Internal Server Error" });
-      console.log(err);
+      console.log("Error updating tracked exercise order:", err);
     } else {
       res.status(200).json(result);
     }
@@ -705,15 +719,11 @@ app.delete("/api/delete/tracked-exercise-order/:id", (req, res) => {
   db.query(sqlDelete, id, (err, result) => {
     if (err) {
       res.status(500).json({ error: "Internal Server Error" });
-      console.error("Error deleting entry:", err);
+      console.error("Error deleting tracked exercise order:", err);
     } else {
       res.status(204).send();
     }
   });
-});
-
-app.get("/api", (req, res) => {
-  res.send("Hello World");
 });
 
 server.listen(3001, () => {

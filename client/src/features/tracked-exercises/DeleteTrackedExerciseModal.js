@@ -5,6 +5,7 @@ import Modal from "../../components/Modal";
 const DeleteTrackedExerciseModal = (props) => {
   const {
     onClose,
+    formatDate,
     selectedExercise,
     setTrackedExercises,
     trackedExercises,
@@ -72,8 +73,8 @@ const DeleteTrackedExerciseModal = (props) => {
       isLarge={false}
     >
       <p>
-        Are you sure you want to delete {selectedExercise.name}:{" "}
-        {`${new Date(selectedExercise.date).toLocaleDateString()}`}?
+        Are you sure you want to delete {selectedExercise.name} from{" "}
+        {formatDate(selectedExercise.date)}?
       </p>
     </Modal>
   );
