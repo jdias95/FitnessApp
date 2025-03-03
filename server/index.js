@@ -434,7 +434,7 @@ app.post("/api/insert/weight", (req, res) => {
 
 app.get("/api/get/weight/:userId", (req, res) => {
   const userId = req.params.userId;
-  const sqlSelect = "SELECT * FROM weight_times WHERE user_id = ? LIMIT 50";
+  const sqlSelect = "SELECT * FROM weight_times WHERE user_id = ? LIMIT 100";
 
   db.query(sqlSelect, [userId], (err, result) => {
     if (err) {
