@@ -34,7 +34,7 @@ function App() {
   const [routineExercises, setRoutineExercises] = useState({});
   const [openMenus, setOpenMenus] = useState({});
   const [showWalkthroughModal, setShowWalkthroughModal] = useState(false);
-  const formattedDate = new Date().toISOString().slice(0, -5);
+  const formattedDate = new Date().toISOString().split("T")[0];
 
   const formatDate = (date) =>
     new Date(date).toLocaleDateString(undefined, {
