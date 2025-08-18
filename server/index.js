@@ -485,7 +485,8 @@ app.post("/api/insert/exercise", (req, res) => {
   const name = req.body.name;
   const repsHigh = req.body.repsHigh;
   const repsLow = req.body.repsLow;
-  const sets = req.body.sets;
+  const setsHigh = req.body.setsHigh;
+  const setsLow = req.body.setsLow;
   const weight = req.body.weight;
   const tracked = req.body.tracked;
   const bw = req.body.bw;
@@ -493,7 +494,7 @@ app.post("/api/insert/exercise", (req, res) => {
   const sortOrder = req.body.sortOrder;
 
   const sqlInsert =
-    "INSERT INTO exercises (user_id, routine_id, name, reps_high, reps_low, sets, weight, tracked, bw, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO exercises (user_id, routine_id, name, reps_high, reps_low, sets_high, sets_low, weight, tracked, bw, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlInsert,
     [
@@ -502,7 +503,8 @@ app.post("/api/insert/exercise", (req, res) => {
       name,
       repsHigh,
       repsLow,
-      sets,
+      setsHigh,
+      setsLow,
       weight,
       tracked,
       bw,
@@ -542,18 +544,31 @@ app.put("/api/update/exercise/:id", (req, res) => {
   const name = req.body.name;
   const repsHigh = req.body.repsHigh;
   const repsLow = req.body.repsLow;
-  const sets = req.body.sets;
+  const setsHigh = req.body.setsHigh;
+  const setsLow = req.body.setsLow;
   const weight = req.body.weight;
   const tracked = req.body.tracked;
   const bw = req.body.bw;
   const notes = req.body.notes;
   const sortOrder = req.body.sortOrder;
 
-  const sqlUpdate = `UPDATE exercises SET name = ?, reps_high = ?, reps_low = ?, sets = ?, weight = ?, tracked = ?, bw = ?, notes = ?, sort_order = ? WHERE id = ?`;
+  const sqlUpdate = `UPDATE exercises SET name = ?, reps_high = ?, reps_low = ?, sets_high = ?, sets_low = ?, weight = ?, tracked = ?, bw = ?, notes = ?, sort_order = ? WHERE id = ?`;
 
   db.query(
     sqlUpdate,
-    [name, repsHigh, repsLow, sets, weight, tracked, bw, notes, sortOrder, id],
+    [
+      name,
+      repsHigh,
+      repsLow,
+      setsHigh,
+      setsLow,
+      weight,
+      tracked,
+      bw,
+      notes,
+      sortOrder,
+      id,
+    ],
     (err, result) => {
       if (err) {
         res.status(500).json({ error: "Internal Server Error" });

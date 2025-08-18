@@ -24,7 +24,8 @@ const UpdateExerciseModal = (props) => {
   const [nameReg, setNameReg] = useState(selectedExercise.name);
   const [repsLowReg, setRepsLowReg] = useState(selectedExercise.reps_low);
   const [repsHighReg, setRepsHighReg] = useState(selectedExercise.reps_high);
-  const [setsReg, setSetsReg] = useState(selectedExercise.sets);
+  const [setsLowReg, setSetsLowReg] = useState(selectedExercise.sets_low);
+  const [setsHighReg, setSetsHighReg] = useState(selectedExercise.sets_high);
   const [weightReg, setWeightReg] = useState(selectedExercise.weight);
   const [trackReg, setTrackReg] = useState(selectedExercise.tracked);
   const [bwReg, setBwReg] = useState(selectedExercise.bw);
@@ -39,7 +40,9 @@ const UpdateExerciseModal = (props) => {
       repsLow: repsLowReg === "" ? 1 : repsLowReg,
       repsHigh:
         repsHighReg === "" || repsHighReg <= repsLowReg ? null : repsHighReg,
-      sets: setsReg === "" ? 1 : setsReg,
+      setsLow: setsLowReg === "" ? 1 : setsLowReg,
+      setsHigh:
+        setsHighReg === "" || setsHighReg <= setsLowReg ? null : setsHighReg,
       weight: weightReg === "" ? 0 : weightReg,
       tracked: trackReg,
       bw: bwReg,
@@ -67,7 +70,11 @@ const UpdateExerciseModal = (props) => {
                   ? null
                   : repsHighReg,
               reps_low: repsLowReg === "" ? 1 : repsLowReg,
-              sets: setsReg === "" ? 1 : setsReg,
+              sets_high:
+                setsHighReg === "" || setsHighReg <= setsLowReg
+                  ? null
+                  : setsHighReg,
+              sets_low: setsLowReg === "" ? 1 : setsLowReg,
               weight: weightReg === "" ? 0 : weightReg,
               tracked: trackReg,
               bw: bwReg,
@@ -86,7 +93,7 @@ const UpdateExerciseModal = (props) => {
                   ? null
                   : repsHighReg,
               repsLow: repsLowReg === "" ? 1 : repsLowReg,
-              sets: setsReg === "" ? 1 : setsReg,
+              sets: setsLowReg === "" ? 1 : setsLowReg,
               weight: weightReg === "" ? 0 : weightReg,
               bw: bwReg,
               date: formattedDate,
@@ -102,7 +109,7 @@ const UpdateExerciseModal = (props) => {
                           id: response.data.insertId,
                           exercise_id: id,
                           name: nameReg,
-                          sets: setsReg === "" ? 1 : setsReg,
+                          sets: setsLowReg === "" ? 1 : setsLowReg,
                           reps_high:
                             repsHighReg === "" || repsHighReg <= repsLowReg
                               ? null
@@ -122,7 +129,7 @@ const UpdateExerciseModal = (props) => {
                           id: response.data.insertId,
                           exercise_id: id,
                           name: nameReg,
-                          sets: setsReg === "" ? 1 : setsReg,
+                          sets: setsLowReg === "" ? 1 : setsLowReg,
                           reps_high:
                             repsHighReg === "" || repsHighReg <= repsLowReg
                               ? null
@@ -264,8 +271,10 @@ const UpdateExerciseModal = (props) => {
           userProfile={userProfile}
           nameReg={nameReg}
           setNameReg={setNameReg}
-          setsReg={setsReg}
-          setSetsReg={setSetsReg}
+          setsLowReg={setsLowReg}
+          setSetsLowReg={setSetsLowReg}
+          setsHighReg={setsHighReg}
+          setSetsHighReg={setSetsHighReg}
           repsLowReg={repsLowReg}
           setRepsLowReg={setRepsLowReg}
           repsHighReg={repsHighReg}

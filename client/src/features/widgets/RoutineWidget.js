@@ -109,8 +109,11 @@ const RoutineWidget = (props) => {
                                     }}
                                   >
                                     <div className="exercise-container">
-                                      {exercise.name} | {exercise.sets} x{" "}
-                                      {exercise.reps_low}
+                                      {exercise.name} |{exercise.sets_low}
+                                      {exercise.sets_high
+                                        ? `-${exercise.sets_high}`
+                                        : ""}
+                                      &nbsp;x {exercise.reps_low}
                                       {exercise.reps_high
                                         ? `-${exercise.reps_high}`
                                         : ""}

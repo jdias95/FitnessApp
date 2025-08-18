@@ -5,8 +5,10 @@ const ExerciseFormFields = ({
   userProfile,
   nameReg,
   setNameReg,
-  setsReg,
-  setSetsReg,
+  setsLowReg,
+  setsHighReg,
+  setSetsLowReg,
+  setSetsHighReg,
   repsLowReg,
   setRepsLowReg,
   repsHighReg,
@@ -40,21 +42,32 @@ const ExerciseFormFields = ({
     </div>
     <TooltipInput
       id="sets"
-      label="Sets:"
-      tooltip="A set refers to a group of repetitions (or reps) of an exercise."
+      label="Set Range:"
+      tooltip="A set refers to a group of repetitions (or reps) of an exercise. The second input field can be left blank if you prefer."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
-      inputProps={{
-        type: "number",
-        id: "narrow",
-        placeholder: "1",
-        min: 1,
-        max: 99,
-        maxLength: 2,
-        value: !setsReg ? "" : setsReg,
-        onChange: (e) => setSetsReg(safeParseInt(e.target.value)),
-      }}
-    />
+    >
+      <input
+        type="number"
+        id="narrow"
+        placeholder="1"
+        min="1"
+        max="99"
+        maxLength="2"
+        value={!setsLowReg ? "" : setsLowReg}
+        onChange={(e) => setSetsLowReg(safeParseInt(e.target.value))}
+      />
+      <p>&nbsp;-&nbsp;</p>
+      <input
+        type="number"
+        id="narrow"
+        min="0"
+        max="99"
+        maxLength="2"
+        value={!setsHighReg ? "" : setsHighReg}
+        onChange={(e) => setSetsHighReg(safeParseInt(e.target.value))}
+      />
+    </TooltipInput>
     <TooltipInput
       id="reps"
       label="Reps:"
