@@ -22,7 +22,7 @@ const TooltipInput = ({
         <p>{tooltip}</p>
       </div>
     )}
-    <label className="flex-input">{label}:&nbsp;</label>
+    <label className="flex-input">{label}&nbsp;</label>
     {children ? children : <input {...inputProps} />}
   </div>
 );

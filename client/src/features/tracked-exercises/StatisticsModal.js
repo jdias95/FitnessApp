@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import * as d3 from "d3";
 import moment from "moment";
 import Modal from "../../components/Modal";
+import TooltipInput from "../help/TooltipInput";
 
 const StatisticsModal = (props) => {
   const {
@@ -341,28 +342,13 @@ const StatisticsModal = (props) => {
     >
       <div className="flex space-between">
         <div>
-          <div className="flex shift-left">
-            <div className="tooltip-container">
-              <img
-                className="tooltip-png2"
-                src={process.env.PUBLIC_URL + "/tooltip.png"}
-                onMouseOver={() => {
-                  setShowInfo("working weight");
-                }}
-                onMouseOut={() => {
-                  setShowInfo("");
-                }}
-                alt="tooltip"
-              />
-            </div>
-            {showInfo === "working weight" && (
-              <div className="tooltip tooltip-exercise" id="working-weight">
-                <p>
-                  Working weight is the amount of weight lifted for a specific
-                  exercise during a workout routine.
-                </p>
-              </div>
-            )}
+          <TooltipInput
+            id="working-weight"
+            label={null}
+            tooltip="Working weight is the amount of weight lifted for a specific exercise during a workout routine."
+            showInfo={showInfo}
+            setShowInfo={setShowInfo}
+          >
             <div
               className={
                 selectedExerciseList.length > 1
@@ -400,30 +386,14 @@ const StatisticsModal = (props) => {
                 src={process.env.PUBLIC_URL + "/graph-indication.png"}
               />
             ) : null}
-          </div>
-          <div className="flex shift-left">
-            <div className="tooltip-container">
-              <img
-                className="tooltip-png2"
-                src={process.env.PUBLIC_URL + "/tooltip.png"}
-                onMouseOver={() => {
-                  setShowInfo("volume");
-                }}
-                onMouseOut={() => {
-                  setShowInfo("");
-                }}
-                alt="tooltip"
-              />
-            </div>
-            {showInfo === "volume" && (
-              <div className="tooltip tooltip-exercise" id="volume">
-                <p>
-                  Volume refers to the total amount of work performed in a
-                  workout. It is calculated by multiplying the number of sets,
-                  repetitions, and weight lifted for an exercise in a routine.
-                </p>
-              </div>
-            )}
+          </TooltipInput>
+          <TooltipInput
+            id="volume"
+            label={null}
+            tooltip="Volume refers to the total amount of work performed in a workout. It is calculated by multiplying the number of sets, repetitions, and weight lifted for an exercise in a routine."
+            showInfo={showInfo}
+            setShowInfo={setShowInfo}
+          >
             <div
               className={
                 selectedExerciseList.length > 1
@@ -492,7 +462,7 @@ const StatisticsModal = (props) => {
                 src={process.env.PUBLIC_URL + "/graph-indication.png"}
               />
             ) : null}
-          </div>
+          </TooltipInput>
         </div>
       </div>
       {selectedExerciseList.length > 1 ? (

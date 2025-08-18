@@ -40,7 +40,7 @@ const ExerciseFormFields = ({
     </div>
     <TooltipInput
       id="sets"
-      label="Sets"
+      label="Sets:"
       tooltip="A set refers to a group of repetitions (or reps) of an exercise."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
@@ -57,7 +57,7 @@ const ExerciseFormFields = ({
     />
     <TooltipInput
       id="reps"
-      label="Reps"
+      label="Reps:"
       tooltip="A rep refers to a repetition of an exercise. The second input field can be left blank if you prefer."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
@@ -85,7 +85,7 @@ const ExerciseFormFields = ({
     </TooltipInput>
     <TooltipInput
       id="weight"
-      label="Weight"
+      label="Weight:"
       tooltip="Weight refers to how much weight is added to an exercise. If there is no weight added (eg. Push Ups), then this can be left blank."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
@@ -138,7 +138,7 @@ const ExerciseFormFields = ({
     </div>
     <TooltipInput
       id="track"
-      label="Track Progress?"
+      label="Track Progress?:"
       tooltip="Selecting this will create a single entry under Track Progress with the information provided. The entry will show up in a list of the same name."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
@@ -152,7 +152,7 @@ const ExerciseFormFields = ({
     </TooltipInput>
     <TooltipInput
       id="bw"
-      label="Bodyweight Comparison?"
+      label="Bodyweight Comparison?:"
       tooltip="Selecting this will add the proportion of weight lifted to your bodyweight when creating an entry under Track Progress. This is especially useful for the more essential compound lifts (eg. Bench Press, Squat, etc.)."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
