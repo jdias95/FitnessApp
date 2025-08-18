@@ -1,12 +1,17 @@
 import React from "react";
+import WeightGraph from "../weight/WeightGraph";
 
 const WeightWidget = (props) => {
   const {
     weightData,
     userProfile,
     timeSelection,
+    timeMultipliers,
+    defaultConvertWeight,
     setTimeSelection,
+    setWeightTimeBTN,
     weightTimeBTN,
+    weightForcast,
     toggleModal,
     setSelectedWeight,
   } = props;
@@ -114,7 +119,16 @@ const WeightWidget = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="weightGraph"></div>
+              <WeightGraph
+                weightData={weightData}
+                userProfile={userProfile}
+                timeSelection={timeSelection}
+                timeMultipliers={timeMultipliers}
+                defaultConvertWeight={defaultConvertWeight}
+                weightForcast={weightForcast}
+                weightTimeBTN={weightTimeBTN}
+                setWeightTimeBTN={setWeightTimeBTN}
+              />
             </div>
           </div>
           <div className="weight-list">

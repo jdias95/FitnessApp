@@ -379,7 +379,10 @@ p {
   width: 49%;
 }
 
-.weightGraph,
+.graph-container svg {
+  height: 400px;
+}
+
 .exerciseGraph {
   padding: 0.5em 0;
   width: 99%;
@@ -618,19 +621,19 @@ a {
 .tooltip-tracked {
   left: 38%;
   padding: 0.5em;
-  z-index: 100;
+  z-index: 1000;
 }
 
 #sets {
-  top: -140%;
+  top: -120%;
 }
 
 #reps {
-  top: -230%;
+  top: -190%;
 }
 
 #weight {
-  top: -210%;
+  top: -240%;
 }
 
 #track {

@@ -203,265 +203,265 @@ const Dashboard = (props) => {
     }
   }, [userProfile]);
 
-  useEffect(() => {
-    d3.select(".weightGraph svg").remove();
+  // useEffect(() => {
+  //   d3.select(".weightGraph svg").remove();
 
-    if (weightData.length > 0) {
-      const weightValues = weightData
-        .filter((d) => d.weight != null)
-        .map((d) => d.weight);
-      const dateValues = weightData
-        .filter((d) => d.weight != null)
-        .map((d) => d.date);
+  //   if (weightData.length > 0) {
+  //     const weightValues = weightData
+  //       .filter((d) => d.weight != null)
+  //       .map((d) => d.weight);
+  //     const dateValues = weightData
+  //       .filter((d) => d.weight != null)
+  //       .map((d) => d.date);
 
-      setWeightTimeBTN(
-        new Date(dateValues[dateValues.length - 1]).getTime() -
-          new Date(dateValues[0]).getTime()
-      );
+  //     setWeightTimeBTN(
+  //       new Date(dateValues[dateValues.length - 1]).getTime() -
+  //         new Date(dateValues[0]).getTime()
+  //     );
 
-      const graphWidth = 500;
-      const graphHeight = 400;
-      const marginTop = 20;
-      const marginRight = 20;
-      const marginBottom = 20;
-      const marginLeft = 30;
+  //     const graphWidth = 500;
+  //     const graphHeight = 400;
+  //     const marginTop = 20;
+  //     const marginRight = 20;
+  //     const marginBottom = 20;
+  //     const marginLeft = 30;
 
-      const minValue = d3.min(weightValues);
-      const maxValue = d3.max(weightValues);
-      const meanValue = d3.mean(weightValues);
-      const padding = meanValue * 0.025;
+  //     const minValue = d3.min(weightValues);
+  //     const maxValue = d3.max(weightValues);
+  //     const meanValue = d3.mean(weightValues);
+  //     const padding = meanValue * 0.025;
 
-      const yScale = d3
-        .scaleLinear()
-        .domain([
-          userProfile &&
-          userProfile.target_weight &&
-          userProfile.measurement_type !== "metric"
-            ? d3.min([userProfile.target_weight - padding, minValue - padding])
-            : userProfile && userProfile.target_weight
-            ? d3.min([
-                defaultConvertWeight(userProfile.target_weight) - padding,
-                minValue - padding,
-              ])
-            : minValue - padding,
-          userProfile &&
-          userProfile.target_weight &&
-          userProfile.measurement_type !== "metric"
-            ? d3.max([userProfile.target_weight + padding, maxValue + padding])
-            : userProfile && userProfile.target_weight
-            ? d3.max([
-                defaultConvertWeight(userProfile.target_weight) + padding,
-                maxValue + padding,
-              ])
-            : maxValue + padding,
-        ])
-        .nice()
-        .range([graphHeight - marginBottom, marginTop]);
+  //     const yScale = d3
+  //       .scaleLinear()
+  //       .domain([
+  //         userProfile &&
+  //         userProfile.target_weight &&
+  //         userProfile.measurement_type !== "metric"
+  //           ? d3.min([userProfile.target_weight - padding, minValue - padding])
+  //           : userProfile && userProfile.target_weight
+  //           ? d3.min([
+  //               defaultConvertWeight(userProfile.target_weight) - padding,
+  //               minValue - padding,
+  //             ])
+  //           : minValue - padding,
+  //         userProfile &&
+  //         userProfile.target_weight &&
+  //         userProfile.measurement_type !== "metric"
+  //           ? d3.max([userProfile.target_weight + padding, maxValue + padding])
+  //           : userProfile && userProfile.target_weight
+  //           ? d3.max([
+  //               defaultConvertWeight(userProfile.target_weight) + padding,
+  //               maxValue + padding,
+  //             ])
+  //           : maxValue + padding,
+  //       ])
+  //       .nice()
+  //       .range([graphHeight - marginBottom, marginTop]);
 
-      const svg = d3
-        .select(".weightGraph")
-        .append("svg")
-        .attr("width", "100%")
-        .attr("height", graphHeight)
-        .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
+  //     const svg = d3
+  //       .select(".weightGraph")
+  //       .append("svg")
+  //       .attr("width", "100%")
+  //       .attr("height", graphHeight)
+  //       .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
 
-      const tickValues = [];
-      const endDate = moment(
-        weightData[weightData.length - 1].date,
-        "YYYY-MM-DD"
-      );
+  //     const tickValues = [];
+  //     const endDate = moment(
+  //       weightData[weightData.length - 1].date,
+  //       "YYYY-MM-DD"
+  //     );
 
-      for (let i = 0; i < 6; i++) {
-        const date = moment(endDate).subtract(
-          timeMultipliers[timeSelection] * i,
-          "days"
-        );
-        tickValues.push(date.toDate());
-      }
+  //     for (let i = 0; i < 6; i++) {
+  //       const date = moment(endDate).subtract(
+  //         timeMultipliers[timeSelection] * i,
+  //         "days"
+  //       );
+  //       tickValues.push(date.toDate());
+  //     }
 
-      const xScale = d3
-        .scaleTime()
-        .domain([
-          new Date(tickValues[tickValues.length - 1]),
-          new Date(tickValues[0]),
-        ])
-        .range([marginLeft, graphWidth - marginRight]);
+  //     const xScale = d3
+  //       .scaleTime()
+  //       .domain([
+  //         new Date(tickValues[tickValues.length - 1]),
+  //         new Date(tickValues[0]),
+  //       ])
+  //       .range([marginLeft, graphWidth - marginRight]);
 
-      svg
-        .append("g")
-        .attr("class", "x-axis")
-        .attr("transform", `translate(0, ${graphHeight - marginBottom})`)
-        .call(
-          d3
-            .axisBottom(xScale)
-            .tickValues(tickValues)
-            .tickFormat((date) => {
-              return date.toLocaleDateString().slice(0, -5);
-            })
-        );
+  //     svg
+  //       .append("g")
+  //       .attr("class", "x-axis")
+  //       .attr("transform", `translate(0, ${graphHeight - marginBottom})`)
+  //       .call(
+  //         d3
+  //           .axisBottom(xScale)
+  //           .tickValues(tickValues)
+  //           .tickFormat((date) => {
+  //             return date.toLocaleDateString().slice(0, -5);
+  //           })
+  //       );
 
-      const line = d3
-        .line()
-        .defined((d) => {
-          return d.weight != null;
-        })
-        .x((d) => xScale(new Date(d.date)))
-        .y((d) => yScale(d.weight));
+  //     const line = d3
+  //       .line()
+  //       .defined((d) => {
+  //         return d.weight != null;
+  //       })
+  //       .x((d) => xScale(new Date(d.date)))
+  //       .y((d) => yScale(d.weight));
 
-      svg
-        .append("defs")
-        .append("clipPath")
-        .attr("id", "clip-path")
-        .append("rect")
-        .attr("transform", `translate(${marginLeft}, 0)`)
-        .attr("width", graphWidth)
-        .attr("height", graphHeight);
+  //     svg
+  //       .append("defs")
+  //       .append("clipPath")
+  //       .attr("id", "clip-path")
+  //       .append("rect")
+  //       .attr("transform", `translate(${marginLeft}, 0)`)
+  //       .attr("width", graphWidth)
+  //       .attr("height", graphHeight);
 
-      svg
-        .append("path")
-        .datum(weightData)
-        .attr("fill", "none")
-        .attr("stroke", "#ACEDFF")
-        .attr("stroke-width", 3)
-        .attr("width", graphWidth)
-        .attr("stroke-linecap", "round")
-        .attr("d", line)
-        .attr("clip-path", "url(#clip-path)");
+  //     svg
+  //       .append("path")
+  //       .datum(weightData)
+  //       .attr("fill", "none")
+  //       .attr("stroke", "#ACEDFF")
+  //       .attr("stroke-width", 3)
+  //       .attr("width", graphWidth)
+  //       .attr("stroke-linecap", "round")
+  //       .attr("d", line)
+  //       .attr("clip-path", "url(#clip-path)");
 
-      if (userProfile && userProfile.target_weight) {
-        const targetWeight =
-          userProfile.measurement_type !== "metric"
-            ? userProfile.target_weight
-            : defaultConvertWeight(userProfile.target_weight);
+  //     if (userProfile && userProfile.target_weight) {
+  //       const targetWeight =
+  //         userProfile.measurement_type !== "metric"
+  //           ? userProfile.target_weight
+  //           : defaultConvertWeight(userProfile.target_weight);
 
-        svg
-          .append("line")
-          .attr("class", "target-line")
-          .attr("x1", marginLeft)
-          .attr("y1", yScale(targetWeight))
-          .attr("x2", graphWidth - marginRight)
-          .attr("y2", yScale(targetWeight))
-          .attr("stroke", "rgb(138, 201, 38)")
-          .attr("stroke-width", 2);
+  //       svg
+  //         .append("line")
+  //         .attr("class", "target-line")
+  //         .attr("x1", marginLeft)
+  //         .attr("y1", yScale(targetWeight))
+  //         .attr("x2", graphWidth - marginRight)
+  //         .attr("y2", yScale(targetWeight))
+  //         .attr("stroke", "rgb(138, 201, 38)")
+  //         .attr("stroke-width", 2);
 
-        const screenWidth = window.innerWidth;
+  //       const screenWidth = window.innerWidth;
 
-        const tooltip = d3
-          .select("body")
-          .append("div")
-          .attr("class", "tooltip")
-          .style("opacity", 0)
-          .style("padding", "15px")
-          .style("font-size", screenWidth < 800 ? "11px" : "14px")
-          .style("font-family", "Open Sans")
-          .style("z-index", "-100");
+  //       const tooltip = d3
+  //         .select("body")
+  //         .append("div")
+  //         .attr("class", "tooltip")
+  //         .style("opacity", 0)
+  //         .style("padding", "15px")
+  //         .style("font-size", screenWidth < 800 ? "11px" : "14px")
+  //         .style("font-family", "Open Sans")
+  //         .style("z-index", "-100");
 
-        svg
-          .append("text")
-          .attr("x", (graphWidth - marginLeft - marginRight) / 2)
-          .attr(
-            "y",
-            userProfile.target_weight - userProfile.weight > 0
-              ? yScale(targetWeight) - 10
-              : yScale(targetWeight) + 20
-          )
-          .attr("text-anchor", "start")
-          .attr("fill", "rgb(138, 201, 38)")
-          .text(
-            weightForcast[0] > 1 ||
-              (weightForcast[0] > 0 && weightForcast[0] < 1)
-              ? `${Number(weightForcast[0])} ${weightForcast[1]}`
-              : Number(weightForcast[0]) === 1
-              ? `${Number(weightForcast[0])} ${weightForcast[1].slice(
-                  0,
-                  weightForcast[1].length - 1
-                )}`
-              : ""
-          );
+  //       svg
+  //         .append("text")
+  //         .attr("x", (graphWidth - marginLeft - marginRight) / 2)
+  //         .attr(
+  //           "y",
+  //           userProfile.target_weight - userProfile.weight > 0
+  //             ? yScale(targetWeight) - 10
+  //             : yScale(targetWeight) + 20
+  //         )
+  //         .attr("text-anchor", "start")
+  //         .attr("fill", "rgb(138, 201, 38)")
+  //         .text(
+  //           weightForcast[0] > 1 ||
+  //             (weightForcast[0] > 0 && weightForcast[0] < 1)
+  //             ? `${Number(weightForcast[0])} ${weightForcast[1]}`
+  //             : Number(weightForcast[0]) === 1
+  //             ? `${Number(weightForcast[0])} ${weightForcast[1].slice(
+  //                 0,
+  //                 weightForcast[1].length - 1
+  //               )}`
+  //             : ""
+  //         );
 
-        if (weightForcast[0]) {
-          svg
-            .append("image")
-            .attr("class", "tooltip-png2")
-            .attr("x", (graphWidth - marginLeft - marginRight) / 2 - 18)
-            .attr(
-              "y",
-              userProfile.target_weight - userProfile.weight > 0
-                ? yScale(targetWeight) - 22
-                : yScale(targetWeight) + 9
-            )
-            .attr("xlink:href", process.env.PUBLIC_URL + "/tooltip.png")
-            .on("mouseover", function (event) {
-              d3.select(this).attr(
-                "xlink:href",
-                process.env.PUBLIC_URL + "/tooltip-hover.png"
-              );
-              tooltip
-                .html(
-                  "Please note, the estimated daily calorie budget is tailored to your weekly goal and profile settings. This calculation assumes your average daily calorie intake aligns closely with the budget. Remember, it's a rough estimate, and you may discover better results by adjusting your calorie intake based on your preferences and needs."
-                )
-                .style("opacity", 1)
-                .style("position", "absolute")
-                .style(
-                  "left",
-                  screenWidth < 800
-                    ? `${event.pageX - 137}px`
-                    : `${event.pageX - 155}px`
-                )
-                .style(
-                  "top",
-                  screenWidth < 800
-                    ? `${event.pageY - 140}px`
-                    : `${event.pageY - 160}px`
-                )
-                .style("z-index", "100");
-            })
-            .on("mouseout", function () {
-              d3.select(this).attr(
-                "xlink:href",
-                process.env.PUBLIC_URL + "/tooltip.png"
-              );
-              tooltip.style("opacity", 0).style("z-index", "-100");
-            });
-        }
-      }
+  //       if (weightForcast[0]) {
+  //         svg
+  //           .append("image")
+  //           .attr("class", "tooltip-png2")
+  //           .attr("x", (graphWidth - marginLeft - marginRight) / 2 - 18)
+  //           .attr(
+  //             "y",
+  //             userProfile.target_weight - userProfile.weight > 0
+  //               ? yScale(targetWeight) - 22
+  //               : yScale(targetWeight) + 9
+  //           )
+  //           .attr("xlink:href", process.env.PUBLIC_URL + "/tooltip.png")
+  //           .on("mouseover", function (event) {
+  //             d3.select(this).attr(
+  //               "xlink:href",
+  //               process.env.PUBLIC_URL + "/tooltip-hover.png"
+  //             );
+  //             tooltip
+  //               .html(
+  //                 "Please note, the estimated daily calorie budget is tailored to your weekly goal and profile settings. This calculation assumes your average daily calorie intake aligns closely with the budget. Remember, it's a rough estimate, and you may discover better results by adjusting your calorie intake based on your preferences and needs."
+  //               )
+  //               .style("opacity", 1)
+  //               .style("position", "absolute")
+  //               .style(
+  //                 "left",
+  //                 screenWidth < 800
+  //                   ? `${event.pageX - 137}px`
+  //                   : `${event.pageX - 155}px`
+  //               )
+  //               .style(
+  //                 "top",
+  //                 screenWidth < 800
+  //                   ? `${event.pageY - 140}px`
+  //                   : `${event.pageY - 160}px`
+  //               )
+  //               .style("z-index", "100");
+  //           })
+  //           .on("mouseout", function () {
+  //             d3.select(this).attr(
+  //               "xlink:href",
+  //               process.env.PUBLIC_URL + "/tooltip.png"
+  //             );
+  //             tooltip.style("opacity", 0).style("z-index", "-100");
+  //           });
+  //       }
+  //     }
 
-      const yAxisGroup = svg
-        .append("g")
-        .attr("class", "y-axis")
-        .attr("transform", `translate(${marginLeft}, 0)`)
-        .call(d3.axisLeft(yScale));
+  //     const yAxisGroup = svg
+  //       .append("g")
+  //       .attr("class", "y-axis")
+  //       .attr("transform", `translate(${marginLeft}, 0)`)
+  //       .call(d3.axisLeft(yScale));
 
-      yAxisGroup
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("text-anchor", "end")
-        .text("Y-Axis Label");
+  //     yAxisGroup
+  //       .append("text")
+  //       .attr("transform", "rotate(-90)")
+  //       .attr("text-anchor", "end")
+  //       .text("Y-Axis Label");
 
-      yAxisGroup
-        .selectAll("g.tick")
-        .append("line")
-        .attr("class", "gridline")
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", graphWidth - marginRight - marginLeft)
-        .attr("y2", 0)
-        .attr("stroke", "rgba(156, 165, 174, .4");
+  //     yAxisGroup
+  //       .selectAll("g.tick")
+  //       .append("line")
+  //       .attr("class", "gridline")
+  //       .attr("x1", 0)
+  //       .attr("y1", 0)
+  //       .attr("x2", graphWidth - marginRight - marginLeft)
+  //       .attr("y2", 0)
+  //       .attr("stroke", "rgba(156, 165, 174, .4");
 
-      svg.selectAll(".domain").remove();
-      svg.selectAll(".x-axis .tick line").remove();
-      svg.selectAll(".y-axis .tick line:first-child").remove();
-      svg.selectAll("text").style("font-size", "12px");
-    }
-  }, [
-    weightData,
-    weightTimeBTN,
-    timeSelection,
-    userProfile,
-    defaultConvertWeight,
-    weightForcast,
-    timeMultipliers,
-  ]);
+  //     svg.selectAll(".domain").remove();
+  //     svg.selectAll(".x-axis .tick line").remove();
+  //     svg.selectAll(".y-axis .tick line:first-child").remove();
+  //     svg.selectAll("text").style("font-size", "12px");
+  //   }
+  // }, [
+  //   weightData,
+  //   weightTimeBTN,
+  //   timeSelection,
+  //   userProfile,
+  //   defaultConvertWeight,
+  //   weightForcast,
+  //   timeMultipliers,
+  // ]);
 
   // Handles logic for list sorting
   const handleOnDragEnd = (result, sortableList, listType) => {
@@ -531,8 +531,12 @@ const Dashboard = (props) => {
         userProfile={userProfile}
         weightData={weightData}
         timeSelection={timeSelection}
+        timeMultipliers={timeMultipliers}
+        defaultConvertWeight={defaultConvertWeight}
         setTimeSelection={setTimeSelection}
         weightTimeBTN={weightTimeBTN}
+        setWeightTimeBTN={setWeightTimeBTN}
+        weightForcast={weightForcast}
         setSelectedWeight={setSelectedWeight}
         toggleModal={toggleModal}
       />
