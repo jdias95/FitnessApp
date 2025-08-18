@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
-import RoutineFormModal from "../routines/RoutineFormModal";
-import WeightFormModal from "../weight/WeightFormModal";
+import CreateRoutineModal from "../routines/CreateRoutineModal";
+import AddWeightModal from "../weight/AddWeightModal";
 import DeleteWeightModal from "../weight/DeleteWeightModal";
 import DeleteRoutineModal from "../routines/DeleteRoutineModal";
 import UpdateRoutineModal from "../routines/UpdateRoutineModal";
-import ExerciseFormModal from "../exercises/ExerciseFormModal";
+import CreateExerciseModal from "../exercises/CreateExerciseModal";
 import UpdateExerciseModal from "../exercises/UpdateExerciseModal";
 import DeleteExerciseModal from "../exercises/DeleteExerciseModal";
 import DeleteTrackedExerciseModal from "../tracked-exercises/DeleteTrackedExerciseModal";
@@ -570,7 +570,7 @@ const Dashboard = (props) => {
       </div>
 
       {showWeightModal && (
-        <WeightFormModal
+        <AddWeightModal
           loginStatus={loginStatus}
           userProfile={userProfile}
           onClose={() => {
@@ -602,7 +602,7 @@ const Dashboard = (props) => {
       )}
 
       {showRoutineModal && (
-        <RoutineFormModal
+        <CreateRoutineModal
           loginStatus={loginStatus}
           onClose={() => {
             toggleModal("routine", false);
@@ -640,7 +640,7 @@ const Dashboard = (props) => {
       )}
 
       {showExerciseModal && (
-        <ExerciseFormModal
+        <CreateExerciseModal
           loginStatus={loginStatus}
           userProfile={userProfile}
           onClose={() => {
