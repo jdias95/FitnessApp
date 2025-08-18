@@ -13,15 +13,16 @@ const WeightGraph = ({
 }) => {
   const svgRef = useRef(null);
 
-  // Calculate weightTimeBTN outside useEffect using useMemo
-  useMemo(() => {
+  useEffect(() => {
     if (weightData && weightData.length > 0) {
       const dateValues = weightData
         .filter((d) => d.weight != null)
         .map((d) => d.date);
+
       const timeDiff =
         new Date(dateValues[dateValues.length - 1]).getTime() -
         new Date(dateValues[0]).getTime();
+
       setWeightTimeBTN(timeDiff);
     }
   }, [weightData, setWeightTimeBTN]);
