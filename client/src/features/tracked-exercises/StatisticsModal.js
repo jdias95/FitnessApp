@@ -7,7 +7,7 @@ import TooltipInput from "../help/TooltipInput";
 const StatisticsModal = (props) => {
   const {
     onClose,
-    selectedExercise,
+    lastExercise,
     selectedExerciseList,
     firstExercise,
     userProfile,
@@ -19,6 +19,7 @@ const StatisticsModal = (props) => {
   const [exerciseTimeBTN, setExerciseTimeBTN] = useState(0);
   const [timeSelectionTracked, setTimeSelectionTracked] = useState("3 months");
   const [graphSelection, setGraphSelection] = useState("working weight");
+
   const timeMultipliers = useMemo(() => {
     return {
       "3 months": 18,
@@ -28,63 +29,15 @@ const StatisticsModal = (props) => {
     };
   }, [exerciseTimeBTN]);
 
-  const calcVolume = (weight, sets, reps) => {
-    const volume = weight * sets * reps;
-    return Number(volume.toFixed(1));
-  };
-
-  const workingWeightDifference = firstExercise
-    ? selectedExercise.weight - firstExercise.weight
-    : 0;
-
-  const volume = selectedExercise.reps_high
-    ? Number(
-        (
-          (calcVolume(
-            selectedExercise.weight,
-            selectedExercise.sets,
-            selectedExercise.reps_low
-          ) +
-            calcVolume(
-              selectedExercise.weight,
-              selectedExercise.sets,
-              selectedExercise.reps_high
-            )) /
-          2
-        ).toFixed(1)
-      )
-    : calcVolume(
-        selectedExercise.weight,
-        selectedExercise.sets,
-        selectedExercise.reps_low
-      );
-
-  const firstVolume =
-    firstExercise && firstExercise.reps_high
-      ? Number(
-          (
-            (calcVolume(
-              firstExercise.weight,
-              firstExercise.sets,
-              firstExercise.reps_low
-            ) +
-              calcVolume(
-                firstExercise.weight,
-                firstExercise.sets,
-                firstExercise.reps_high
-              )) /
-            2
-          ).toFixed(1)
-        )
-      : firstExercise
-      ? calcVolume(
-          firstExercise.weight,
-          firstExercise.sets,
-          firstExercise.reps_low
-        )
+  const workingWeightDifference =
+    firstExercise && lastExercise
+      ? lastExercise.working_weight - firstExercise.working_weight
       : 0;
 
-  const volumeDifference = volume - firstVolume;
+  const volumeDifference =
+    firstExercise && lastExercise
+      ? lastExercise.volume - firstExercise.volume
+      : 0;
 
   const renderPercentageDifference = (difference, first) => {
     const percentage = Number(Math.abs((difference / first) * 100).toFixed(1));
@@ -111,73 +64,26 @@ const StatisticsModal = (props) => {
   useEffect(() => {
     d3.select(".exerciseGraph svg").remove();
 
-    const filteredExercises = selectedExerciseList.filter(
-      (exercise) => exercise.weight
-    );
+    const graphData = selectedExerciseList
+      .filter((exercise) => exercise.working_weight)
+      .map((exercise) => {
+        const weight =
+          graphSelection === "working weight"
+            ? exercise.working_weight
+            : exercise.volume;
 
-    const metricFilteredExercises = filteredExercises.map((exercise) => {
-      return { ...exercise, weight: defaultConvertWeight(exercise.weight) };
-    });
+        return {
+          ...exercise,
+          value:
+            userProfile?.measurement_type === "metric"
+              ? defaultConvertWeight(weight)
+              : weight,
+        };
+      });
 
-    const exerciseVolumes = filteredExercises.map((exercise) => {
-      return {
-        ...exercise,
-        weight:
-          exercise.reps_high &&
-          userProfile &&
-          userProfile.measurement_type !== "metric"
-            ? Number(
-                (
-                  (calcVolume(
-                    exercise.weight,
-                    exercise.sets,
-                    exercise.reps_low
-                  ) +
-                    calcVolume(
-                      exercise.weight,
-                      exercise.sets,
-                      exercise.reps_high
-                    )) /
-                  2
-                ).toFixed(1)
-              )
-            : userProfile && userProfile.measurement_type !== "metric"
-            ? calcVolume(exercise.weight, exercise.sets, exercise.reps_low)
-            : exercise.reps_high
-            ? defaultConvertWeight(
-                Number(
-                  (
-                    (calcVolume(
-                      exercise.weight,
-                      exercise.sets,
-                      exercise.reps_low
-                    ) +
-                      calcVolume(
-                        exercise.weight,
-                        exercise.sets,
-                        exercise.reps_high
-                      )) /
-                    2
-                  ).toFixed(1)
-                )
-              )
-            : defaultConvertWeight(
-                calcVolume(exercise.weight, exercise.sets, exercise.reps_low)
-              ),
-      };
-    });
+    const weightValues = graphData.map((d) => d.value);
 
-    const weightValues = filteredExercises
-      .filter((d) => d.weight != null)
-      .map((d) => d.weight);
-
-    const volumeWeightValues = exerciseVolumes
-      .filter((d) => d.weight != null)
-      .map((d) => d.weight);
-
-    const dateValues = filteredExercises
-      .filter((d) => d.weight != null)
-      .map((d) => d.date);
+    const dateValues = graphData.map((d) => d.date);
 
     setExerciseTimeBTN(
       new Date(dateValues[dateValues.length - 1]).getTime() -
@@ -196,29 +102,9 @@ const StatisticsModal = (props) => {
     const meanValue = d3.mean(weightValues);
     const padding = meanValue * 0.025;
 
-    const volumeMinValue = d3.min(volumeWeightValues);
-    const volumeMaxValue = d3.max(volumeWeightValues);
-    const volumeMeanValue = d3.mean(volumeWeightValues);
-    const volumePadding = volumeMeanValue * 0.025;
-
     const yScale = d3
       .scaleLinear()
-      .domain([
-        userProfile &&
-        userProfile.measurement_type !== "metric" &&
-        graphSelection === "working weight"
-          ? minValue - padding
-          : graphSelection === "working weight"
-          ? defaultConvertWeight(minValue - padding)
-          : volumeMinValue - volumePadding,
-        userProfile &&
-        userProfile.measurement_type !== "metric" &&
-        graphSelection === "working weight"
-          ? maxValue + padding
-          : graphSelection === "working weight"
-          ? defaultConvertWeight(maxValue + padding)
-          : volumeMaxValue + volumePadding,
-      ])
+      .domain([minValue - padding, maxValue + padding])
       .nice()
       .range([graphHeight - marginBottom, marginTop]);
 
@@ -230,7 +116,7 @@ const StatisticsModal = (props) => {
       .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
 
     const tickValues = [];
-    const enddDate = moment(selectedExercise.date, "YYYY-MM-DD");
+    const enddDate = moment(lastExercise.date, "YYYY-MM-DD");
 
     for (let i = 0; i < 6; i++) {
       const date = moment(enddDate).subtract(
@@ -273,15 +159,7 @@ const StatisticsModal = (props) => {
     svg
       .append("g")
       .append("path")
-      .datum(
-        userProfile &&
-          userProfile.measurement_type !== "metric" &&
-          graphSelection === "working weight"
-          ? filteredExercises
-          : graphSelection === "working weight"
-          ? metricFilteredExercises
-          : exerciseVolumes
-      )
+      .datum(graphData)
       .attr("fill", "none")
       .attr("stroke", "#ACEDFF")
       .attr("stroke-width", 2)
@@ -292,7 +170,7 @@ const StatisticsModal = (props) => {
         d3
           .line()
           .x((exercise) => xScale(new Date(exercise.date)))
-          .y((exercise) => yScale(exercise.weight))
+          .y((exercise) => yScale(exercise.value))
       );
 
     const yAxisGroup = svg
@@ -326,7 +204,7 @@ const StatisticsModal = (props) => {
     userProfile,
     graphSelection,
     defaultConvertWeight,
-    selectedExercise.date,
+    lastExercise.date,
     timeMultipliers,
     timeSelectionTracked,
   ]);
@@ -335,7 +213,7 @@ const StatisticsModal = (props) => {
     <Modal
       isOpen={true}
       hasHeader={true}
-      header={selectedExercise.name}
+      header={lastExercise.name}
       onClose={onClose}
       hasConfirm={false}
       isLarge={true}
@@ -367,14 +245,14 @@ const StatisticsModal = (props) => {
             >
               <p>Working Weight:&nbsp;</p>
               {userProfile.measurement_type !== "metric" ? (
-                <p>{selectedExercise.weight} lbs</p>
+                <p>{lastExercise.working_weight} lbs</p>
               ) : (
-                <p>{defaultConvertWeight(selectedExercise.weight)} kgs</p>
+                <p>{defaultConvertWeight(lastExercise.working_weight)} kgs</p>
               )}
               <div className="flex">
                 {renderPercentageDifference(
                   workingWeightDifference,
-                  firstExercise.weight
+                  firstExercise.working_weight
                 )}
               </div>
             </div>
@@ -410,46 +288,19 @@ const StatisticsModal = (props) => {
               }}
             >
               <p>Volume:&nbsp;</p>
-              {userProfile.measurement_type !== "metric" ? (
-                <p>
-                  {calcVolume(
-                    selectedExercise.weight,
-                    selectedExercise.sets,
-                    selectedExercise.reps_low
-                  )}
-                  {selectedExercise.reps_high
-                    ? `-${calcVolume(
-                        selectedExercise.weight,
-                        selectedExercise.sets,
-                        selectedExercise.reps_high
-                      )}`
-                    : ""}
-                  {" lbs "}
-                </p>
+              {userProfile?.measurement_type !== "metric" ? (
+                <p>{`${lastExercise.volume?.toLocaleString()} lbs`}</p>
               ) : (
-                <p>
-                  {defaultConvertWeight(
-                    calcVolume(
-                      selectedExercise.weight,
-                      selectedExercise.sets,
-                      selectedExercise.reps_low
-                    )
-                  )}
-                  {selectedExercise.reps_high
-                    ? `-${defaultConvertWeight(
-                        calcVolume(
-                          selectedExercise.weight,
-                          selectedExercise.sets,
-                          selectedExercise.reps_high
-                        )
-                      )}`
-                    : ""}
-                  {" kgs "}
-                </p>
+                <p>{`${defaultConvertWeight(
+                  lastExercise.volume
+                )?.toLocaleString()} kgs`}</p>
               )}
-              {firstVolume ? (
+              {firstExercise.volume ? (
                 <div className="flex">
-                  {renderPercentageDifference(volumeDifference, firstVolume)}
+                  {renderPercentageDifference(
+                    volumeDifference,
+                    firstExercise.volume
+                  )}
                 </div>
               ) : (
                 ""

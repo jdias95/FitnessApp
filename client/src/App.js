@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -32,6 +32,7 @@ function App() {
   const [exercises, setExercises] = useState([]);
   const [trackedExercises, setTrackedExercises] = useState({});
   const [routineExercises, setRoutineExercises] = useState({});
+  const [workoutLog, setWorkoutLog] = useState([]);
   const [openMenus, setOpenMenus] = useState({});
   const [showWalkthroughModal, setShowWalkthroughModal] = useState(false);
   const formattedDate = new Date().toISOString().split("T")[0];
@@ -42,6 +43,16 @@ function App() {
       month: "short",
       day: "numeric",
     });
+
+  const formatDateForSQL = (date) => {
+    const d = new Date(date);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const todaySQL = formatDateForSQL(new Date());
 
   const apiURL =
     process.env.NODE_ENV === "production"
@@ -62,154 +73,177 @@ function App() {
     }
   };
 
-  const fetchUserData = async (
-    apiURL,
-    loginStatus,
-    setUserProfile,
-    setRoutines,
-    setExercises,
-    setTrackedExercises
-  ) => {
-    if (!loginStatus) {
-      setUserProfile(null);
-      setRoutines([]);
-      setExercises([]);
-      setTrackedExercises({});
-      return;
-    }
+  const fetchUserData = useCallback(
+    async (
+      apiURL,
+      loginStatus,
+      setUserProfile,
+      setRoutines,
+      setExercises,
+      setTrackedExercises
+    ) => {
+      if (!loginStatus) {
+        setUserProfile(null);
+        setRoutines([]);
+        setExercises([]);
+        setTrackedExercises({});
+        return;
+      }
 
-    try {
-      // Fetch all data concurrently
-      const [routinesRes, exercisesRes, trackedExercisesRes, profileRes] =
-        await Promise.allSettled([
+      try {
+        // Fetch all data concurrently
+        const [
+          routinesRes,
+          exercisesRes,
+          trackedExercisesRes,
+          profileRes,
+          workoutLogRes,
+        ] = await Promise.allSettled([
           Axios.get(`${apiURL}/get/routines/${loginStatus.id}`),
           Axios.get(`${apiURL}/get/exercises/${loginStatus.id}`),
           Axios.get(`${apiURL}/get/tracked-exercises/${loginStatus.id}`),
           Axios.get(`${apiURL}/get/profile/${loginStatus.id}`),
+          Axios.get(`${apiURL}/get/workout-log/${loginStatus.id}/${todaySQL}`),
         ]);
 
-      // Handle routines and exercises
-      setRoutines(
-        routinesRes.status === "fulfilled" ? routinesRes.value.data || [] : []
-      );
-      setExercises(
-        exercisesRes.status === "fulfilled" ? exercisesRes.value.data || [] : []
-      );
-
-      // Handle tracked exercises
-      if (
-        trackedExercisesRes.status === "fulfilled" &&
-        trackedExercisesRes.value.data.length > 0
-      ) {
-        let groupedExercises = trackedExercisesRes.value.data.reduce(
-          (acc, exercise) => {
-            acc[exercise.name] = acc[exercise.name] || [];
-            acc[exercise.name].push(exercise);
-            return acc;
-          },
-          {}
+        // Handle routines and exercises
+        setRoutines(
+          routinesRes.status === "fulfilled" ? routinesRes.value.data || [] : []
+        );
+        setExercises(
+          exercisesRes.status === "fulfilled"
+            ? exercisesRes.value.data || []
+            : []
+        );
+        setTrackedExercises(
+          trackedExercisesRes.status === "fulfilled"
+            ? trackedExercisesRes.value.data || {}
+            : {}
         );
 
-        try {
-          const trackedOrderRes = await Axios.get(
-            `${apiURL}/get/tracked-exercise-order/${loginStatus.id}`
-          );
-          if (trackedOrderRes.data.length > 0) {
-            groupedExercises["sortOrder"] = trackedOrderRes.data.map(
-              (exercise) => ({
-                id: exercise.id,
-                user_id: exercise.user_id,
-                name: exercise.name,
-                sort_order: exercise.sort_order,
-              })
+        // Handle profile (create if not found)
+        if (profileRes.status === "fulfilled") {
+          setUserProfile(profileRes.value.data);
+        } else if (
+          profileRes.reason.response &&
+          profileRes.reason.response.status === 404
+        ) {
+          // Profile not found, create new one
+          const newProfile = {
+            weight: 0,
+            height: 0,
+            age: 0,
+            activityLevel: "",
+            gender: "",
+            measurementType: "imperial",
+            weightGoal: 0,
+            targetWeight: 0,
+          };
+
+          await Axios.post(`${apiURL}/insert/profile`, {
+            userId: loginStatus.id,
+            ...newProfile,
+          });
+
+          // Fetch and set the newly created profile
+          try {
+            const newProfileRes = await Axios.get(
+              `${apiURL}/get/profile/${loginStatus.id}`
             );
+            setUserProfile(newProfileRes.data);
+          } catch (fetchError) {
+            console.error("Error fetching newly created profile:", fetchError);
+            setUserProfile(newProfile); // Fallback: set default profile if fetch fails
           }
-        } catch (orderError) {
-          console.error("Error fetching tracked exercise order:", orderError);
+        } else {
+          console.error("Error fetching profile data:", profileRes.reason);
+          setUserProfile(null);
         }
 
-        setTrackedExercises(groupedExercises);
-      } else {
-        setTrackedExercises({});
-      }
+        // Handle workout log
+        const todaysWorkoutLog = [];
+        if (workoutLogRes.status === "fulfilled") {
+          const id = workoutLogRes.value.data.id;
 
-      // Handle profile (create if not found)
-      if (profileRes.status === "fulfilled") {
-        setUserProfile(profileRes.value.data);
-      } else if (
-        profileRes.reason.response &&
-        profileRes.reason.response.status === 404
-      ) {
-        // Profile not found, create new one
-        const newProfile = {
-          weight: 0,
-          height: 0,
-          age: 0,
-          activityLevel: "",
-          gender: "",
-          measurementType: "imperial",
-          weightGoal: 0,
-          targetWeight: 0,
-        };
+          try {
+            const logExercisesRes = await Axios.get(
+              `${apiURL}/get/log-exercises/${id}`
+            );
+            const logExercises = logExercisesRes.data || [];
 
-        await Axios.post(`${apiURL}/insert/profile`, {
-          userId: loginStatus.id,
-          ...newProfile,
-        });
+            const logSetsPromises = logExercises.map((logEx) =>
+              Axios.get(`${apiURL}/get/log-sets/${logEx.id}`)
+                .then((res) => ({ id: logEx.id, sets: res.data || [] }))
+                .catch((err) => {
+                  console.error(
+                    `Failed to fetch sets for logEx ${logEx.id}:`,
+                    err
+                  );
+                  return { id: logEx.id, sets: [] };
+                })
+            );
 
-        // Fetch and set the newly created profile
-        try {
-          const newProfileRes = await Axios.get(
-            `${apiURL}/get/profile/${loginStatus.id}`
-          );
-          setUserProfile(newProfileRes.data);
-        } catch (fetchError) {
-          console.error("Error fetching newly created profile:", fetchError);
-          setUserProfile(newProfile); // Fallback: set default profile if fetch fails
+            const logSetsResults = await Promise.all(logSetsPromises);
+
+            logSetsResults.forEach(({ id, sets }) => {
+              const logEx = logExercises.find((le) => le.id === id);
+              todaysWorkoutLog.push({
+                name: logEx.exercise_name,
+                tracked: logEx.tracked,
+                bw: logEx.bw,
+                sets,
+              });
+            });
+          } catch (logExError) {
+            console.error("Failed to fetch log exercises:", logExError);
+          }
         }
-      } else {
-        console.error("Error fetching profile data:", profileRes.reason);
-        setUserProfile(null);
+
+        setWorkoutLog(todaysWorkoutLog);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
+    },
+    [todaySQL]
+  );
 
-  const fetchWeightData = async (
-    apiURL,
-    loginStatus,
-    userProfile,
-    setPreviousWeight,
-    setWeightData
-  ) => {
-    if (!loginStatus) {
-      setPreviousWeight({});
-      setWeightData([]);
-      return;
-    }
+  const fetchWeightData = useCallback(
+    async (
+      apiURL,
+      loginStatus,
+      userProfile,
+      setPreviousWeight,
+      setWeightData
+    ) => {
+      if (!loginStatus) {
+        setPreviousWeight({});
+        setWeightData([]);
+        return;
+      }
 
-    try {
-      const response = await Axios.get(
-        `${apiURL}/get/weight/${loginStatus.id}`
-      );
-      const weightData = response.data;
-      setPreviousWeight(weightData[weightData.length - 1]);
-
-      if (userProfile && userProfile.measurement_type !== "imperial") {
-        setWeightData(
-          weightData.map((item) => ({
-            ...item,
-            weight: defaultConvertWeight(item.weight),
-          }))
+      try {
+        const response = await Axios.get(
+          `${apiURL}/get/weight/${loginStatus.id}`
         );
-      } else {
-        setWeightData(weightData);
+        const weightData = response.data;
+        setPreviousWeight(weightData[weightData.length - 1]);
+
+        if (userProfile && userProfile.measurement_type !== "imperial") {
+          setWeightData(
+            weightData.map((item) => ({
+              ...item,
+              weight: defaultConvertWeight(item.weight),
+            }))
+          );
+        } else {
+          setWeightData(weightData);
+        }
+      } catch (error) {
+        console.error("Error fetching weight data:", error);
       }
-    } catch (error) {
-      console.error("Error fetching weight data:", error);
-    }
-  };
+    },
+    []
+  );
 
   const convertWeight = (kgs) => {
     const lbs = kgs * 2.20462262185;
@@ -233,6 +267,22 @@ function App() {
       if (!isNaN(parsedValue) && parsedValue >= 0) {
         if (str.length >= 6 || hasMultipleDigitsAfterDecimal) {
           return parseFloat(str.slice(0, str.length - 1));
+        }
+        return parsedValue;
+      } else {
+        throw new Error("Value is not a valid number.");
+      }
+    } catch (error) {
+      return "";
+    }
+  };
+
+  const safeParseInt = (str) => {
+    try {
+      const parsedValue = parseInt(str);
+      if (!isNaN(parsedValue) && parsedValue >= 1) {
+        if (str.length >= 3) {
+          return parseInt(str.slice(0, 2));
         }
         return parsedValue;
       } else {
@@ -352,6 +402,8 @@ function App() {
                 setRoutines={setRoutines}
                 exercises={exercises}
                 setExercises={setExercises}
+                workoutLog={workoutLog}
+                setWorkoutLog={setWorkoutLog}
                 trackedExercises={trackedExercises}
                 setTrackedExercises={setTrackedExercises}
                 weightData={weightData}
@@ -359,6 +411,7 @@ function App() {
                 setUserProfile={setUserProfile}
                 convertWeight={convertWeight}
                 defaultConvertWeight={defaultConvertWeight}
+                safeParseInt={safeParseInt}
                 safeParseFloat={safeParseFloat}
                 openMenus={openMenus}
                 setOpenMenus={setOpenMenus}
@@ -418,7 +471,7 @@ function App() {
       setExercises,
       setTrackedExercises
     );
-  }, [loginStatus, apiURL]);
+  }, [loginStatus, apiURL, fetchUserData]);
 
   useEffect(() => {
     fetchWeightData(
@@ -428,7 +481,7 @@ function App() {
       setPreviousWeight,
       setWeightData
     );
-  }, [loginStatus, userProfile, apiURL, setPreviousWeight]);
+  }, [loginStatus, userProfile, apiURL, setPreviousWeight, fetchWeightData]);
 
   return (
     <div className="App">

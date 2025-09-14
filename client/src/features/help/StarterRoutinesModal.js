@@ -21,52 +21,101 @@ const StarterRoutinesModal = (props) => {
     ];
 
     const exerciseData = [
-      { userId: loginStatus.id, name: "Squats", repsHigh: 8, repsLow: 5 },
-      { userId: loginStatus.id, name: "Bench Press", repsHigh: 8, repsLow: 5 },
+      {
+        userId: loginStatus.id,
+        name: "Squats",
+        repsHigh: 8,
+        repsLow: 5,
+        setsHigh: 3,
+        setsLow: 1,
+      },
+      {
+        userId: loginStatus.id,
+        name: "Bench Press",
+        repsHigh: 8,
+        repsLow: 5,
+        setsHigh: 4,
+        setsLow: 2,
+      },
       {
         userId: loginStatus.id,
         name: "Bent-over Rows",
         repsHigh: 8,
         repsLow: 5,
+        setsHigh: 4,
+        setsLow: 2,
       },
       {
         userId: loginStatus.id,
         name: "Overhead Press",
         repsHigh: 8,
         repsLow: 5,
+        setsHigh: 3,
+        setsLow: 2,
       },
       {
         userId: loginStatus.id,
         name: "Dumbbell Romanian Deadlift",
         repsHigh: 8,
         repsLow: 5,
+        setsHigh: 3,
+        setsLow: 1,
       },
       {
         userId: loginStatus.id,
         name: "Incline Bench Press",
         repsHigh: 8,
         repsLow: 5,
+        setsHigh: 3,
+        setsLow: 1,
       },
-      { userId: loginStatus.id, name: "Lat Pulldown", repsHigh: 8, repsLow: 5 },
+      {
+        userId: loginStatus.id,
+        name: "Lat Pulldown",
+        repsHigh: 8,
+        repsLow: 5,
+        setsHigh: 4,
+        setsLow: 3,
+      },
       {
         userId: loginStatus.id,
         name: "Dumbbell Lateral Raise",
         repsHigh: 12,
         repsLow: 8,
+        setsHigh: 4,
+        setsLow: 3,
       },
-      { userId: loginStatus.id, name: "Lunges", repsHigh: 8, repsLow: 5 },
-      { userId: loginStatus.id, name: "Dips", repsHigh: 8, repsLow: 5 },
+      {
+        userId: loginStatus.id,
+        name: "Lunges",
+        repsHigh: 8,
+        repsLow: 5,
+        setsHigh: 4,
+        setsLow: 2,
+      },
+      {
+        userId: loginStatus.id,
+        name: "Dips",
+        repsHigh: 8,
+        repsLow: 5,
+        setsHigh: 3,
+        setsLow: 2,
+      },
       {
         userId: loginStatus.id,
         name: "Pullups (Assisted if needed)",
         repsHigh: 8,
         repsLow: 5,
+        setsHigh: 4,
+        setsLow: 2,
       },
       {
         userId: loginStatus.id,
         name: "Seated Shoulder Press",
         repsHigh: 8,
         repsLow: 5,
+        setsHigh: 3,
+        setsLow: 2,
       },
     ];
 
@@ -98,7 +147,8 @@ const StarterRoutinesModal = (props) => {
               name: exercise.name,
               repsHigh: exercise.repsHigh,
               repsLow: exercise.repsLow,
-              sets: 3,
+              setsHigh: exercise.setsHigh,
+              setsLow: exercise.setsLow,
               weight: 0,
               tracked: false,
               bw: false,
@@ -119,7 +169,8 @@ const StarterRoutinesModal = (props) => {
                 name: exercise.name,
                 repsHigh: exercise.repsHigh,
                 repsLow: exercise.repsLow,
-                sets: 3,
+                setsHigh: exercise.setsHigh,
+                setsLow: exercise.setsLow,
                 weight: 0,
                 tracked: false,
                 bw: false,
@@ -135,7 +186,8 @@ const StarterRoutinesModal = (props) => {
                 name: exercise.name,
                 reps_high: exercise.repsHigh,
                 reps_low: exercise.repsLow,
-                sets: 3,
+                sets_high: exercise.setsHigh,
+                sets_low: exercise.setsLow,
                 weight: 0,
                 tracked: false,
                 bw: false,
@@ -163,8 +215,7 @@ const StarterRoutinesModal = (props) => {
       isOpen={true}
       hasHeader={false}
       onClose={onClose}
-      onConfirm={(e) => {
-        e.preventDefault();
+      onConfirm={() => {
         createRoutines();
       }}
       isLarge={true}

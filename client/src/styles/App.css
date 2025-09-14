@@ -109,6 +109,73 @@ p {
   transition: content 0.3s;
 }
 
+.add-log-svg {
+  position: fixed;
+  width: 5em;
+  height: 5em;
+  bottom: 2em;
+  right: 2em;
+  z-index: 200;
+  cursor: pointer;
+  color: #22c55e;
+}
+
+.add-log-svg:hover {
+  scale: 1.1;
+  animation: pulse 1s infinite;
+  transition: transform 0.3s;
+  color: #16a34a;
+}
+
+.routine-list {
+  padding: 0;
+}
+
+.routine-list .routine-button {
+  padding: 1em 2em;
+  margin: 0.5em 0;
+}
+
+.routine-list .routine-button,
+.workout-log-modal-content .log-add-exercise-button,
+.workout-log-modal-content .log-add-set-button {
+  width: 100%;
+}
+
+.routine-list .routine-button,
+.workout-log-modal-content .log-add-exercise-button,
+.workout-log-modal-content .log-remove-exercise-button,
+.workout-log-modal-content .log-add-set-button,
+.workout-log-modal-content .log-remove-set-button {
+  text-align: center;
+  background-color: #1c2432;
+  color: white;
+  box-shadow: none;
+}
+
+.workout-log-modal-content .log-remove-exercise-button,
+.workout-log-modal-content .log-add-exercise-button {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.workout-log-modal-content .log-remove-exercise-button,
+.workout-log-modal-content .log-remove-set-button {
+  width: 30%;
+}
+
+#workout-log-modal,
+#workout-log-modal div {
+  margin: auto 0;
+}
+
+.routine-button:hover {
+  cursor: pointer;
+  background-color: #13171c;
+  color: black;
+  transition: background-color 0.3s;
+}
+
 .page {
   cursor: pointer;
 }
@@ -625,7 +692,7 @@ a {
 }
 
 #sets {
-  top: -120%;
+  top: -200%;
 }
 
 #reps {
@@ -637,11 +704,23 @@ a {
 }
 
 #track {
-  top: -440%;
+  top: -320%;
 }
 
 #bw {
-  top: -550%;
+  top: -450%;
+}
+
+.log-track {
+  top: -540%;
+}
+
+.log-bw {
+  top: -540%;
+}
+
+.pl-1 {
+  padding-left: 1rem;
 }
 
 #working-weight {

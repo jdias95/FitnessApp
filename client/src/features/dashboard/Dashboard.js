@@ -9,17 +9,16 @@ import UpdateExerciseModal from "../exercises/UpdateExerciseModal";
 import DeleteExerciseModal from "../exercises/DeleteExerciseModal";
 import DeleteTrackedExerciseModal from "../tracked-exercises/DeleteTrackedExerciseModal";
 import NotesModal from "../exercises/NotesModal";
-import * as d3 from "d3";
-import moment from "moment";
 import StatisticsModal from "../tracked-exercises/StatisticsModal";
 import { useNavigate } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Axios from "axios";
 import StarterRoutinesModal from "../help/StarterRoutinesModal";
 import UpdateTrackedExerciseNameModal from "../tracked-exercises/UpdateTrackedExerciseNameModal";
 import WeightWidget from "../widgets/WeightWidget";
 import RoutineWidget from "../widgets/RoutineWidget";
 import TrackedExerciseWidget from "../widgets/TrackedExerciseWidget";
+import RoutineSelectionModal from "../workout-log/RoutineSelectionModal";
+import WorkoutLogModal from "../workout-log/WorkoutLogModal";
 
 const Dashboard = (props) => {
   const navigate = useNavigate();
@@ -42,6 +41,8 @@ const Dashboard = (props) => {
     setRoutines,
     exercises,
     setExercises,
+    workoutLog,
+    setWorkoutLog,
     trackedExercises,
     setTrackedExercises,
     weightData,
@@ -49,6 +50,7 @@ const Dashboard = (props) => {
     setUserProfile,
     convertWeight,
     defaultConvertWeight,
+    safeParseInt,
     safeParseFloat,
     openMenus,
     setOpenMenus,
@@ -69,7 +71,7 @@ const Dashboard = (props) => {
     useState(false);
   const [firstExercise, setFirstExercise] = useState({});
   const [selectedExercise, setSelectedExercise] = useState({});
-  const [showExerciseModal, setShowExerciseModal] = useState(false);
+  const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
   const [showUpdateExerciseModal, setShowUpdateExerciseModal] = useState(false);
   const [showDeleteExerciseModal, setShowDeleteExerciseModal] = useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
@@ -80,6 +82,10 @@ const Dashboard = (props) => {
     setShowUpdateTrackedExerciseNameModal,
   ] = useState(false);
   const [showStatisticsModal, setShowStatisticsModal] = useState(false);
+  const [selectedRoutineForLog, setSelectedRoutineForLog] = useState(null);
+  const [showRoutineSelectionModal, setShowRoutineSelectionModal] =
+    useState(false);
+  const [showWorkoutLogModal, setShowWorkoutLogModal] = useState(false);
   const timeMultipliers = useMemo(() => {
     return {
       "1 month": 6,
@@ -111,7 +117,7 @@ const Dashboard = (props) => {
         setShowDeleteRoutineModal(isOpen);
         break;
       case "exercise":
-        setShowExerciseModal(isOpen);
+        setShowCreateExerciseModal(isOpen);
         break;
       case "notes":
         setShowNotesModal(isOpen);
@@ -133,6 +139,12 @@ const Dashboard = (props) => {
         break;
       case "starterRoutines":
         setShowStarterRoutinesModal(isOpen);
+        break;
+      case "routineSelection":
+        setShowRoutineSelectionModal(isOpen);
+        break;
+      case "workoutLog":
+        setShowWorkoutLogModal(isOpen);
         break;
       default:
         break;
@@ -203,266 +215,6 @@ const Dashboard = (props) => {
     }
   }, [userProfile]);
 
-  // useEffect(() => {
-  //   d3.select(".weightGraph svg").remove();
-
-  //   if (weightData.length > 0) {
-  //     const weightValues = weightData
-  //       .filter((d) => d.weight != null)
-  //       .map((d) => d.weight);
-  //     const dateValues = weightData
-  //       .filter((d) => d.weight != null)
-  //       .map((d) => d.date);
-
-  //     setWeightTimeBTN(
-  //       new Date(dateValues[dateValues.length - 1]).getTime() -
-  //         new Date(dateValues[0]).getTime()
-  //     );
-
-  //     const graphWidth = 500;
-  //     const graphHeight = 400;
-  //     const marginTop = 20;
-  //     const marginRight = 20;
-  //     const marginBottom = 20;
-  //     const marginLeft = 30;
-
-  //     const minValue = d3.min(weightValues);
-  //     const maxValue = d3.max(weightValues);
-  //     const meanValue = d3.mean(weightValues);
-  //     const padding = meanValue * 0.025;
-
-  //     const yScale = d3
-  //       .scaleLinear()
-  //       .domain([
-  //         userProfile &&
-  //         userProfile.target_weight &&
-  //         userProfile.measurement_type !== "metric"
-  //           ? d3.min([userProfile.target_weight - padding, minValue - padding])
-  //           : userProfile && userProfile.target_weight
-  //           ? d3.min([
-  //               defaultConvertWeight(userProfile.target_weight) - padding,
-  //               minValue - padding,
-  //             ])
-  //           : minValue - padding,
-  //         userProfile &&
-  //         userProfile.target_weight &&
-  //         userProfile.measurement_type !== "metric"
-  //           ? d3.max([userProfile.target_weight + padding, maxValue + padding])
-  //           : userProfile && userProfile.target_weight
-  //           ? d3.max([
-  //               defaultConvertWeight(userProfile.target_weight) + padding,
-  //               maxValue + padding,
-  //             ])
-  //           : maxValue + padding,
-  //       ])
-  //       .nice()
-  //       .range([graphHeight - marginBottom, marginTop]);
-
-  //     const svg = d3
-  //       .select(".weightGraph")
-  //       .append("svg")
-  //       .attr("width", "100%")
-  //       .attr("height", graphHeight)
-  //       .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
-
-  //     const tickValues = [];
-  //     const endDate = moment(
-  //       weightData[weightData.length - 1].date,
-  //       "YYYY-MM-DD"
-  //     );
-
-  //     for (let i = 0; i < 6; i++) {
-  //       const date = moment(endDate).subtract(
-  //         timeMultipliers[timeSelection] * i,
-  //         "days"
-  //       );
-  //       tickValues.push(date.toDate());
-  //     }
-
-  //     const xScale = d3
-  //       .scaleTime()
-  //       .domain([
-  //         new Date(tickValues[tickValues.length - 1]),
-  //         new Date(tickValues[0]),
-  //       ])
-  //       .range([marginLeft, graphWidth - marginRight]);
-
-  //     svg
-  //       .append("g")
-  //       .attr("class", "x-axis")
-  //       .attr("transform", `translate(0, ${graphHeight - marginBottom})`)
-  //       .call(
-  //         d3
-  //           .axisBottom(xScale)
-  //           .tickValues(tickValues)
-  //           .tickFormat((date) => {
-  //             return date.toLocaleDateString().slice(0, -5);
-  //           })
-  //       );
-
-  //     const line = d3
-  //       .line()
-  //       .defined((d) => {
-  //         return d.weight != null;
-  //       })
-  //       .x((d) => xScale(new Date(d.date)))
-  //       .y((d) => yScale(d.weight));
-
-  //     svg
-  //       .append("defs")
-  //       .append("clipPath")
-  //       .attr("id", "clip-path")
-  //       .append("rect")
-  //       .attr("transform", `translate(${marginLeft}, 0)`)
-  //       .attr("width", graphWidth)
-  //       .attr("height", graphHeight);
-
-  //     svg
-  //       .append("path")
-  //       .datum(weightData)
-  //       .attr("fill", "none")
-  //       .attr("stroke", "#ACEDFF")
-  //       .attr("stroke-width", 3)
-  //       .attr("width", graphWidth)
-  //       .attr("stroke-linecap", "round")
-  //       .attr("d", line)
-  //       .attr("clip-path", "url(#clip-path)");
-
-  //     if (userProfile && userProfile.target_weight) {
-  //       const targetWeight =
-  //         userProfile.measurement_type !== "metric"
-  //           ? userProfile.target_weight
-  //           : defaultConvertWeight(userProfile.target_weight);
-
-  //       svg
-  //         .append("line")
-  //         .attr("class", "target-line")
-  //         .attr("x1", marginLeft)
-  //         .attr("y1", yScale(targetWeight))
-  //         .attr("x2", graphWidth - marginRight)
-  //         .attr("y2", yScale(targetWeight))
-  //         .attr("stroke", "rgb(138, 201, 38)")
-  //         .attr("stroke-width", 2);
-
-  //       const screenWidth = window.innerWidth;
-
-  //       const tooltip = d3
-  //         .select("body")
-  //         .append("div")
-  //         .attr("class", "tooltip")
-  //         .style("opacity", 0)
-  //         .style("padding", "15px")
-  //         .style("font-size", screenWidth < 800 ? "11px" : "14px")
-  //         .style("font-family", "Open Sans")
-  //         .style("z-index", "-100");
-
-  //       svg
-  //         .append("text")
-  //         .attr("x", (graphWidth - marginLeft - marginRight) / 2)
-  //         .attr(
-  //           "y",
-  //           userProfile.target_weight - userProfile.weight > 0
-  //             ? yScale(targetWeight) - 10
-  //             : yScale(targetWeight) + 20
-  //         )
-  //         .attr("text-anchor", "start")
-  //         .attr("fill", "rgb(138, 201, 38)")
-  //         .text(
-  //           weightForcast[0] > 1 ||
-  //             (weightForcast[0] > 0 && weightForcast[0] < 1)
-  //             ? `${Number(weightForcast[0])} ${weightForcast[1]}`
-  //             : Number(weightForcast[0]) === 1
-  //             ? `${Number(weightForcast[0])} ${weightForcast[1].slice(
-  //                 0,
-  //                 weightForcast[1].length - 1
-  //               )}`
-  //             : ""
-  //         );
-
-  //       if (weightForcast[0]) {
-  //         svg
-  //           .append("image")
-  //           .attr("class", "tooltip-png2")
-  //           .attr("x", (graphWidth - marginLeft - marginRight) / 2 - 18)
-  //           .attr(
-  //             "y",
-  //             userProfile.target_weight - userProfile.weight > 0
-  //               ? yScale(targetWeight) - 22
-  //               : yScale(targetWeight) + 9
-  //           )
-  //           .attr("xlink:href", process.env.PUBLIC_URL + "/tooltip.png")
-  //           .on("mouseover", function (event) {
-  //             d3.select(this).attr(
-  //               "xlink:href",
-  //               process.env.PUBLIC_URL + "/tooltip-hover.png"
-  //             );
-  //             tooltip
-  //               .html(
-  //                 "Please note, the estimated daily calorie budget is tailored to your weekly goal and profile settings. This calculation assumes your average daily calorie intake aligns closely with the budget. Remember, it's a rough estimate, and you may discover better results by adjusting your calorie intake based on your preferences and needs."
-  //               )
-  //               .style("opacity", 1)
-  //               .style("position", "absolute")
-  //               .style(
-  //                 "left",
-  //                 screenWidth < 800
-  //                   ? `${event.pageX - 137}px`
-  //                   : `${event.pageX - 155}px`
-  //               )
-  //               .style(
-  //                 "top",
-  //                 screenWidth < 800
-  //                   ? `${event.pageY - 140}px`
-  //                   : `${event.pageY - 160}px`
-  //               )
-  //               .style("z-index", "100");
-  //           })
-  //           .on("mouseout", function () {
-  //             d3.select(this).attr(
-  //               "xlink:href",
-  //               process.env.PUBLIC_URL + "/tooltip.png"
-  //             );
-  //             tooltip.style("opacity", 0).style("z-index", "-100");
-  //           });
-  //       }
-  //     }
-
-  //     const yAxisGroup = svg
-  //       .append("g")
-  //       .attr("class", "y-axis")
-  //       .attr("transform", `translate(${marginLeft}, 0)`)
-  //       .call(d3.axisLeft(yScale));
-
-  //     yAxisGroup
-  //       .append("text")
-  //       .attr("transform", "rotate(-90)")
-  //       .attr("text-anchor", "end")
-  //       .text("Y-Axis Label");
-
-  //     yAxisGroup
-  //       .selectAll("g.tick")
-  //       .append("line")
-  //       .attr("class", "gridline")
-  //       .attr("x1", 0)
-  //       .attr("y1", 0)
-  //       .attr("x2", graphWidth - marginRight - marginLeft)
-  //       .attr("y2", 0)
-  //       .attr("stroke", "rgba(156, 165, 174, .4");
-
-  //     svg.selectAll(".domain").remove();
-  //     svg.selectAll(".x-axis .tick line").remove();
-  //     svg.selectAll(".y-axis .tick line:first-child").remove();
-  //     svg.selectAll("text").style("font-size", "12px");
-  //   }
-  // }, [
-  //   weightData,
-  //   weightTimeBTN,
-  //   timeSelection,
-  //   userProfile,
-  //   defaultConvertWeight,
-  //   weightForcast,
-  //   timeMultipliers,
-  // ]);
-
   // Handles logic for list sorting
   const handleOnDragEnd = (result, sortableList, listType) => {
     const { source, destination } = result;
@@ -500,14 +252,14 @@ const Dashboard = (props) => {
             tracked: exercise.tracked,
             bw: exercise.bw,
             notes: exercise.notes,
-            sortOrder: sortOrder[index],
+            sortOrder: exercise.sort_order,
           });
         })
       ).catch((error) => {
         console.log(error);
       });
 
-      // Sets the selected exercise to reflect the new order if the exercises is updated after sorting
+      // Sets the selected exercise to reflect the new order if the exercise is updated after sorting
       setSelectedExercise(sortableList[destinationIndex]);
     } else if (listType === "trackedExercises") {
       Promise.all(
@@ -515,8 +267,8 @@ const Dashboard = (props) => {
           return Axios.put(
             `${apiURL}/update/tracked-exercise-order/${exercise.id}`,
             {
-              name: exercise.name,
-              sortOrder: sortOrder[index],
+              name: exercise.exercise_name,
+              sortOrder: exercise.sort_order,
             }
           );
         })
@@ -640,7 +392,7 @@ const Dashboard = (props) => {
         />
       )}
 
-      {showExerciseModal && (
+      {showCreateExerciseModal && (
         <CreateExerciseModal
           loginStatus={loginStatus}
           userProfile={userProfile}
@@ -651,13 +403,11 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           routineExercises={routineExercises}
           setRoutineExercises={setRoutineExercises}
-          formattedDate={formattedDate}
           setShowInfo={setShowInfo}
           showInfo={showInfo}
-          setTrackedExercises={setTrackedExercises}
-          trackedExercises={trackedExercises}
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
+          safeParseInt={safeParseInt}
           safeParseFloat={safeParseFloat}
           apiURL={apiURL}
         />
@@ -674,13 +424,11 @@ const Dashboard = (props) => {
           selectedRoutine={selectedRoutine}
           selectedExercise={selectedExercise}
           setRoutineExercises={setRoutineExercises}
-          formattedDate={formattedDate}
           setShowInfo={setShowInfo}
           showInfo={showInfo}
-          setTrackedExercises={setTrackedExercises}
-          trackedExercises={trackedExercises}
           convertWeight={convertWeight}
           defaultConvertWeight={defaultConvertWeight}
+          safeParseInt={safeParseInt}
           safeParseFloat={safeParseFloat}
           apiURL={apiURL}
         />
@@ -740,7 +488,7 @@ const Dashboard = (props) => {
           onClose={() => {
             toggleModal("exerciseStatistics", false);
           }}
-          selectedExercise={selectedExercise[selectedExercise.length - 1]}
+          lastExercise={selectedExercise[selectedExercise.length - 1]}
           selectedExerciseList={selectedExercise}
           firstExercise={firstExercise}
           userProfile={userProfile}
@@ -763,6 +511,64 @@ const Dashboard = (props) => {
           apiURL={apiURL}
         />
       )}
+
+      {showRoutineSelectionModal && (
+        <RoutineSelectionModal
+          onClose={() => {
+            toggleModal("routineSelection", false);
+          }}
+          routines={routines}
+          getExercisesForRoutine={getExercisesForRoutine}
+          setSelectedRoutineForLog={setSelectedRoutineForLog}
+          toggleModal={toggleModal}
+        />
+      )}
+
+      {showWorkoutLogModal && (
+        <WorkoutLogModal
+          loginStatus={loginStatus}
+          userProfile={userProfile}
+          onClose={() => {
+            toggleModal("workoutLog", false);
+            setSelectedRoutineForLog(null);
+          }}
+          setShowInfo={setShowInfo}
+          showInfo={showInfo}
+          convertWeight={convertWeight}
+          defaultConvertWeight={defaultConvertWeight}
+          setTrackedExercises={setTrackedExercises}
+          safeParseInt={safeParseInt}
+          safeParseFloat={safeParseFloat}
+          selectedRoutineForLog={selectedRoutineForLog}
+          workoutLog={workoutLog}
+          setWorkoutLog={setWorkoutLog}
+          apiURL={apiURL}
+        />
+      )}
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="200"
+        height="200"
+        viewBox="0 0 26 26"
+        className="add-log-svg"
+        role="img"
+        aria-label="Workout Log"
+        onClick={() => {
+          if (workoutLog.length > 0) {
+            setSelectedRoutineForLog(null);
+            toggleModal("workoutLog", true);
+          } else {
+            toggleModal("routineSelection", true);
+          }
+        }}
+      >
+        <title>Workout Log</title>
+        <path
+          fill="currentColor"
+          d="M22.438-.063c-.375 0-.732.17-1.032.47l-.718.687l4.218 4.218l.688-.718c.6-.6.6-1.494 0-2.094L23.5.406c-.3-.3-.688-.469-1.063-.469zM20 1.688l-1.094.907l4.5 4.5l1-1L20 1.687zm-1.688 1.625l-9.03 8.938a.975.975 0 0 0-.126.125l-.062.031a.975.975 0 0 0-.219.438l-1.219 4.281a.975.975 0 0 0 1.219 1.219l4.281-1.219a.975.975 0 0 0 .656-.531l8.876-8.782L21 6v.094l-1.188-1.188h.094l-1.593-1.593zM.813 4A1 1 0 0 0 0 5v20a1 1 0 0 0 1 1h20a1 1 0 0 0 1-1V14a1 1 0 1 0-2 0v10H2V6h10a1 1 0 1 0 0-2H1a1 1 0 0 0-.094 0a1 1 0 0 0-.094 0zm9.813 9.813l1.375.093l.094 1.5l-1.375.406l-.531-.53l.437-1.47z"
+        />
+      </svg>
     </div>
   );
 };

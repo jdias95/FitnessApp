@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const TrackedExerciseWidget = (props) => {
@@ -35,15 +35,7 @@ const TrackedExerciseWidget = (props) => {
         {showInfo === "track progress" && (
           <div className="tooltip">
             <p>
-              When you create {"("}
-              <span className="bold">+</span>
-              {")"} or update {"("}
-              <img
-                id="edit"
-                alt="edit"
-                src={process.env.PUBLIC_URL + "/edit.png"}
-              />
-              {")"} an exercise in a workout routine with 'Track Progress?'
+              When you add an exercise to a workout log with 'Track Progress?'
               selected, a new entry will be added below to a list with the{" "}
               <span className="bold">SAME NAME</span> as the exercise.
             </p>
@@ -69,8 +61,8 @@ const TrackedExerciseWidget = (props) => {
               {trackedExercises.sortOrder
                 ? trackedExercises.sortOrder.map((exercise, index) => (
                     <Draggable
-                      key={exercise.name}
-                      draggableId={exercise.name || "unnamed"}
+                      key={exercise.exercise_name}
+                      draggableId={exercise.exercise_name || "unnamed"}
                       index={index}
                     >
                       {(provided) => (
@@ -86,11 +78,11 @@ const TrackedExerciseWidget = (props) => {
                             <div
                               className="flex tracked-clickable"
                               onClick={() => {
-                                toggleTrackedMenu(exercise.name);
+                                toggleTrackedMenu(exercise.exercise_name);
                               }}
                             >
-                              <h3>{exercise.name}</h3>
-                              {openMenus[exercise.name] ? (
+                              <h3>{exercise.exercise_name}</h3>
+                              {openMenus[exercise.exercise_name] ? (
                                 <img
                                   src={process.env.PUBLIC_URL + "/up-arrow.png"}
                                   className="up-arrow"
@@ -107,10 +99,7 @@ const TrackedExerciseWidget = (props) => {
                               )}
                             </div>
                             <div className="flex">
-                              {trackedExercises[exercise.name] &&
-                              trackedExercises[exercise.name].find(
-                                (exercise) => exercise.weight
-                              ) ? (
+                              {trackedExercises[exercise.exercise_name] ? (
                                 <img
                                   alt="exercise statistics"
                                   className="img stats"
@@ -119,11 +108,13 @@ const TrackedExerciseWidget = (props) => {
                                   }
                                   onClick={() => {
                                     setSelectedExercise(
-                                      trackedExercises[exercise.name]
+                                      trackedExercises[exercise.exercise_name]
                                     );
                                     setFirstExercise(
-                                      trackedExercises[exercise.name].find(
-                                        (entry) => entry.weight > 0
+                                      trackedExercises[
+                                        exercise.exercise_name
+                                      ].find(
+                                        (entry) => entry.working_weight > 0
                                       )
                                     );
                                     toggleModal("exerciseStatistics", true);
@@ -136,7 +127,8 @@ const TrackedExerciseWidget = (props) => {
                                 alt="edit name"
                                 onClick={() => {
                                   setSelectedExercise(
-                                    trackedExercises[exercise.name][0].name
+                                    trackedExercises[exercise.exercise_name][0]
+                                      .exercise_name
                                   );
                                   toggleModal(
                                     "updateTrackedExerciseName",
@@ -152,38 +144,35 @@ const TrackedExerciseWidget = (props) => {
                               />
                             </div>
                           </div>
-                          {openMenus[exercise.name] && (
+                          {openMenus[exercise.exercise_name] && (
                             <div className="tracked-dropdown dropdown-menu">
                               <ul>
-                                {trackedExercises[exercise.name]
+                                {trackedExercises[exercise.exercise_name]
                                   .slice()
                                   .reverse()
                                   .map((exercise) => (
                                     <li key={exercise.id}>
                                       <div className="dashboard flex">
                                         <div className="exercise-container">
-                                          {exercise.weight &&
-                                          userProfile &&
-                                          userProfile.measurement_type ===
+                                          {exercise.working_weight &&
+                                          userProfile?.measurement_type ===
                                             "imperial"
-                                            ? `${exercise.weight} lbs | `
-                                            : exercise.weight &&
-                                              userProfile &&
-                                              userProfile.measurement_type ===
+                                            ? `${exercise.working_weight} lbs | `
+                                            : exercise.working_weight &&
+                                              userProfile?.measurement_type ===
                                                 "metric"
                                             ? `${defaultConvertWeight(
-                                                exercise.weight
+                                                exercise.working_weight
                                               )} kgs | `
                                             : " "}
-                                          {exercise.bw &&
-                                          userProfile &&
-                                          userProfile.weight
+                                          {exercise.bw && userProfile?.weight
                                             ? `(${compareBW(
                                                 userProfile.weight,
-                                                exercise.weight
+                                                exercise.working_weight
                                               )}xBW) | `
                                             : " "}
-                                          {exercise.sets} x {exercise.reps_low}
+                                          {exercise.working_set_count} x{" "}
+                                          {exercise.reps_low}
                                           {exercise.reps_high
                                             ? `-${exercise.reps_high}`
                                             : ""}

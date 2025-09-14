@@ -9,6 +9,7 @@ const Modal = ({
   header,
   isLarge,
   hasConfirm = true,
+  hasCancel = true,
 }) => {
   if (!isOpen) return null;
 
@@ -29,15 +30,25 @@ const Modal = ({
               <div className="flex-end">
                 <span className="modal-button-container">
                   {hasConfirm ? (
-                    <button className="modal-button" onClick={onConfirm}>
+                    <button
+                      className="modal-button"
+                      onClick={() => onConfirm?.()}
+                    >
                       Confirm
                     </button>
                   ) : (
                     ""
                   )}
-                  <button className="modal-button" onClick={onClose}>
-                    Cancel
-                  </button>
+                  {hasCancel ? (
+                    <button
+                      className="modal-button"
+                      onClick={() => onClose?.()}
+                    >
+                      Cancel
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </span>
               </div>
             </div>
@@ -47,15 +58,19 @@ const Modal = ({
             <div className="modal-body">{children}</div>
             <span className="modal-button-container mr-1">
               {hasConfirm ? (
-                <button className="modal-button" onClick={onConfirm}>
+                <button className="modal-button" onClick={() => onConfirm?.()}>
                   Confirm
                 </button>
               ) : (
                 ""
               )}
-              <button className="modal-button" onClick={onClose}>
-                Cancel
-              </button>
+              {hasCancel ? (
+                <button className="modal-button" onClick={() => onClose?.()}>
+                  Cancel
+                </button>
+              ) : (
+                ""
+              )}
             </span>
           </div>
         )}

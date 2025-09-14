@@ -13,8 +13,9 @@ const UpdateTrackedExerciseNameModal = (props) => {
   } = props;
   const [nameReg, setNameReg] = useState(selectedExercise);
   const sortOrderCheck =
-    trackedExercises.sortOrder.find((exercise) => exercise.name === nameReg) ??
-    "";
+    trackedExercises.sortOrder.find(
+      (exercise) => exercise.exercise_name === nameReg
+    ) ?? "";
 
   const updateTrackedExerciseName = () => {
     const updatedTrackedExercises = { ...trackedExercises };
@@ -22,18 +23,18 @@ const UpdateTrackedExerciseNameModal = (props) => {
 
     const selectedExerciseValue = updatedTrackedExercises[selectedExercise].map(
       (exercise) => {
-        return { ...exercise, name: nameReg };
+        return { ...exercise, exercise_name: nameReg };
       }
     );
 
     updatedTrackedExercises[nameReg] = selectedExerciseValue;
 
     const exerciseIndex = updatedSortOrder.findIndex(
-      (exercise) => exercise.name === selectedExercise
+      (exercise) => exercise.exercise_name === selectedExercise
     );
 
     if (exerciseIndex !== -1) {
-      updatedSortOrder[exerciseIndex].name = nameReg;
+      updatedSortOrder[exerciseIndex].exercise_name = nameReg;
     }
 
     updatedTrackedExercises.sortOrder = updatedSortOrder;

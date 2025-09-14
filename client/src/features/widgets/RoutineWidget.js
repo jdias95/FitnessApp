@@ -81,9 +81,9 @@ const RoutineWidget = (props) => {
               {isMenuOpen && (
                 <div className="dropdown-menu">
                   <DragDropContext
-                    onDragEnd={(result) =>
-                      handleOnDragEnd(result, exerciseList, "routineExercises")
-                    }
+                    onDragEnd={(result) => {
+                      handleOnDragEnd(result, exerciseList, "routineExercises");
+                    }}
                   >
                     <Droppable droppableId="exercises">
                       {(provided) => (

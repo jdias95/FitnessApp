@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Axios from "axios";
 import Modal from "../../components/Modal";
 
@@ -17,7 +17,7 @@ const DeleteTrackedExerciseModal = (props) => {
       .then(() => {
         setTrackedExercises((prevTrackedExercises) => {
           const updatedTrackedExercises = [
-            ...prevTrackedExercises[selectedExercise.name],
+            ...prevTrackedExercises[selectedExercise.exercise_name],
           ];
 
           const indexToDelete = updatedTrackedExercises.findIndex(
@@ -30,12 +30,13 @@ const DeleteTrackedExerciseModal = (props) => {
 
           if (updatedTrackedExercises.length === 0) {
             const updatedTrackedExercisesObj = { ...prevTrackedExercises };
-            delete updatedTrackedExercisesObj[selectedExercise.name];
+            delete updatedTrackedExercisesObj[selectedExercise.exercise_name];
 
             Axios.delete(
               `${apiURL}/delete/tracked-exercise-order/${
                 trackedExercises.sortOrder.find(
-                  (exercise) => exercise.name === selectedExercise.name
+                  (exercise) =>
+                    exercise.exercise_name === selectedExercise.exercise_name
                 ).id
               }`
             ).catch((error) => {
@@ -43,7 +44,8 @@ const DeleteTrackedExerciseModal = (props) => {
             });
 
             const updatedSortOrder = prevTrackedExercises.sortOrder.filter(
-              (exercise) => exercise.name !== selectedExercise.name
+              (exercise) =>
+                exercise.exercise_name !== selectedExercise.exercise_name
             );
 
             return {
@@ -53,7 +55,7 @@ const DeleteTrackedExerciseModal = (props) => {
           } else {
             return {
               ...prevTrackedExercises,
-              [selectedExercise.name]: updatedTrackedExercises,
+              [selectedExercise.exercise_name]: updatedTrackedExercises,
             };
           }
         });

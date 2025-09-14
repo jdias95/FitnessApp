@@ -2,6 +2,7 @@ import React from "react";
 
 const TooltipInput = ({
   id,
+  className = "",
   label,
   tooltip,
   showInfo,
@@ -18,11 +19,13 @@ const TooltipInput = ({
       alt="tooltip"
     />
     {showInfo === id && (
-      <div className="tooltip tooltip-exercise" id={id}>
+      <div className={`tooltip tooltip-exercise ${className}`} id={id}>
         <p>{tooltip}</p>
       </div>
     )}
-    <label className="flex-input">{label}&nbsp;</label>
+    <label className="flex-input" htmlFor={id}>
+      {label}&nbsp;
+    </label>
     {children ? children : <input {...inputProps} />}
   </div>
 );

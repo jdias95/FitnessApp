@@ -25,8 +25,8 @@ const ExerciseFormFields = ({
   setShowInfo,
   convertWeight,
   defaultConvertWeight,
-  safeParseFloat,
   safeParseInt,
+  safeParseFloat,
 }) => (
   <>
     <div>
@@ -152,7 +152,7 @@ const ExerciseFormFields = ({
     <TooltipInput
       id="track"
       label="Track Progress?:"
-      tooltip="Selecting this will create a single entry under Track Progress with the information provided. The entry will show up in a list of the same name."
+      tooltip="Selecting this will default Track Progress to be enabled for this exercise when creating a workout log entry using this routine."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
     >
@@ -166,7 +166,7 @@ const ExerciseFormFields = ({
     <TooltipInput
       id="bw"
       label="Bodyweight Comparison?:"
-      tooltip="Selecting this will add the proportion of weight lifted to your bodyweight when creating an entry under Track Progress. This is especially useful for the more essential compound lifts (eg. Bench Press, Squat, etc.)."
+      tooltip="Selecting this will default Bodyweight Comparison to be enabled for this exercise when creating a workout log entry using this routine."
       showInfo={showInfo}
       setShowInfo={setShowInfo}
     >
