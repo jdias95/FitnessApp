@@ -43,6 +43,7 @@ const RoutineFormModal = (props) => {
           id="wider"
           placeholder="Ex: Push, Lower Body, etc."
           maxLength="45"
+          onFocus={(e) => e.target.select()}
           value={nameReg}
           onChange={(e) => {
             setNameReg(e.target.value);

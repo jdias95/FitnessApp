@@ -38,9 +38,9 @@ const WorkoutLogModal = (props) => {
           bw: ex.bw || false,
           sets: (ex.sets ?? []).map((s) => ({
             id: s.id ?? makeId(),
-            reps: s.reps ?? 0,
+            reps: s.reps ?? 1,
             weight: s.weight ?? 0,
-            note: s.note ?? "",
+            notes: s.notes ?? "",
           })),
         }))
       );
@@ -90,7 +90,7 @@ const WorkoutLogModal = (props) => {
         ...copy[exIndex],
         sets: [
           ...(copy[exIndex].sets || []),
-          { id: makeId(), reps: 0, weight: 0, note: "" },
+          { id: makeId(), reps: 1, weight: 0, notes: "" },
         ],
       };
       return copy;
@@ -289,12 +289,12 @@ const WorkoutLogModal = (props) => {
                     </>
                   )}
                   <textarea
-                    placeholder="Note"
+                    placeholder="Notes"
                     id="wider"
-                    name="note"
-                    value={set.note}
+                    name="notes"
+                    value={set.notes}
                     onChange={(e) =>
-                      updateSet(exIndex, setIndex, "note", e.target.value)
+                      updateSet(exIndex, setIndex, "notes", e.target.value)
                     }
                     onFocus={(e) => e.target.select()}
                   />

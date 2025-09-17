@@ -169,6 +169,20 @@ p {
   margin: auto 0;
 }
 
+.workout-log-entries-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 20em;
+  overflow-y: auto;
+}
+
+.workout-log-entries-list li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5em;
+  margin-right: 2em;
+}
+
 .routine-button:hover {
   cursor: pointer;
   background-color: #13171c;
@@ -723,6 +737,10 @@ a {
   padding-left: 1rem;
 }
 
+.pl-3 {
+  padding-left: 3rem;
+}
+
 #working-weight {
   top: -150%;
   z-index: 100;
@@ -1028,6 +1046,18 @@ li {
 .stats:hover {
   cursor: pointer;
   content: url("../../public/linegraph-hover.png");
+  transition: content 0.3s;
+}
+
+.log-entries {
+  width: 1.3rem;
+  height: 1.3rem;
+  padding-right: 0.25em;
+}
+
+.log-entries:hover {
+  cursor: pointer;
+  content: url("../../public/log-entries-hover.png");
   transition: content 0.3s;
 }
 

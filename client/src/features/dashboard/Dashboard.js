@@ -19,6 +19,7 @@ import RoutineWidget from "../widgets/RoutineWidget";
 import TrackedExerciseWidget from "../widgets/TrackedExerciseWidget";
 import RoutineSelectionModal from "../workout-log/RoutineSelectionModal";
 import WorkoutLogModal from "../workout-log/WorkoutLogModal";
+import WorkoutLogEntriesModal from "../workout-log/WorkoutLogEntriesModal";
 
 const Dashboard = (props) => {
   const navigate = useNavigate();
@@ -86,6 +87,8 @@ const Dashboard = (props) => {
   const [showRoutineSelectionModal, setShowRoutineSelectionModal] =
     useState(false);
   const [showWorkoutLogModal, setShowWorkoutLogModal] = useState(false);
+  const [showWorkoutLogEntriesModal, setShowWorkoutLogEntriesModal] =
+    useState(false);
   const timeMultipliers = useMemo(() => {
     return {
       "1 month": 6,
@@ -145,6 +148,9 @@ const Dashboard = (props) => {
         break;
       case "workoutLog":
         setShowWorkoutLogModal(isOpen);
+        break;
+      case "workoutLogEntries":
+        setShowWorkoutLogEntriesModal(isOpen);
         break;
       default:
         break;
@@ -543,6 +549,19 @@ const Dashboard = (props) => {
           workoutLog={workoutLog}
           setWorkoutLog={setWorkoutLog}
           apiURL={apiURL}
+        />
+      )}
+
+      {showWorkoutLogEntriesModal && selectedExercise && (
+        <WorkoutLogEntriesModal
+          onClose={() => {
+            toggleModal("workoutLogEntries", false);
+            setSelectedExercise(null);
+          }}
+          userProfile={userProfile}
+          selectedExercise={selectedExercise}
+          defaultConvertWeight={defaultConvertWeight}
+          formatDate={formatDate}
         />
       )}
 

@@ -38,6 +38,7 @@ const ExerciseFormFields = ({
         maxLength="45"
         value={nameReg}
         onChange={(e) => setNameReg(e.target.value)}
+        onFocus={(e) => e.target.select()}
       />
     </div>
     <TooltipInput
@@ -56,6 +57,7 @@ const ExerciseFormFields = ({
         maxLength="2"
         value={!setsLowReg ? "" : setsLowReg}
         onChange={(e) => setSetsLowReg(safeParseInt(e.target.value))}
+        onFocus={(e) => e.target.select()}
       />
       <p>&nbsp;-&nbsp;</p>
       <input
@@ -66,6 +68,7 @@ const ExerciseFormFields = ({
         maxLength="2"
         value={!setsHighReg ? "" : setsHighReg}
         onChange={(e) => setSetsHighReg(safeParseInt(e.target.value))}
+        onFocus={(e) => e.target.select()}
       />
     </TooltipInput>
     <TooltipInput
@@ -84,6 +87,7 @@ const ExerciseFormFields = ({
         maxLength="2"
         value={!repsLowReg ? "" : repsLowReg}
         onChange={(e) => setRepsLowReg(safeParseInt(e.target.value))}
+        onFocus={(e) => e.target.select()}
       />
       <p>&nbsp;-&nbsp;</p>
       <input
@@ -94,6 +98,7 @@ const ExerciseFormFields = ({
         maxLength="2"
         value={!repsHighReg ? "" : repsHighReg}
         onChange={(e) => setRepsHighReg(safeParseInt(e.target.value))}
+        onFocus={(e) => e.target.select()}
       />
     </TooltipInput>
     <TooltipInput
@@ -115,6 +120,7 @@ const ExerciseFormFields = ({
             maxLength="4"
             value={!weightReg ? "" : weightReg}
             onChange={(e) => setWeightReg(safeParseFloat(e.target.value))}
+            onFocus={(e) => e.target.select()}
           />
           <label>&nbsp;lbs</label>
         </>
@@ -132,6 +138,7 @@ const ExerciseFormFields = ({
             onChange={(e) =>
               setWeightReg(convertWeight(safeParseFloat(e.target.value)))
             }
+            onFocus={(e) => e.target.select()}
           />
           <label>&nbsp;kgs</label>
         </>
@@ -147,6 +154,7 @@ const ExerciseFormFields = ({
         maxLength="300"
         value={notesReg}
         onChange={(e) => setNotesReg(e.target.value)}
+        onFocus={(e) => e.target.select()}
       />
     </div>
     <TooltipInput
@@ -161,6 +169,7 @@ const ExerciseFormFields = ({
         id="checkbox"
         checked={trackReg}
         onChange={() => setTrackReg(!trackReg)}
+        onFocus={(e) => e.target.select()}
       />
     </TooltipInput>
     <TooltipInput
@@ -176,6 +185,7 @@ const ExerciseFormFields = ({
         checked={bwReg}
         disabled={!trackReg}
         onChange={() => setBwReg(!bwReg)}
+        onFocus={(e) => e.target.select()}
       />
     </TooltipInput>
   </>

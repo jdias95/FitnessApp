@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const TrackedExerciseWidget = (props) => {
@@ -178,6 +178,21 @@ const TrackedExerciseWidget = (props) => {
                                             : ""}
                                         </div>
                                         <div>
+                                          <img
+                                            className="img log-entries"
+                                            src={
+                                              process.env.PUBLIC_URL +
+                                              "/log-entries.png"
+                                            }
+                                            alt="workout log entries"
+                                            onClick={() => {
+                                              setSelectedExercise(exercise);
+                                              toggleModal(
+                                                "workoutLogEntries",
+                                                true
+                                              );
+                                            }}
+                                          />
                                           {new Date(
                                             exercise.date
                                           ).toLocaleDateString()}
