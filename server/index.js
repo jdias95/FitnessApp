@@ -832,51 +832,6 @@ app.get("/api/get/log-exercises/:workoutLogId", (req, res) => {
   });
 });
 
-app.post("/api/insert/log-exercise", (req, res) => {
-  const workoutLogId = req.body.workoutLogId;
-  const exerciseName = req.body.exerciseName;
-
-  const sqlInsert =
-    "INSERT INTO log_exercises (workout_log_id, exercise_name) VALUES (?, ?)";
-  db.query(sqlInsert, [workoutLogId, exerciseName], (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.log(err);
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.put("/api/update/log-exercise/:id", (req, res) => {
-  const id = req.params.id;
-  const exerciseName = req.body.exerciseName;
-
-  const sqlUpdate = `UPDATE log_exercises SET exercise_name = ? WHERE id = ?`;
-  db.query(sqlUpdate, [exerciseName, id], (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.log("Error updating log exercise:", err);
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.delete("/api/delete/log-exercise/:id", (req, res) => {
-  const id = req.params.id;
-
-  const sqlDelete = "DELETE FROM log_exercises WHERE id = ?";
-  db.query(sqlDelete, id, (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.error("Error deleting log exercise:", err);
-    } else {
-      res.status(204).send();
-    }
-  });
-});
-
 app.get("/api/get/log-sets/:logExerciseId", (req, res) => {
   const logExerciseId = req.params.logExerciseId;
 
@@ -887,72 +842,6 @@ app.get("/api/get/log-sets/:logExerciseId", (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     } else if (result.length === 0) {
       res.status(404).json({ error: "Log sets not found" });
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.post("/api/insert/log-set", (req, res) => {
-  const logExerciseId = req.body.logExerciseId;
-  const reps = req.body.reps;
-  const weight = req.body.weight;
-  const notes = req.body.notes;
-
-  const sqlInsert =
-    "INSERT INTO log_sets (log_exercise_id, reps, weight, notes) VALUES (?, ?, ?, ?)";
-  db.query(sqlInsert, [logExerciseId, reps, weight, notes], (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.log(err);
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.put("/api/update/log-set/:id", (req, res) => {
-  const id = req.params.id;
-  const reps = req.body.reps;
-  const weight = req.body.weight;
-  const notes = req.body.notes;
-
-  const sqlUpdate = `UPDATE log_sets SET reps = ?, weight = ?, notes = ? WHERE id = ?`;
-  db.query(sqlUpdate, [reps, weight, notes, id], (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.log("Error updating log set:", err);
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.delete("/api/delete/log-set/:id", (req, res) => {
-  const id = req.params.id;
-
-  const sqlDelete = "DELETE FROM log_sets WHERE id = ?";
-  db.query(sqlDelete, id, (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.error("Error deleting log set:", err);
-    } else {
-      res.status(204).send();
-    }
-  });
-});
-
-app.post("/api/insert/tracked-exercise", (req, res) => {
-  const userId = req.body.userId;
-  const logExerciseId = req.body.logExerciseId;
-  const exerciseName = req.body.exerciseName;
-
-  const sqlInsert =
-    "INSERT INTO tracked_exercises (user_id, log_exercise_id, name) VALUES (?, ?, ?)";
-  db.query(sqlInsert, [userId, logExerciseId, exerciseName], (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.log("Error creating tracked exercise:", err);
     } else {
       res.status(200).json(result);
     }
@@ -1124,32 +1013,6 @@ app.get("/api/get/tracked-exercises/:userId", (req, res) => {
   });
 });
 
-app.put("/api/update/tracked-exercise/:userId", (req, res) => {
-  const userId = req.params.userId;
-  const name = req.body.name;
-  const newName = req.body.newName;
-  const sqlUpdate =
-    "UPDATE tracked_exercises SET exercise_name = ? WHERE user_id = ? AND exercise_name = ?";
-  const sqlUpdate2 =
-    "UPDATE tracked_exercises_order SET exercise_name = ? WHERE user_id = ? AND exercise_name = ?";
-
-  db.query(sqlUpdate, [newName, userId, name], (err1, result1) => {
-    if (err1) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.error("Error updating tracked exercise name:", err1);
-    } else {
-      db.query(sqlUpdate2, [newName, userId, name], (err2, result2) => {
-        if (err2) {
-          res.status(500).json({ error: "Internal Server Error" });
-          console.error("Error updating tracked exercise order name:", err2);
-        } else {
-          res.status(200).json({ result1, result2 });
-        }
-      });
-    }
-  });
-});
-
 app.delete("/api/delete/tracked-exercise/:id", (req, res) => {
   const id = req.params.id;
   const sqlDelete = "DELETE FROM tracked_exercises WHERE id = ?";
@@ -1160,23 +1023,6 @@ app.delete("/api/delete/tracked-exercise/:id", (req, res) => {
       console.error("Error deleting exercise:", err);
     } else {
       res.status(204).send();
-    }
-  });
-});
-
-app.post("/api/insert/tracked-exercise-order/:userId", (req, res) => {
-  const userId = req.params.userId;
-  const name = req.body.name;
-  const sortOrder = req.body.sortOrder;
-  const sqlInsert =
-    "INSERT INTO tracked_exercises_order (user_id, name, sort_order) VALUES (?, ?, ?)";
-
-  db.query(sqlInsert, [userId, name, sortOrder], (err, result) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      console.log("Error creating tracked exercise order:", err);
-    } else {
-      res.status(200).json(result);
     }
   });
 });
@@ -1196,23 +1042,6 @@ app.put("/api/update/tracked-exercise-order/:id", (req, res) => {
     }
   });
 });
-
-// app.get("/api/get/tracked-exercise-order/:userId", (req, res) => {
-//   const userId = req.params.userId;
-//   const sqlSelect =
-//     "SELECT * FROM tracked_exercises_order WHERE user_id = ? ORDER BY sort_order";
-
-//   db.query(sqlSelect, [userId], (err, result) => {
-//     if (err) {
-//       console.error("Error retrieving tracked exercise order:", err);
-//       res.status(500).json({ error: "Internal Server Error" });
-//     } else if (result.length === 0) {
-//       res.status(404).json({ error: "Exercise order not found" });
-//     } else {
-//       res.status(200).json(result);
-//     }
-//   });
-// });
 
 app.delete("/api/delete/tracked-exercise-order/:id", (req, res) => {
   const id = req.params.id;
