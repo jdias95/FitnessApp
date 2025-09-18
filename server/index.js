@@ -9,7 +9,6 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const http = require("http");
 const { format } = require("date-fns-tz");
-const { time } = require("console");
 require("dotenv").config();
 
 const app = express();
